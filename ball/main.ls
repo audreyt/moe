@@ -28,12 +28,8 @@ window.reset = -> $in.val ''
 window.addEventListener("message", -> window.input it.data, false);
 window.input = ->
   $in.val it
+  show-chars go-similar it
   $out.empty!
-  sims = ""
-  for char in it
-    continue unless Shape[char]
-    sims += char + Shape[char]
-  show-chars sims
 
 window.output = ->
   return if window.muted
@@ -53,15 +49,19 @@ function draw (ch)
     $li.append( '&nbsp;' )
   $li.appendTo $out
 
-window.debug = function show-chars
+window.render-chars = function render-chars
   window.table = table = []
   for ch in it
+    # console.log ch
     continue unless Sound[ch]
     radical = Radical[ch]
     bpmf = Sound[ch].0
     table.push { ch, bpmf, radical }
   window.init table
   window.animate!
+
+window.show-chars = function show-chars
+  window.location ="?#{ encodeURIComponent it }"
 
 function go-radical
   show-chars RadicalSame[ it ]
@@ -72,7 +72,25 @@ function go-rhyme
 function go-alike
   show-chars SoundAlike[ (it - /[ˋˊˇ‧]/g) ]
 
-table <- GET "Table.json"
-window.table = table
-window.init table
-window.animate!
+window.go-char = function go-char ({ch, bpmf, radical})
+  rads = RadicalSame[ radical ] || ''
+  snds = SoundAlike[ bpmf ] || ''
+  sims = go-similar(ch) || ''
+  # console.log rads+snds+sims
+  show-chars(rads+snds+sims)
+
+window.go-similar = function go-similar
+  sims = ""
+  for char in it
+    continue unless Shape[char]
+    sims += char + Shape[char]
+  return sims
+
+if location.search
+  <- setTimeout _, 1ms
+  render-chars("#{ decodeURIComponent location.search }")
+else
+  table <- GET "Table.json"
+  window.table = table
+  window.init table
+  window.animate!

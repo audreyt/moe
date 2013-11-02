@@ -5,17 +5,27 @@ targets = { table: [], sphere: [], helix: [], grid: [] }
 window.init = function init(table)
   $('#container').remove!
   $(\<div/> id: \container).prependTo($ \body)
+  $('#container').on \click \.element -> go-char {
+    ch: $('.symbol', @).text!
+    radical: $('.radical', @).text! || $('.symbol', @).text!
+    bpmf: $('.details', @).text!
+  }
   l = table.length
   radius = Math.sqrt(l) * 56
   window.camera = camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, (radius * 6.25) )
   camera.position.z = (radius * 2)
   window.scene = scene = new THREE.Scene()
-  for {ch, radical, strokes, bpmf} in table
+  for entry in table
+    {ch, radical, strokes, bpmf} = entry
+    $(element).data entry
     element = document.createElement( 'div' )
     element.className = 'element'
     element.style.backgroundColor = 'rgba(0,127,127,' + ( Math.random() * 0.5 + 0.25 ) + ')'
     number = document.createElement( 'div' )
-    number.className = 'number'
+    if strokes
+      number.className = 'number'
+    else
+      number.className = 'number radical'
     number.textContent = strokes || radical
     element.appendChild( number )
     symbol = document.createElement( 'div' )

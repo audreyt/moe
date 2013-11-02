@@ -11,23 +11,36 @@
   };
   window.init = (function(){
     function init(table){
-      var l, radius, camera, scene, i$, len$, ref$, ch, radical, strokes, bpmf, element, number, symbol, details, object, vector, i, obj, phi, theta, distance, renderer, controls, button;
+      var l, radius, camera, scene, i$, len$, entry, ch, radical, strokes, bpmf, element, number, symbol, details, object, vector, ref$, i, obj, phi, theta, distance, renderer, controls, button;
       $('#container').remove();
       $('<div/>', {
         id: 'container'
       }).prependTo($('body'));
+      $('#container').on('click', '.element', function(){
+        return goChar({
+          ch: $('.symbol', this).text(),
+          radical: $('.radical', this).text() || $('.symbol', this).text(),
+          bpmf: $('.details', this).text()
+        });
+      });
       l = table.length;
       radius = Math.sqrt(l) * 56;
       window.camera = camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, radius * 6.25);
       camera.position.z = radius * 2;
       window.scene = scene = new THREE.Scene();
       for (i$ = 0, len$ = table.length; i$ < len$; ++i$) {
-        ref$ = table[i$], ch = ref$.ch, radical = ref$.radical, strokes = ref$.strokes, bpmf = ref$.bpmf;
+        entry = table[i$];
+        ch = entry.ch, radical = entry.radical, strokes = entry.strokes, bpmf = entry.bpmf;
+        $(element).data(entry);
         element = document.createElement('div');
         element.className = 'element';
         element.style.backgroundColor = 'rgba(0,127,127,' + (Math.random() * 0.5 + 0.25) + ')';
         number = document.createElement('div');
-        number.className = 'number';
+        if (strokes) {
+          number.className = 'number';
+        } else {
+          number.className = 'number radical';
+        }
         number.textContent = strokes || radical;
         element.appendChild(number);
         symbol = document.createElement('div');

@@ -34,18 +34,9 @@
                   return window.input(it.data, false);
                 });
                 window.input = function(it){
-                  var sims, i$, len$, char;
                   $in.val(it);
-                  $out.empty();
-                  sims = "";
-                  for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
-                    char = it[i$];
-                    if (!Shape[char]) {
-                      continue;
-                    }
-                    sims += char + Shape[char];
-                  }
-                  return showChars(sims);
+                  showChars(goSimilar(it));
+                  return $out.empty();
                 };
                 window.output = function(it){
                   if (window.muted) {
@@ -84,8 +75,8 @@
                     return goAlike($(this).text());
                   }
                 }
-                window.debug = (function(){
-                  function showChars(it){
+                window.renderChars = (function(){
+                  function renderChars(it){
                     var table, i$, len$, ch, radical, bpmf;
                     window.table = table = [];
                     for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
@@ -104,6 +95,12 @@
                     window.init(table);
                     return window.animate();
                   }
+                  return renderChars;
+                }());
+                window.showChars = (function(){
+                  function showChars(it){
+                    return window.location = "?" + encodeURIComponent(it);
+                  }
                   return showChars;
                 }());
                 function goRadical(it){
@@ -116,11 +113,43 @@
                 function goAlike(it){
                   return showChars(SoundAlike[replace$.call(it, /[ˋˊˇ‧]/g, '')]);
                 }
-                return GET("Table.json", function(table){
-                  window.table = table;
-                  window.init(table);
-                  return window.animate();
-                });
+                window.goChar = (function(){
+                  function goChar(arg$){
+                    var ch, bpmf, radical, rads, snds, sims;
+                    ch = arg$.ch, bpmf = arg$.bpmf, radical = arg$.radical;
+                    rads = RadicalSame[radical] || '';
+                    snds = SoundAlike[bpmf] || '';
+                    sims = goSimilar(ch) || '';
+                    return showChars(rads + snds + sims);
+                  }
+                  return goChar;
+                }());
+                window.goSimilar = (function(){
+                  function goSimilar(it){
+                    var sims, i$, len$, char;
+                    sims = "";
+                    for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
+                      char = it[i$];
+                      if (!Shape[char]) {
+                        continue;
+                      }
+                      sims += char + Shape[char];
+                    }
+                    return sims;
+                  }
+                  return goSimilar;
+                }());
+                if (location.search) {
+                  return setTimeout(function(){
+                    return renderChars(decodeURIComponent(location.search) + "");
+                  }, 1);
+                } else {
+                  return GET("Table.json", function(table){
+                    window.table = table;
+                    window.init(table);
+                    return window.animate();
+                  });
+                }
               });
             });
           });
