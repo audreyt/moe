@@ -1,4 +1,5 @@
 #window ?= -> { $: require(\jquery), addEventListener: -> }
+/*
 Array::powerset = String::powerset = ->
   return @ if @length <= 1
   xs = Array::slice.call @
@@ -17,33 +18,44 @@ String::permutate = ->
       after = set.substring i
       ret.push before + x + after
   ret
-# global
-origin = "http://127.0.0.1:8888/"
+*/
+# buffered messages before data loaded
 buffer = []
+buffered-msgs-first = ({data}) -> buffer.push data
+window.input = -> buffered-msgs-first {data: it}
+window.addEventListener \message buffered-msgs-first
+# load data for chinese character composition/decomposition
+CharComp <- $.get \./data/char_comp_simple.json
+CompChar <- $.get \./data/comp_char_sorted.json
+OrigChars <- $.get \./data/orig-chars.json
+###
+# main function for Large Henzi Collider
+###
+# API
+origin = "http://127.0.0.1:8888/"
+window.id = \lhc
+window.reset = !->
+  $input.val ""
+  $output.empty!
+window.output = ->
+  return if window.muted
+  window.top.postMessage it, origin
 $input = $ \#input
 $output = $ \#output
-# functions to handle message event
-buffer = []
-var CharComp
-var CompChar
-var OrigChars
-msg-before-data = ({data}) ->
-  buffer.push data
 window.uniq = uniq = ->
   seen = {}
   for w in it / '' => seen[w] = true
   Object.keys(seen).sort! * ''
-msg-after-data = ({data}) ->
-  data = uniq($input.val! + data)
-  $input.val data
+main = ({data}) ->
+  $input.val $input.val! + data
+  data = uniq($input.val!)
   comps = []
   get-comps = ->
     out = ""
-    return out if it.length <= 0
     for char in it
       comps = CharComp[char]
-      out += comps if comps
-    it + get-comps out
+      out += if CharComp[char] then get-comps CharComp[char] else char
+    it + out
   comps = uniq(get-comps data)
   seen = {}
   for ch in comps => seen[ch] = true if ch in OrigChars
@@ -71,24 +83,8 @@ msg-after-data = ({data}) ->
       window.output $(@).text!
     )
   JSON.stringify keys,, 2
-# API
-window.id = \lhc
-window.reset = -> $input.val ""
-window.input = -> msg-before-data {data: it}
-window.addEventListener \message msg-before-data
-window.output = ->
-  return if window.muted
-  window.top.postMessage it, origin
-# load char to comps and comps to char table
-d <- $.get \./data/char_comp_simple.json
-CharComp := d
-d <- $.get \./data/comp_char_sorted.json
-CompChar := d
-d <- $.get \./data/orig-chars.json
-OrigChars := d
-window.input := -> msg-after-data {data: it}
-window.removeEventListener \message, msg-before-data
-for data in buffer
-  msg-after-data {data}
-window.addEventListener \message, msg-after-data
+window.input := -> main {data: it}
+window.removeEventListener \message, buffered-msgs-first
+for data in buffer => main {data}
+window.addEventListener \message, main
 
