@@ -46,7 +46,6 @@
         myOutput.push(c);
       }
     }
-    window.output(myOutput);
     return JSON.stringify(myOutput, void 8, 2);
   };
   window.id = 'lhc';

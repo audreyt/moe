@@ -26,7 +26,7 @@ msg-after-data = ({data}) ->
   for maybe in comps.powerset!
     c = CompChar[maybe]
     my-output.push c if c and c in OrigChars
-  window.output my-output
+  # window.output my-output
   JSON.stringify my-output,, 2
 # API
 window.id = \lhc
