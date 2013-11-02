@@ -1,1 +1,1 @@
-../../js/jquery.js
+../../js/libs/jquery-1.10.2.js
