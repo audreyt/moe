@@ -65,3 +65,6 @@ function go-alike
   $out.empty!
   for ch in SoundAlike[ (it - /[ˋˊˇ‧]/g) ] => draw ch
 
+table <- GET "Table.json"
+window.init(table);
+window.animate();

@@ -117,7 +117,10 @@
                   }
                   return results$;
                 }
-                return goAlike;
+                return GET("Table.json", function(table){
+                  window.init(table);
+                  return window.animate();
+                });
               });
             });
           });
