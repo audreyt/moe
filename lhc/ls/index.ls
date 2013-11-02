@@ -13,6 +13,7 @@ my-output = []
 buffer = []
 var CharComp
 var CompChar
+var OrigChars
 msg-before-data = ({data}) ->
   buffer.push data
 msg-after-data = ({data}) ->
@@ -23,7 +24,8 @@ msg-after-data = ({data}) ->
     continue if not CharComp[char]
     for {c} in CharComp[char] => comps.push c
   for maybe in comps.powerset!
-    my-output.push CompChar[maybe] if CompChar[maybe]
+    c = CompChar[maybe]
+    my-output.push c if c and c in OrigChars
   window.output my-output
   my-output
 # API
@@ -39,7 +41,9 @@ d <- $.get \./data/char_comp.json
 CharComp := d
 d <- $.get \./data/comp_char.json
 CompChar := d
-window.input = -> msg-after-data {data: it}
+d <- $.get \./data/orig-chars.json
+OrigChars := d
+window.input := -> msg-after-data {data: it}
 window.removeEventListener \message, msg-before-data
 for data in buffer
   msg-after-data {data}
