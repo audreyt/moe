@@ -30,7 +30,7 @@ do
   <- $.getJSON \orig-chars.json
   DATA['j'] = it
 
-STR2GEO = ->
+window.STR2GEO = STR2GEO = ->
   long = DATA['j'].indexOf(it[0])
   lat = DATA['j'].indexOf(it[1])
   
@@ -41,12 +41,14 @@ STR2GEO = ->
     long = (long .<<. 6) .|. high
     lat = (lat .<<. 6) .|. low
     
-  rLong = (parseInt long.toString(2), 2) / (2 ** (long.toString(2).length))
-  rLat = (parseInt lat.toString(2), 2) / (2 ** (long.toString(2).length))
+  rX = (parseInt long.toString(2), 2)
+  rY = (parseInt lat.toString(2), 2)
+  rLong = rX / (2 ** (long.toString(2).length))
+  rLat = rY / (2 ** (long.toString(2).length))
 
-  { longitude: longMIN + (longMAX - longMIN) * rLong, latitude: latMIN + (latMAX - latMIN)*rLat }
+  { longitude: longMIN + (longMAX - longMIN) * rLong, latitude: latMIN + (latMAX - latMIN)*rLat, x: rX, y: rY }
   
-GEO2STR = ->
+window.GEO2STR = GEO2STR = ->
   long = parseInt(((it.longitude - longMIN) / (longMAX - longMIN)).toString(2).split('.')[1], 2)
 
   lat = parseInt(((it.latitude - latMIN) / (latMAX - latMIN)).toString(2).split('.')[1], 2)
