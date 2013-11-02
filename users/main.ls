@@ -3,6 +3,7 @@
 origin = "http://127.0.0.1:8888/"
 url =  'https://goinstant.net/poga/yhd2013-moe-users'
 window.id = \users
+window.addEventListener("message", -> window.input it.data, false);
 
 $(document).on \click, \.gi-user, ->
   window.output $(it.target).text!
