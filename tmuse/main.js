@@ -16,7 +16,7 @@
     window.input = function(it){
       $in.val(it);
       return GET("a/" + it + ".json", function(json){
-        var nodes, scene, camera, renderer, multiplier, objs, i$, len$, i, n, coords, sphere_geo, mat, sphere, spritey, obj_coloring, clustering, cluster, labels, c, j$, len1$, l, edges, edge, color, sv, tv, geometry, line, controls, render, light;
+        var nodes, scene, camera, renderer, multiplier, objs, obj_coloring, obj_radius, clustering, i$, len$, i, cluster, labels, c, j$, len1$, l, n, coords, sphere_geo, mat, sphere, spritey, edges, edge, color, sv, tv, geometry, line, controls, render, light;
         nodes = json.graph_json.nodes;
         $out.empty();
         scene = new THREE.Scene();
@@ -27,25 +27,8 @@
         camera.position.z = 5;
         multiplier = 5;
         objs = {};
-        for (i$ = 0, len$ = nodes.length; i$ < len$; ++i$) {
-          i = i$;
-          n = nodes[i$];
-          coords = n.coords;
-          sphere_geo = new THREE.SphereGeometry(0.1, 10, 10);
-          mat = new THREE.MeshBasicMaterial({
-            color: 0x0000ff
-          });
-          sphere = new THREE.Mesh(sphere_geo, mat);
-          sphere.position.x = coords[0] * multiplier;
-          sphere.position.y = coords[1] * multiplier;
-          sphere.position.z = coords[2] * multiplier;
-          scene.add(sphere);
-          objs[n.label] = sphere;
-          spritey = makeTextSprite(" " + n.label + " ");
-          spritey.position = sphere.position.clone().multiplyScalar(1.1);
-          scene.add(spritey);
-        }
         obj_coloring = {};
+        obj_radius = {};
         clustering = json.clustering_json;
         for (i$ = 0, len$ = clustering.length; i$ < len$; ++i$) {
           i = i$;
@@ -59,8 +42,27 @@
               g: window.colors[c][1] / 255,
               b: window.colors[c][2] / 255
             };
-            objs[l[0]].material.color.setRGB(window.colors[c][0] / 255, window.colors[c][1] / 255, window.colors[c][2] / 255);
+            obj_radius[l[0]] = l[1];
           }
+        }
+        for (i$ = 0, len$ = nodes.length; i$ < len$; ++i$) {
+          i = i$;
+          n = nodes[i$];
+          coords = n.coords;
+          sphere_geo = new THREE.SphereGeometry(obj_radius[n.label] * 0.1 + 0.05, 10, 10);
+          mat = new THREE.MeshBasicMaterial({
+            color: 0x0000ff
+          });
+          mat.color.setRGB(obj_coloring[n.label].r, obj_coloring[n.label].g, obj_coloring[n.label].b);
+          sphere = new THREE.Mesh(sphere_geo, mat);
+          sphere.position.x = coords[0] * multiplier;
+          sphere.position.y = coords[1] * multiplier;
+          sphere.position.z = coords[2] * multiplier;
+          scene.add(sphere);
+          objs[n.label] = sphere;
+          spritey = makeTextSprite(" " + n.label + " ");
+          spritey.position = sphere.position.clone().multiplyScalar(1.01);
+          scene.add(spritey);
         }
         edges = json.graph_json.edges;
         for (i$ = 0, len$ = edges.length; i$ < len$; ++i$) {

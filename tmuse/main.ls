@@ -26,10 +26,22 @@ window.input = ->
   camera.position.z = 5;
   multiplier = 5
   objs = {}
+#clustering & coloring
+  obj_coloring = {}
+  obj_radius = {}
+  clustering = json.clustering_json
+  for cluster,i in clustering
+    labels = cluster.labels
+    c = i % window.colors.length
+    for l in labels
+      obj_coloring[l[0]] = {r:window.colors[c][0]/255,g: window.colors[c][1]/255, b: window.colors[c][2]/255}
+      obj_radius[l[0]] = l[1]
+# draw nodes  
   for n,i in nodes
     coords = n.coords
-    sphere_geo = new THREE.SphereGeometry(0.1,10,10)
+    sphere_geo = new THREE.SphereGeometry(obj_radius[n.label]*0.1 + 0.05,10,10)
     mat = new THREE.MeshBasicMaterial({color: 0x0000ff})
+    mat.color.setRGB(obj_coloring[n.label].r, obj_coloring[n.label].g, obj_coloring[n.label].b)
     sphere = new THREE.Mesh(sphere_geo, mat)
     sphere.position.x = coords[0]*multiplier
     sphere.position.y = coords[1]*multiplier
@@ -38,17 +50,8 @@ window.input = ->
     objs[n.label] = sphere
 
     spritey = makeTextSprite( " #{n.label} " );
-    spritey.position = sphere.position.clone().multiplyScalar(1.1);
+    spritey.position = sphere.position.clone().multiplyScalar(1.01);
     scene.add( spritey );
-#clustering & coloring
-  obj_coloring = {}
-  clustering = json.clustering_json
-  for cluster,i in clustering
-    labels = cluster.labels
-    c = i % window.colors.length
-    for l in labels
-      obj_coloring[l[0]] = {r:window.colors[c][0]/255,g: window.colors[c][1]/255, b: window.colors[c][2]/255}
-      objs[l[0]].material.color.setRGB(window.colors[c][0]/255, window.colors[c][1]/255, window.colors[c][2]/255)
 #draw edges
   edges = json.graph_json.edges
   for edge in edges
