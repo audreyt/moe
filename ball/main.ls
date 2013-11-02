@@ -29,10 +29,11 @@ window.addEventListener("message", -> window.input it.data, false);
 window.input = ->
   $in.val it
   $out.empty!
-  function x => it - /[`~]/g
+  sims = ""
   for char in it
     continue unless Shape[char]
-    for ch in char + Shape[char] => draw ch
+    sims += char + Shape[char]
+  show-chars sims
 
 window.output = ->
   return if window.muted
@@ -52,19 +53,26 @@ function draw (ch)
     $li.append( '&nbsp;' )
   $li.appendTo $out
 
+window.debug = function show-chars
+  window.table = table = []
+  for ch in it
+    continue unless Sound[ch]
+    radical = Radical[ch]
+    bpmf = Sound[ch].0
+    table.push { ch, bpmf, radical }
+  window.init table
+  window.animate!
+
 function go-radical
-  $out.empty!
-  for ch in RadicalSame[ it ] => draw ch
-  return
+  show-chars RadicalSame[ it ]
 
 function go-rhyme
-  $out.empty!
-  for ch in SoundRhyme[ (it - /[ˋˊˇ‧]/g)[*-1] ] => draw ch
+  show-chars SoundRhyme[ (it - /[ˋˊˇ‧]/g)[*-1] ]
 
 function go-alike
-  $out.empty!
-  for ch in SoundAlike[ (it - /[ˋˊˇ‧]/g) ] => draw ch
+  show-chars SoundAlike[ (it - /[ˋˊˇ‧]/g) ]
 
 table <- GET "Table.json"
-window.init(table);
-window.animate();
+window.table = table
+window.init table
+window.animate!
