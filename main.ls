@@ -4,10 +4,13 @@ origin = "http://127.0.0.1:8888/"
 @frames = []
 for x in $('iframe').get! => @frames.push x.contentWindow.window
 
+prev = null
 window.id = \hub
 window.reset = -> input ''
 window.addEventListener("message", -> window.input it.data, false);
 window.input = ->
+  return if prev === it
+  prev := it
   for w in @frames => w.postMessage it, origin
 window.output = ->
   # record?
