@@ -8,7 +8,6 @@
       x = ref$[i$];
       this.frames.push(x.contentWindow.window);
     }
-    console.log(this.frames);
     window.id = 'hub';
     window.reset = function(){
       return input('');
