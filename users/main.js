@@ -6,7 +6,7 @@
     url = 'https://goinstant.net/poga/yhd2013-moe-users';
     window.id = 'users';
     $(document).on('click', '.gi-user', function(it){
-      return console.log($(it.target).text());
+      return window.output($(it.target).text());
     });
     connection = new goinstant.Connection(url);
     return connection.connect(function(){
