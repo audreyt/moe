@@ -20,8 +20,8 @@ String::permutate = ->
 # global
 origin = "http://127.0.0.1:8888/"
 buffer = []
-my-input = ""
-my-output = []
+$input = $ \#input
+$output = $ \#output
 # functions to handle message event
 buffer = []
 var CharComp
@@ -30,8 +30,8 @@ var OrigChars
 msg-before-data = ({data}) ->
   buffer.push data
 msg-after-data = ({data}) ->
-  my-input := data
-  my-output := []
+  data = ($input.val! + data)
+  $input.val data
   comps = []
   get-comps = ->
     out = ""
@@ -40,8 +40,7 @@ msg-after-data = ({data}) ->
       comps = CharComp[char]
       out += comps if comps
     it + get-comps out
-  comps = get-comps my-input
-  #comps = Array::filter.call comps, -> it not in my-input
+  comps = get-comps data
   foo = {}
   for part in (comps / '').sort! =>
     foo[part] = true
@@ -60,10 +59,16 @@ msg-after-data = ({data}) ->
     scanl taken, rest
     scanl taken + head, rest
   scanl '', comps
-  JSON.stringify Object.keys(seen),, 2
+  keys = Object.keys(seen)
+  $output.empty!
+  for char in keys
+    $output.append($(\<li/>).append $(\<a/> href: \#).text char .click ->
+      window.output $(@).text!
+    )
+  JSON.stringify keys,, 2
 # API
 window.id = \lhc
-window.reset = -> my-input := ""
+window.reset = -> $input.val ""
 window.input = -> msg-before-data {data: it}
 window.addEventListener \message msg-before-data
 window.output = ->
@@ -81,5 +86,4 @@ window.removeEventListener \message, msg-before-data
 for data in buffer
   msg-after-data {data}
 window.addEventListener \message, msg-after-data
-
 
