@@ -103,10 +103,37 @@
             </div>
         </div>
     </div>
+    <div class="lightbox">
+        <a href="#" class="lightbox-close"><i class="icon-remove"></i></a>
+        <div class="big-iframe">
+            <iframe src="https://www.moedict.tw/#萌"></iframe>
+        </div>
+        <div class="nav">
+            <ul>
+                <li><a href="#">匯出記錄</a></li>
+                <li><a href="#">關於</a></li>
+                <li class="share">
+                    告訴朋友：
+                    <a href="#"><i class="icon-facebook-sign"></i></a>
+                    <a href="#"><i class="icon-google-plus-sign"></i></a>
+                    <a href="#"><i class="icon-twitter-sign"></i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
 
 <script src="javascripts/jquery-1.10.2.min.js"></script>
 <script>
 $(function(){
+    //lightbox
+    $(".lightbox").hide();
+    $(".main-btn").on("click", function() {
+        $(".lightbox").fadeIn();
+    });
+    $(".lightbox .lightbox-close").on("click", function() {
+        $(".lightbox").fadeOut();
+    });
+
     // get window width & height
     var windowWidth = $(window).width();
     var windowHeight = $(window).height();
