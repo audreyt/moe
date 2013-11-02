@@ -29,35 +29,40 @@ var CompChar
 var OrigChars
 msg-before-data = ({data}) ->
   buffer.push data
+window.uniq = uniq = ->
+  seen = {}
+  for w in it / '' => seen[w] = true
+  Object.keys(seen).sort! * ''
 msg-after-data = ({data}) ->
-  data = ($input.val! + data)
+  data = uniq($input.val! + data)
   $input.val data
   comps = []
   get-comps = ->
     out = ""
     for char in it
       comps = CharComp[char]
-      out += if CharComp[char] then get-comps CharComp[char] else char
+      out += comps if get-comps comps else char
     it + out
-  comps = get-comps data
-  foo = {}
-  for part in (comps / '').sort! =>
-    foo[part] = true
-  comps = Object.keys(foo).sort! * ''
+  comps = uniq(get-comps data)
   seen = {}
   for ch in comps => seen[ch] = true if ch in OrigChars
   scanned = { '' : true }
-  scanl = (taken, rest) ->
+  queue = []
+  callback = null
+  queue = [['', comps]]
+  count = 0
+  while queue.length
+    break if count++ > 1000 # TODO: move to worker
+    [taken, rest] = queue.shift!
     unless scanned[taken]
       scanned[taken] = true
       c = CompChar[taken]
       seen[c] = true if c and c in OrigChars
-    return if rest.length == 0
+    break if rest.length == 0
     head = rest.0
     rest.=substr(1)
-    scanl taken, rest
-    scanl taken + head, rest
-  scanl '', comps
+    queue.push [taken, rest]
+    queue.push [taken + head, rest]
   keys = Object.keys(seen)
   $output.empty!
   for char in keys
