@@ -39,11 +39,10 @@ msg-after-data = ({data}) ->
   comps = []
   get-comps = ->
     out = ""
-    return out if it.length <= 0
     for char in it
       comps = CharComp[char]
-      out += comps if comps
-    it + get-comps out
+      out += comps if get-comps comps else char
+    it + out
   comps = uniq(get-comps data)
   seen = {}
   for ch in comps => seen[ch] = true if ch in OrigChars
