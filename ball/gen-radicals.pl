@@ -5,6 +5,9 @@ use Encode;
 use JSON::XS;
 use File::Slurp qw[ read_file write_file ];
 my %radical_of;
+my %radical_same;
+my @chars = split //, read_file 'orig-chars.json', {binmode => ':utf8'};
+my %chars = map { $_ => 1 } @chars;
 for (<c/@*.json>) {
     my $radical = Encode::decode_utf8($_);
     $radical =~ s!.*/\@!!;
@@ -13,11 +16,14 @@ for (<c/@*.json>) {
     my $x = read_file $_; #, { binmode => ':utf8' };
     for (@{ JSON::XS::decode_json($x) }) {
         next unless $_;
-        $radical_of{$_} = $radical for @$_;
+        for (@$_) {
+            $radical_of{$_} = $radical if $chars{$_};
+            $radical_same{$radical} .= $_ if $chars{$_};
+        }
     }
-    $radical_of{$radical} = $radical;
 }
 File::Slurp::write_file("Radical.json", {binmode => ":utf8"} , JSON::XS->new->pretty(1)->canonical(1)->encode(\%radical_of));
+File::Slurp::write_file("RadicalSame.json", {binmode => ":utf8"} , JSON::XS->new->pretty(1)->canonical(1)->encode(\%radical_same));
 
 __DATA__
 流水號,國字,審定音一,審定音二,審定音三,審定音四,審定音五,審定音六,

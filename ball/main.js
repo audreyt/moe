@@ -21,78 +21,105 @@
     return GET("Shape.json", function(Shape){
       return GET("Sound.json", function(Sound){
         return GET("Radical.json", function(Radical){
-          return GET("SoundRhyme.json", function(Rhyme){
-            var origin;
-            origin = "http://127.0.0.1:8888/";
-            window.id = 'tmuse';
-            window.reset = function(){
-              return $in.val('');
-            };
-            window.addEventListener("message", function(it){
-              return window.input(it.data, false);
-            });
-            window.input = function(it){
-              var i$, len$, char, lresult$, j$, ref$, len1$, ch, results$ = [];
-              $in.val(it);
-              $out.empty();
-              function x(it){
-                return replace$.call(it, /[`~]/g, '');
-              }
-              for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
-                char = it[i$];
-                lresult$ = [];
-                if (!Shape[char]) {
-                  continue;
-                }
-                for (j$ = 0, len1$ = (ref$ = char + Shape[char]).length; j$ < len1$; ++j$) {
-                  ch = ref$[j$];
-                  lresult$.push((fn$.call(this, ch, char)));
-                }
-                results$.push(lresult$);
-              }
-              return results$;
-              function fn$(ch, char){
-                var parts, i$, ref$, len$, s, $li, p;
-                console.log(ch);
-                parts = [];
-                parts.push($('<a/>', {
-                  href: '#'
-                }).text(ch).click(function(){
-                  return window.output($(this).text());
-                }));
-                for (i$ = 0, len$ = (ref$ = Sound[ch] || []).length; i$ < len$; ++i$) {
-                  s = ref$[i$];
+          return GET("RadicalSame.json", function(RadicalSame){
+            return GET("SoundRhyme.json", function(SoundRhyme){
+              return GET("SoundAlike.json", function(SoundAlike){
+                var origin;
+                origin = "http://127.0.0.1:8888/";
+                window.id = 'tmuse';
+                window.reset = function(){
+                  return $in.val('');
+                };
+                window.addEventListener("message", function(it){
+                  return window.input(it.data, false);
+                });
+                window.input = function(it){
+                  var i$, len$, char, lresult$, j$, ref$, len1$, ch, results$ = [];
+                  $in.val(it);
+                  $out.empty();
+                  function x(it){
+                    return replace$.call(it, /[`~]/g, '');
+                  }
+                  for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
+                    char = it[i$];
+                    lresult$ = [];
+                    if (!Shape[char]) {
+                      continue;
+                    }
+                    for (j$ = 0, len1$ = (ref$ = char + Shape[char]).length; j$ < len1$; ++j$) {
+                      ch = ref$[j$];
+                      lresult$.push(draw(ch));
+                    }
+                    results$.push(lresult$);
+                  }
+                  return results$;
+                };
+                window.output = function(it){
+                  if (window.muted) {
+                    return;
+                  }
+                  input(it);
+                  return window.top.postMessage(it, origin);
+                };
+                function draw(ch){
+                  var parts, i$, ref$, len$, s, $li, p;
+                  parts = [];
                   parts.push($('<a/>', {
                     href: '#'
-                  }).text(s).click(fn$));
+                  }).text(ch).click(function(){
+                    return window.output($(this).text());
+                  }));
+                  for (i$ = 0, len$ = (ref$ = Sound[ch] || []).length; i$ < len$; ++i$) {
+                    s = ref$[i$];
+                    parts.push($('<a/>', {
+                      href: '#'
+                    }).text(s).click(fn$));
+                  }
+                  parts.push($('<a/>', {
+                    href: '#'
+                  }).text(Radical[ch]).click(function(){
+                    return goRadical($(this).text());
+                  }));
+                  $li = $('<li/>');
+                  for (i$ = 0, len$ = parts.length; i$ < len$; ++i$) {
+                    p = parts[i$];
+                    $li.append(p);
+                    $li.append('&nbsp;');
+                  }
+                  return $li.appendTo($out);
+                  function fn$(){
+                    return goAlike($(this).text());
+                  }
                 }
-                parts.push($('<a/>', {
-                  href: '#'
-                }).text(Radical[ch]).click(function(){
-                  return goRadical($(this).text());
-                }));
-                $li = $('<li/>');
-                for (i$ = 0, len$ = parts.length; i$ < len$; ++i$) {
-                  p = parts[i$];
-                  $li.append(p);
-                  $li.append('&nbsp;');
+                function goRadical(it){
+                  var i$, ref$, len$, ch;
+                  $out.empty();
+                  for (i$ = 0, len$ = (ref$ = RadicalSame[it]).length; i$ < len$; ++i$) {
+                    ch = ref$[i$];
+                    draw(ch);
+                  }
                 }
-                return $li.appendTo($out);
-                function fn$(){
-                  return goRhyme($(this).text());
+                function goRhyme(it){
+                  var i$, ref$, ref1$, len$, ch, results$ = [];
+                  $out.empty();
+                  for (i$ = 0, len$ = (ref$ = SoundRhyme[(ref1$ = replace$.call(it, /[ˋˊˇ‧]/g, ''))[ref1$.length - 1]]).length; i$ < len$; ++i$) {
+                    ch = ref$[i$];
+                    results$.push(draw(ch));
+                  }
+                  return results$;
                 }
-              }
-            };
-            window.output = function(it){
-              if (window.muted) {
-                return;
-              }
-              input(it);
-              return window.top.postMessage(it, origin);
-            };
-            function goRadical(){}
-            function goRhyme(){}
-            return goRhyme;
+                function goAlike(it){
+                  var i$, ref$, len$, ch, results$ = [];
+                  $out.empty();
+                  for (i$ = 0, len$ = (ref$ = SoundAlike[replace$.call(it, /[ˋˊˇ‧]/g, '')]).length; i$ < len$; ++i$) {
+                    ch = ref$[i$];
+                    results$.push(draw(ch));
+                  }
+                  return results$;
+                }
+                return goAlike;
+              });
+            });
           });
         });
       });
