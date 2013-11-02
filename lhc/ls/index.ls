@@ -1,5 +1,5 @@
 Array::powerset = ->
-  return @ if @length is 1
+  return @ if @length <= 1
   xs = @slice!
   x = xs.pop!
   p = xs.powerset!
@@ -27,7 +27,7 @@ msg-after-data = ({data}) ->
     c = CompChar[maybe]
     my-output.push c if c and c in OrigChars
   window.output my-output
-  my-output
+  JSON.stringify my-output,, 2
 # API
 window.id = \lhc
 window.reset = -> my-input := ""

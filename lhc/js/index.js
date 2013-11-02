@@ -3,7 +3,7 @@
   var origin, buffer, myInput, myOutput, CharComp, CompChar, OrigChars, msgBeforeData, msgAfterData;
   Array.prototype.powerset = function(){
     var xs, x, p;
-    if (this.length === 1) {
+    if (this.length <= 1) {
       return this;
     }
     xs = this.slice();
@@ -47,7 +47,7 @@
       }
     }
     window.output(myOutput);
-    return myOutput;
+    return JSON.stringify(myOutput, void 8, 2);
   };
   window.id = 'lhc';
   window.reset = function(){
