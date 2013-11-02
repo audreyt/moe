@@ -12,13 +12,17 @@
       return window.input(it.data, false);
     });
     $('#submitStr').click(function(){
-      $('#inputLong').val(STR2GEO($('#inputStr').val()).longitude);
-      return $('#inputLat').val(STR2GEO($('#inputStr').val()).latitude);
+      var geo;
+      geo = STR2GEO($('#inputStr').val());
+      $('#inputX').val(geo.x);
+      $('#spanLong').text(geo.longitude);
+      $('#inputY').val(geo.y);
+      return $('#spanLat').text(geo.latitude);
     });
     $('#submitGeo').click(function(){
       return $('#inputStr').val(GEO2STR({
-        longitude: parseFloat($('#inputLong').val()),
-        latitude: parseFloat($('#inputLat').val())
+        x: parseInt($('#inputX').val()),
+        y: parseInt($('#inputY').val())
       }));
     });
     window.input = function(it){
@@ -47,10 +51,10 @@
         long = long * 64 + high;
         lat = lat * 64 + low;
       }
-      rX = parseInt(long.toString(2), 2);
-      rY = parseInt(lat.toString(2), 2);
-      rLong = rX / Math.pow(2, long.toString(2).length);
-      rLat = rY / Math.pow(2, long.toString(2).length);
+      rX = long;
+      rY = lat;
+      rLong = rX / Math.pow(2, it.length * 6);
+      rLat = rY / Math.pow(2, it.length * 6);
       return {
         longitude: longMIN + (longMAX - longMIN) * rLong,
         latitude: latMIN + (latMAX - latMIN) * rLat,
