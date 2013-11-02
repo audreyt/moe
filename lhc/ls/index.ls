@@ -1,4 +1,4 @@
-window ?= { $: require(\jquery), addEventListener: -> }
+#window ?= -> { $: require(\jquery), addEventListener: -> }
 Array::powerset = String::powerset = ->
   return @ if @length <= 1
   xs = Array::slice.call @
@@ -41,23 +41,26 @@ msg-after-data = ({data}) ->
       out += comps if comps
     it + get-comps out
   comps = get-comps my-input
-  comps = Array::filter.call comps, -> it not in my-input
-  console.log comps
-  /*
-  results = []
-  do
-    console.log comps.powerset!
-    results = results.concat comps.powerset!
-    Array::pop.call comps
-  while comps.length isnt 0
-  */
-  for set in comps.powerset!
-    console.log set
-    for p in set.permutate!
-      c = CompChar[p]
-      my-output.push c if c and c in OrigChars
-  # window.output my-output
-  JSON.stringify my-output,, 2
+  #comps = Array::filter.call comps, -> it not in my-input
+  foo = {}
+  for part in (comps / '').sort! =>
+    foo[part] = true
+  comps = Object.keys(foo).sort! * ''
+  seen = {}
+  for ch in comps => seen[ch] = true if ch in OrigChars
+  scanned = { '' : true }
+  scanl = (taken, rest) ->
+    unless scanned[taken]
+      scanned[taken] = true
+      c = CompChar[taken]
+      seen[c] = true if c and c in OrigChars
+    return if rest.length == 0
+    head = rest.0
+    rest.=substr(1)
+    scanl taken, rest
+    scanl taken + head, rest
+  scanl '', comps
+  JSON.stringify Object.keys(seen),, 2
 # API
 window.id = \lhc
 window.reset = -> my-input := ""
@@ -69,7 +72,7 @@ window.output = ->
 # load char to comps and comps to char table
 d <- $.get \./data/char_comp_simple.json
 CharComp := d
-d <- $.get \./data/comp_char_simple.json
+d <- $.get \./data/comp_char_sorted.json
 CompChar := d
 d <- $.get \./data/orig-chars.json
 OrigChars := d
