@@ -50,7 +50,7 @@
         lat = lat << 6 | low;
       }
       rLong = parseInt(long.toString(2), 2) / Math.pow(2, long.toString(2).length);
-      rLat = parseInt(lat.toString(2), 2) / Math.pow(2, long.toString(2).length);
+      rLat = parseInt(lat.toString(2), 2) / Math.pow(2, lat.toString(2).length);
       return {
         longitude: longMIN + (longMAX - longMIN) * rLong,
         latitude: latMIN + (latMAX - latMIN) * rLat
