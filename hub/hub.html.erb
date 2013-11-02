@@ -11,12 +11,21 @@
 <link rel="stylesheet" media="screen" href="../stylesheets/hub.css">
 </head>
 <body>
+    <div class="twinkling"></div>
     <div class="content-wrapper">
         <div class="main-control">
             <a href="#" class="gogo">gogo</a>
             <a href="#" class="main-btn">主選單</a>
-            <div class="tube project-users"><span class="moving-word output">草木</span></div>
-            <div class="tube project-tmuse"></div>
+            <div class="tube project-users">
+                <a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a>
+                <span class="moving-word output">草木</span>
+            </div>
+            <div class="tube project-tmuse"><a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a></div>
+            <div class="tube project-tmuse"><a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a></div>
+            <div class="tube project-dict"><a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a></div>
+            <div class="tube project-ball"><a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a></div>
+            <div class="tube project-thc"><a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a></div>
+            <div class="tube project-map"><a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a></div>
         </div>
         <div class="iframe-wrapper v-type project-users">
             <div class="iframe-header">
@@ -176,7 +185,25 @@ $(function(){
     $(".iframe-wrapper.project-users, .iframe-wrapper.project-ball").css({left:"2%"});
     $(".iframe-wrapper.project-dict, .iframe-wrapper.project-map").css({left:contentWidth*0.98-nBlockWidth});
 
+    // tube-status position 
+    var centerPointX = contentWidth/2;
+    var centerPointY = contentHeight/2;
+    $(".tube.project-users .tube-status, .tube.project-dict .tube-status").css({top: centerPointY-41});
+    $(".tube.project-ball .tube-status, .tube.project-map .tube-status").css({top: centerPointY+6});
+    $(".tube.project-users .tube-status, .tube.project-ball .tube-status").css({left: centerPointX-94});
+    $(".tube.project-dict .tube-status, .tube.project-map .tube-status").css({left: centerPointX+58});
+    $(".tube.project-tmuse .tube-status, .tube.project-thc .tube-status").css({left: centerPointX-18});
+    $(".tube.project-tmuse .tube-status").css({top: centerPointY-96});
+    $(".tube.project-thc .tube-status").css({top: centerPointY+60});
+
+    // tube-status toggle
+    $(".tube-status").on("click", function() {
+        $(this).toggleClass("open").toggleClass("close");
+        $(this).find("i").toggleClass("icon-circle-blank").toggleClass("icon-ban-circle");
+    });
+
     // input / output words
+    // 僅供樣式測試，功能不正確
     var pUserWordPosition = {top: contentHeight*0.3, left: contentWidth*0.02+nBlockWidth/2};
     var pMapWordPosition = {top: contentHeight*0.52+nBlockHeight/2, left: contentWidth*0.98-nBlockWidth/2};
 
@@ -192,7 +219,6 @@ $(function(){
             complete: function() {
                 $(".tube.project-users .moving-word").animate(pMapWordPosition, 2500);
             }
-
         });
     });
 
@@ -208,15 +234,15 @@ $(function(){
             originHeight = thisBlock.height();
             originTop = thisBlock.css("top");
             originLeft = thisBlock.css("left");
-            thisBlock.css({"z-index": 9999}).animate({width: contentWidth*0.96, height: contentHeight*0.96, top: "2%", left: "2%"});
-            thisIframe.animate({width: contentWidth*0.96-16, height: contentHeight*0.96-46});
+            thisBlock.css({"z-index": 9999, position: "fixed"}).animate({width: windowWidth*0.98, height: windowHeight*0.98, top: "1%", left: "1%"});
+            thisIframe.animate({width: windowWidth*0.98-16, height: windowHeight*0.98-46});
             $(this).find("i").removeClass("icon-zoom-in").addClass("icon-zoom-out");
         }
         else {
             thisBlock.animate({width: originWidth, height: originHeight, top: originTop, left: originLeft});
             thisIframe.animate({width: originWidth-16, height: originHeight-46}, {
                 complete: function() {
-                    thisBlock.css({"z-index": 1});
+                    thisBlock.css({"z-index": 5, position: "absolute"});
                 }
             });
             
