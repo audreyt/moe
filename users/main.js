@@ -5,8 +5,11 @@
     origin = "http://127.0.0.1:8888/";
     url = 'https://goinstant.net/poga/yhd2013-moe-users';
     window.id = 'users';
+    window.addEventListener("message", function(it){
+      return window.input(it.data, false);
+    });
     $(document).on('click', '.gi-user', function(it){
-      return console.log($(it.target).text());
+      return window.output($(it.target).text());
     });
     connection = new goinstant.Connection(url);
     return connection.connect(function(){
