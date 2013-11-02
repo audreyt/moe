@@ -1,0 +1,108 @@
+A very first TMuse dump : spacialized lexicon of Mandarin
+
+By the Proxteam, 2013/11/01
+
+Download the resource : here
+
+Licence
+
+This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+http://creativecommons.org/licenses/by-nc-sa/3.0/
+
+Authors: Proxteam Members (and for this json dump: Yannick Chudy <y.chudy@gmail.com>, Pierre Magistry <pmagistry@gmail.com>)
+For any aditional information : #proxteam on freenode.
+
+Description of the resource
+
+This archive contains a dump of a set of 22,722 local graphs built from a large Mandarin Chinese lexical graph. To each entry in the resources corresponds a local graph where vertices are semanticaly related words. In each of these graphs, vertices are connected by synonymy relations. Each vertex has a position in space and is included in a semantic cluster. It corresponds to the result of the computations made by the TMuse system for lexical resources exploration [1] using the Prox algorithm. For details or reference in scientific publication, please see the following papers [2] (short demo paper) and [3].
+
+It was built based on synonymy data from the Chinese Wordnet [4] and from the Ministery of Education of Taiwan (MOE). Concerning the MOE data, we used the json version distributed by g0v.tw [5]
+
+[1] http://naviprox.net/tmuse/ 
+[2] Chudy, Y., Desalle, Y., Gaillard, B., Gaume, B., Magistry, P., Navarro, E. Tmuse: Lexical Network Exploration.
+In Sixth International Joint Conference on Natural Language Processing, 2013, p. 41.
+http://aclweb.org/anthology/I/I13/I13-2011.pdf
+[3] Gaume, B. Maping the form of meaning in Small Worlds. In Journal of Intelligent Systems, Volume 23, Issue 7, pages 848â€“862, 
+http://w3.erss.univ-tlse2.fr/textes/pagespersos/gaume/resources/gaume_IJIS_7034_07_05_08_for%20Printing.pdf
+[4] http://lope.linguistics.ntu.edu.tw/cwn2/
+[5] 3du from g0v.tw
+Description of the JSON format
+
+Each entry consists of a clustering and a graph, here is a simple example :
+{
+
+#clustering_json is a list of clusters 
+    "clustering_json": [
+    {
+        "labels": [
+            [
+            "\u65e9\u665a", 
+        1.0
+            ], 
+        [
+            "\u65e5\u5915", 
+        0.8333333333333334
+            ],
+        (...)  
+            [
+            "\u9072\u65e9", 
+        0.16666666666666666
+            ]
+            ]
+    }
+    ], 
+
+#graph_json consists of nodes and edges
+        "graph_json": {
+            "nodes": [
+            {
+                "degree_in": 6, 
+                "score": 0.17072940287226, 
+                "coords": [
+                    -0.02204919267495964, 
+                -0.04249168921809943, 
+                0.0
+                    ], 
+                "degree_out": 6, 
+                "label": "\u65e9\u665a"
+            }, 
+            (...)
+            {
+                "degree_in": 5, 
+                "score": 0.1588246409674981, 
+                "coords": [
+                    0.16886667682441991, 
+                0.0781877410882022, 
+                0.031312610819203335
+                    ], 
+                "degree_out": 5, 
+                "label": "\u6668\u5915"
+            }
+            ],  
+
+#edges have a source 's' and a target 't' that are the indices of the connected nodes in the node list
+                "edges": [
+                {
+                    "s": 0, 
+                    "t": 3, 
+                    "w": 1.0
+                },
+                (...) 
+                {
+                    "s": 3, 
+                    "t": 4, 
+                    "w": 1.0
+                }, 
+                {
+                    "s": 3, 
+                    "t": 5, 
+                    "w": 1.0
+                }, 
+                {
+                    "s": 4, 
+                    "t": 5, 
+                    "w": 1.0
+                }
+            ]
+        }
+}
