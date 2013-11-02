@@ -13,30 +13,105 @@ body {
     background: #111 url("../images/bg_body.png");
     background-size: cover;
 }
+
+@keyframes move-twink-back {
+    from {background-position:0 0;}
+    to {background-position:-10000px 5000px;}
+}
+@-webkit-keyframes move-twink-back {
+    from {background-position:0 0;}
+    to {background-position:-10000px 5000px;}
+}
+@-moz-keyframes move-twink-back {
+    from {background-position:0 0;}
+    to {background-position:-10000px 5000px;}
+}
+@-ms-keyframes move-twink-back {
+    from {background-position:0 0;}
+    to {background-position:-10000px 5000px;}
+}
+
+.twinkling {
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    width:100%;
+    height:100%;
+    display:block;
+}
+
+.twinkling{
+    background:transparent url("../images/twinkling.png") repeat top center;
+    z-index:1;
+    
+    -moz-animation:move-twink-back 200s linear infinite;
+    -ms-animation:move-twink-back 200s linear infinite;
+    -o-animation:move-twink-back 200s linear infinite;
+    -webkit-animation:move-twink-back 200s linear infinite;
+    animation:move-twink-back 200s linear infinite;
+}
+
 .content-wrapper {
     margin: 0 auto;
     background: url("../images/bg_tubes.png") center center no-repeat;
     position: relative;
+    z-index: 2;
 }
 
 .iframe-wrapper {
     background: $darkRed;
-    box-shadow: rgba(235,138,138,1) 0 0 12px;
+    //box-shadow: rgba(235,138,138,1) 0 0 12px;
     position: absolute;
-    z-index: 1;
+    z-index: 5;
     .iframe-header {
+        line-height: 25px;
         display: block;
         height: 25px;
         margin: 8px 8px 5px;
+        position: relative;
+        input {
+            width: 60%;
+            display: inline-block;
+            height: 15px;
+            padding: 4px 6px;
+            line-height: 15px;
+            color: #555555;
+            vertical-align: top;
+            border: darken($darkRed, 8) 1px solid;
+        }
+        button {
+            box-sizing: border-box;
+            display: inline-block;
+            padding: 4px 12px;
+            margin-bottom: 0;
+            line-height: 15px;
+            background: #ddd;
+            color: #333333;
+            text-align: center;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+            vertical-align: top;
+            border: darken($darkRed, 8) 1px solid;
+            transition: all 0.2s ease;
+            &:hover {
+                background: #333;
+                text-shadow: 0 1px 1px rgba(0,0,0, 0.75);
+                color: #fff;
+            }
+        }
     }
     .controls {
         float: right;
         a {
-            display: inline-block;
+            display: block;
             text-decoration: none;
             color: #eee;
             border: darken($darkRed, 8) 1px solid;
-            padding: 2px 5px;
+            height: 23px;
+            width: 30px;
+            text-align: center;
+            line-height: 23px;
             transition: all 0.2s ease;
             &:hover {
                 background: darken($darkRed, 5);
@@ -71,7 +146,10 @@ body {
         &:hover {
             background: #eee url("../images/meng_hover.png") center center;
             background-size: 100% 100%;
-            box-shadow: darken($darkRed, 10) 0 2px 1px, darken($darkRed, 10) 0 2px 3px, darken($darkRed, 20) 0 0 2px;
+            box-shadow: darken($darkRed, 10) 0 2px 1px, darken($darkRed, 20) 0 0 2px;
+        }
+        &:active {
+            box-shadow: darken($darkRed, 20) 0 0 2px;
         }
     }
     .moving-word {
@@ -82,6 +160,31 @@ body {
         padding: 3px 5px;
         border-radius: 16px;
         border: $darkRed 10px solid;
+        z-index: 3;
+    }
+    a.tube-status {
+        display: block;
+        width: 24px;
+        height: 24px;
+        background: #eee;
+        text-decoration: none;
+        border-radius: 18px;
+        border: $darkRed 6px solid;
+        color: #006b00;
+        text-align: center;
+        line-height: 26px;
+        position: absolute;
+        z-index: 8;
+        &:hover {
+            background: #fff;
+        }
+        &.close {
+            background: #999;
+            color: $darkRed;
+            &:hover {
+                background: #aaa;
+            }
+        }
     }
 }
 
