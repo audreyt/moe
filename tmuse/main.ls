@@ -36,6 +36,10 @@ window.input = ->
     sphere.position.z = coords[2]*multiplier
     scene.add(sphere)
     objs[n.label] = sphere
+
+    spritey = makeTextSprite( " #{n.label} " );
+    spritey.position = sphere.position.clone().multiplyScalar(1.1);
+    scene.add( spritey );
 #clustering & coloring
   obj_coloring = {}
   clustering = json.clustering_json
@@ -86,3 +90,61 @@ GET = (url, data, onSuccess, dataType) ->
   ), (dataType || \json)).fail ->
     #x = decodeURIComponent(url) - /\.json$/ - /^\w/
     #window.input x
+
+
+window.makeTextSprite = ( message, parameters ) ->
+  parameters = {} if parameters === undefined
+
+  fontface = "Arial";
+  fontsize = 10;
+  borderThickness = 1;
+  borderColor = { r:0, g:0, b:0, a:1.0 };
+  backgroundColor = { r:255, g:255, b:255, a:1.0 };
+
+  spriteAlignment = THREE.SpriteAlignment.topLeft;
+
+  canvas = document.createElement('canvas');
+  context = canvas.getContext('2d');
+  context.font = "Bold " + fontsize + "px " + fontface;
+
+  # get size data (height depends only on font size)
+  metrics = context.measureText( message );
+  textWidth = metrics.width;
+
+  # background color
+  context.fillStyle = "rgba(" + backgroundColor.r + "," + backgroundColor.g + "," + backgroundColor.b + "," + backgroundColor.a + ")";
+  # border color
+  context.strokeStyle = "rgba(" + borderColor.r + "," + borderColor.g + "," + borderColor.b + "," + borderColor.a + ")";
+
+  context.lineWidth = borderThickness;
+  window.roundRect(context, borderThickness/2, borderThickness/2, textWidth + borderThickness, fontsize * 1.4 + borderThickness, 6);
+  # 1.4 is extra height factor for text below baseline: g,j,p,q.
+
+  # text color
+  context.fillStyle = "rgba(0, 0, 0, 1.0)";
+
+  context.fillText( message, borderThickness, fontsize + borderThickness);
+
+  # canvas contents will be used for a texture
+  texture = new THREE.Texture(canvas) 
+  texture.needsUpdate = true;
+
+  spriteMaterial = new THREE.SpriteMaterial( { map: texture, useScreenCoordinates: false, alignment: spriteAlignment } );
+  sprite = new THREE.Sprite( spriteMaterial );
+  sprite.scale.set(4, 2, 0.04)
+  return sprite
+
+window.roundRect = (ctx, x, y, w, h, r) ->
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.lineTo(x+w - r, y);
+  ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+  ctx.lineTo(x+w, y+h - r);
+  ctx.quadraticCurveTo(x+w, y+h, x+w - r, y+h);
+  ctx.lineTo(x+r, y+h);
+  ctx.quadraticCurveTo(x, y+h, x, y+h - r);
+  ctx.lineTo(x, y+r);
+  ctx.quadraticCurveTo(x, y, x+r, y);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();   
