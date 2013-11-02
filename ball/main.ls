@@ -73,6 +73,8 @@ function go-alike
   show-chars SoundAlike[ (it - /[ˋˊˇ‧]/g) ]
 
 window.go-char = function go-char ({ch, bpmf, radical})
+  output ch
+  <- setTimeout _, 1ms
   rads = RadicalSame[ radical ] || ''
   snds = SoundAlike[ bpmf ] || ''
   sims = go-similar(ch) || ''

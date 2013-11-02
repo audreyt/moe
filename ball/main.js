@@ -115,12 +115,16 @@
                 }
                 window.goChar = (function(){
                   function goChar(arg$){
-                    var ch, bpmf, radical, rads, snds, sims;
+                    var ch, bpmf, radical;
                     ch = arg$.ch, bpmf = arg$.bpmf, radical = arg$.radical;
-                    rads = RadicalSame[radical] || '';
-                    snds = SoundAlike[bpmf] || '';
-                    sims = goSimilar(ch) || '';
-                    return showChars(rads + snds + sims);
+                    output(ch);
+                    return setTimeout(function(){
+                      var rads, snds, sims;
+                      rads = RadicalSame[radical] || '';
+                      snds = SoundAlike[bpmf] || '';
+                      sims = goSimilar(ch) || '';
+                      return showChars(rads + snds + sims);
+                    }, 1);
                   }
                   return goChar;
                 }());
