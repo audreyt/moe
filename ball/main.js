@@ -34,25 +34,18 @@
                   return window.input(it.data, false);
                 });
                 window.input = function(it){
-                  var i$, len$, char, lresult$, j$, ref$, len1$, ch, results$ = [];
+                  var sims, i$, len$, char;
                   $in.val(it);
                   $out.empty();
-                  function x(it){
-                    return replace$.call(it, /[`~]/g, '');
-                  }
+                  sims = "";
                   for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
                     char = it[i$];
-                    lresult$ = [];
                     if (!Shape[char]) {
                       continue;
                     }
-                    for (j$ = 0, len1$ = (ref$ = char + Shape[char]).length; j$ < len1$; ++j$) {
-                      ch = ref$[j$];
-                      lresult$.push(draw(ch));
-                    }
-                    results$.push(lresult$);
+                    sims += char + Shape[char];
                   }
-                  return results$;
+                  return showChars(sims);
                 };
                 window.output = function(it){
                   if (window.muted) {
@@ -91,33 +84,40 @@
                     return goAlike($(this).text());
                   }
                 }
-                function goRadical(it){
-                  var i$, ref$, len$, ch;
-                  $out.empty();
-                  for (i$ = 0, len$ = (ref$ = RadicalSame[it]).length; i$ < len$; ++i$) {
-                    ch = ref$[i$];
-                    draw(ch);
+                window.debug = (function(){
+                  function showChars(it){
+                    var table, i$, len$, ch, radical, bpmf;
+                    window.table = table = [];
+                    for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
+                      ch = it[i$];
+                      if (!Sound[ch]) {
+                        continue;
+                      }
+                      radical = Radical[ch];
+                      bpmf = Sound[ch][0];
+                      table.push({
+                        ch: ch,
+                        bpmf: bpmf,
+                        radical: radical
+                      });
+                    }
+                    window.init(table);
+                    return window.animate();
                   }
+                  return showChars;
+                }());
+                function goRadical(it){
+                  return showChars(RadicalSame[it]);
                 }
                 function goRhyme(it){
-                  var i$, ref$, ref1$, len$, ch, results$ = [];
-                  $out.empty();
-                  for (i$ = 0, len$ = (ref$ = SoundRhyme[(ref1$ = replace$.call(it, /[ˋˊˇ‧]/g, ''))[ref1$.length - 1]]).length; i$ < len$; ++i$) {
-                    ch = ref$[i$];
-                    results$.push(draw(ch));
-                  }
-                  return results$;
+                  var ref$;
+                  return showChars(SoundRhyme[(ref$ = replace$.call(it, /[ˋˊˇ‧]/g, ''))[ref$.length - 1]]);
                 }
                 function goAlike(it){
-                  var i$, ref$, len$, ch, results$ = [];
-                  $out.empty();
-                  for (i$ = 0, len$ = (ref$ = SoundAlike[replace$.call(it, /[ˋˊˇ‧]/g, '')]).length; i$ < len$; ++i$) {
-                    ch = ref$[i$];
-                    results$.push(draw(ch));
-                  }
-                  return results$;
+                  return showChars(SoundAlike[replace$.call(it, /[ˋˊˇ‧]/g, '')]);
                 }
                 return GET("Table.json", function(table){
+                  window.table = table;
                   window.init(table);
                   return window.animate();
                 });
