@@ -1,9 +1,22 @@
+window ?= { $: require(\jquery), addEventListener: -> }
 Array::powerset = String::powerset = ->
   return @ if @length <= 1
   xs = Array::slice.call @
   x = Array::pop.call xs
   p = xs.powerset!
   p.concat p.map -> it.concat [x]
+String::permutate = ->
+  return @ if @length is 1
+  ret = []
+  xs = @substr 1
+  x = @.0
+  p = xs.permutate!
+  for set in p
+    for i from 0 to set.length
+      before = set.substring 0, i
+      after = set.substring i
+      ret.push before + x + after
+  ret
 # global
 origin = "http://127.0.0.1:8888/"
 buffer = []
@@ -29,10 +42,20 @@ msg-after-data = ({data}) ->
     it + get-comps out
   comps = get-comps my-input
   comps = Array::filter.call comps, -> it not in my-input
-  console.log comps.powerset!
-  for maybe in comps.powerset!
-    c = CompChar[maybe]
-    my-output.push c if c and c in OrigChars
+  console.log comps
+  /*
+  results = []
+  do
+    console.log comps.powerset!
+    results = results.concat comps.powerset!
+    Array::pop.call comps
+  while comps.length isnt 0
+  */
+  for set in comps.powerset!
+    console.log set
+    for p in set.permutate!
+      c = CompChar[p]
+      my-output.push c if c and c in OrigChars
   # window.output my-output
   JSON.stringify my-output,, 2
 # API
@@ -55,4 +78,5 @@ window.removeEventListener \message, msg-before-data
 for data in buffer
   msg-after-data {data}
 window.addEventListener \message, msg-after-data
+
 

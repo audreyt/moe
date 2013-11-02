@@ -13,6 +13,26 @@
       return it.concat([x]);
     }));
   };
+  String.prototype.permutate = function(){
+    var ret, xs, x, p, i$, len$, set, j$, to$, i, before, after;
+    if (this.length === 1) {
+      return this;
+    }
+    ret = [];
+    xs = this.substr(1);
+    x = this[0];
+    p = xs.permutate();
+    for (i$ = 0, len$ = p.length; i$ < len$; ++i$) {
+      set = p[i$];
+      for (j$ = 0, to$ = set.length; j$ <= to$; ++j$) {
+        i = j$;
+        before = set.substring(0, i);
+        after = set.substring(i);
+        ret.push(before + x + after);
+      }
+    }
+    return ret;
+  };
   origin = "http://127.0.0.1:8888/";
   buffer = [];
   myInput = "";
@@ -24,7 +44,7 @@
     return buffer.push(data);
   };
   msgAfterData = function(arg$){
-    var data, comps, getComps, i$, ref$, len$, maybe, c;
+    var data, comps, getComps, i$, ref$, len$, set, j$, ref1$, len1$, p, c;
     data = arg$.data;
     myInput = data;
     myOutput = [];
@@ -48,12 +68,24 @@
     comps = Array.prototype.filter.call(comps, function(it){
       return !in$(it, myInput);
     });
-    console.log(comps.powerset());
+    console.log(comps);
+    /*
+    results = []
+    do
+      console.log comps.powerset!
+      results = results.concat comps.powerset!
+      Array::pop.call comps
+    while comps.length isnt 0
+    */
     for (i$ = 0, len$ = (ref$ = comps.powerset()).length; i$ < len$; ++i$) {
-      maybe = ref$[i$];
-      c = CompChar[maybe];
-      if (c && in$(c, OrigChars)) {
-        myOutput.push(c);
+      set = ref$[i$];
+      for (j$ = 0, len1$ = (ref1$ = set.permutate()).length; j$ < len1$; ++j$) {
+        p = ref1$[j$];
+        console.log(p);
+        c = CompChar[p];
+        if (c && in$(c, OrigChars)) {
+          myOutput.push(c);
+        }
       }
     }
     return JSON.stringify(myOutput, void 8, 2);
