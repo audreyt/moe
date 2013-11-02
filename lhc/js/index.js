@@ -52,17 +52,12 @@
     getComps = function(it){
       var out, i$, len$, char, comps;
       out = "";
-      if (it.length <= 0) {
-        return out;
-      }
       for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
         char = it[i$];
         comps = CharComp[char];
-        if (comps) {
-          out += comps;
-        }
+        out += CharComp[char] ? getComps(CharComp[char]) : char;
       }
-      return it + getComps(out);
+      return it + out;
     };
     comps = getComps(data);
     foo = {};

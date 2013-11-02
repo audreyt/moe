@@ -35,11 +35,10 @@ msg-after-data = ({data}) ->
   comps = []
   get-comps = ->
     out = ""
-    return out if it.length <= 0
     for char in it
       comps = CharComp[char]
-      out += comps if comps
-    it + get-comps out
+      out += if CharComp[char] then get-comps CharComp[char] else char
+    it + out
   comps = get-comps data
   foo = {}
   for part in (comps / '').sort! =>
