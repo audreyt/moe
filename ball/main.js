@@ -39,15 +39,25 @@
           }
           for (j$ = 0, len1$ = (ref$ = Shape[char]).length; j$ < len1$; ++j$) {
             label = ref$[j$];
-            lresult$.push($out.append($('<li/>').append($('<a/>', {
-              href: '#'
-            }).text(label)).click(fn$)));
+            lresult$.push(GET("Shape.json", fn$));
           }
           results$.push(lresult$);
         }
         return results$;
-        function fn$(){
-          return window.output($(this).text());
+        function fn$(Shape){
+          return $out.append($('<li/>').append($('<a/>', {
+            href: '#'
+          }).text(label).click(function(){
+            return window.output($(this).text());
+          }), '&nbsp;', $('<a/>', {
+            href: '#'
+          }).text(label).click(function(){
+            return window.output($(this).text());
+          }), '&nbsp;', $('<a/>', {
+            href: '#'
+          }).text(label).click(function(){
+            return window.output($(this).text());
+          })));
         }
       };
       return window.output = function(it){

@@ -27,7 +27,14 @@ window.input = ->
   for char in it
     continue unless Shape[char]
     for label in Shape[char]
-      $out.append($(\<li/>).append $(\<a/> href: \#).text label .click -> window.output $(@).text!)
+      Shape <- GET "Shape.json"
+      $out.append($(\<li/>).append(
+        ($(\<a/> href: \#).text label .click -> window.output $(@).text!), # 字形
+        '&nbsp;'
+        ($(\<a/> href: \#).text label .click -> window.output $(@).text!), # 字音
+        '&nbsp;'
+        ($(\<a/> href: \#).text label .click -> window.output $(@).text!) # 部首+筆劃
+      ))
 window.output = ->
   return if window.muted
   input it
