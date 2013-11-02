@@ -11,75 +11,97 @@
   };
   window.init = (function(){
     function init(table){
-      var camera, scene, i$, to$, i, element, number, symbol, details, object, vector, l, ref$, len$, obj, phi, theta, renderer, controls, button;
-      window.camera = camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 5000);
-      camera.position.z = 1500;
+      var l, radius, camera, scene, i$, len$, entry, ch, radical, strokes, bpmf, element, number, symbol, details, object, vector, ref$, i, obj, phi, theta, distance, renderer, controls, button;
+      $('#container').remove();
+      $('<div/>', {
+        id: 'container'
+      }).prependTo($('body'));
+      $('#container').on('click', '.element', function(){
+        return goChar({
+          ch: $('.symbol', this).text(),
+          radical: $('.radical', this).text() || $('.symbol', this).text(),
+          bpmf: $('.details', this).text()
+        });
+      });
+      l = table.length;
+      radius = Math.sqrt(l) * 56;
+      window.camera = camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, radius * 6.25);
+      camera.position.z = radius * 2;
       window.scene = scene = new THREE.Scene();
-      for (i$ = 0, to$ = table.length; i$ < to$; i$ += 5) {
-        i = i$;
+      for (i$ = 0, len$ = table.length; i$ < len$; ++i$) {
+        entry = table[i$];
+        ch = entry.ch, radical = entry.radical, strokes = entry.strokes, bpmf = entry.bpmf;
+        $(element).data(entry);
         element = document.createElement('div');
         element.className = 'element';
         element.style.backgroundColor = 'rgba(0,127,127,' + (Math.random() * 0.5 + 0.25) + ')';
         number = document.createElement('div');
-        number.className = 'number';
-        number.textContent = table[i + 4];
+        if (strokes) {
+          number.className = 'number';
+        } else {
+          number.className = 'number radical';
+        }
+        number.textContent = strokes || radical;
         element.appendChild(number);
         symbol = document.createElement('div');
         symbol.className = 'symbol';
-        symbol.textContent = table[i];
+        symbol.textContent = ch;
         element.appendChild(symbol);
         details = document.createElement('div');
         details.className = 'details';
-        details.innerHTML = table[i + 2];
+        details.innerHTML = bpmf;
         element.appendChild(details);
         object = new THREE.CSS3DObject(element);
-        object.position.x = Math.random() * 4000 - 2000;
-        object.position.y = Math.random() * 4000 - 2000;
-        object.position.z = Math.random() * 4000 - 2000;
+        object.position.x = Math.random() * (radius * 5) - radius * 2.5;
+        object.position.y = Math.random() * (radius * 5) - radius * 2.5;
+        object.position.z = Math.random() * (radius * 5) - radius * 2.5;
         scene.add(object);
         objects.push(object);
-        object = new THREE.Object3D();
-        object.position.x = table[i + 3] * 140 - 1330;
-        object.position.y = -(table[i + 4] * 180) + 990;
-        targets.table.push(object);
       }
       vector = new THREE.Vector3();
-      l = objects.length;
       for (i$ = 0, len$ = (ref$ = objects).length; i$ < len$; ++i$) {
         i = i$;
         obj = ref$[i$];
         phi = Math.acos(-1 + (2 * i) / l);
         theta = Math.sqrt(l * Math.PI) * phi;
         object = new THREE.Object3D();
-        object.position.x = 800 * Math.cos(theta) * Math.sin(phi);
-        object.position.y = 800 * Math.sin(theta) * Math.sin(phi);
-        object.position.z = 800 * Math.cos(phi);
+        object.position.x = radius * Math.cos(theta) * Math.sin(phi);
+        object.position.y = radius * Math.sin(theta) * Math.sin(phi);
+        object.position.z = radius * Math.cos(phi);
         vector.copy(object.position).multiplyScalar(2);
         object.lookAt(vector);
         targets.sphere.push(object);
       }
       vector = new THREE.Vector3();
+      distance = radius / 2;
+      if (distance < 300) {
+        distance = 300;
+      }
       for (i$ = 0, len$ = (ref$ = objects).length; i$ < len$; ++i$) {
         i = i$;
         obj = ref$[i$];
         phi = i * 0.175 + Math.PI;
         object = new THREE.Object3D();
-        object.position.x = 900 * Math.sin(phi);
-        object.position.y = -(i * 8) + 450;
-        object.position.z = 900 * Math.cos(phi);
+        object.position.x = distance * 2 * Math.sin(phi);
+        object.position.y = -(i * 8) + distance;
+        object.position.z = distance * 2 * Math.cos(phi);
         vector.x = object.position.x * 2;
         vector.y = object.position.y;
         vector.z = object.position.z * 2;
         object.lookAt(vector);
         targets.helix.push(object);
       }
+      distance = radius / 2;
+      if (distance < 150) {
+        distance = 150;
+      }
       for (i$ = 0, len$ = (ref$ = objects).length; i$ < len$; ++i$) {
         i = i$;
         obj = ref$[i$];
         object = new THREE.Object3D();
-        object.position.x = (i % 5) * 400 - 800;
-        object.position.y = (0 - (Math.floor(i / 5) % 5) * 400) + 800;
-        object.position.z = Math.floor(i / 25) * 1000 - 2000;
+        object.position.x = (i % 5) * distance - distance * 2;
+        object.position.y = (0 - (Math.floor(i / 5) % 5) * distance) + distance * 2;
+        object.position.z = Math.floor(i / 25) * (distance * 2) - 4 * distance;
         targets.grid.push(object);
       }
       window.renderer = renderer = new THREE.CSS3DRenderer();
@@ -99,7 +121,6 @@
       }, false);
       button = document.getElementById('grid');
       button.addEventListener('click', function(){
-        console.log(targets.grid);
         return transform(targets.grid, 2000);
       }, false);
       transform(targets.sphere, 5000);
@@ -117,6 +138,7 @@
   window.transform = (function(){
     function transform(targets, duration){
       var i$, ref$, len$, i, object, target;
+      duration /= 2;
       TWEEN.removeAll();
       for (i$ = 0, len$ = (ref$ = objects).length; i$ < len$; ++i$) {
         i = i$;

@@ -34,25 +34,9 @@
                   return window.input(it.data, false);
                 });
                 window.input = function(it){
-                  var i$, len$, char, lresult$, j$, ref$, len1$, ch, results$ = [];
                   $in.val(it);
-                  $out.empty();
-                  function x(it){
-                    return replace$.call(it, /[`~]/g, '');
-                  }
-                  for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
-                    char = it[i$];
-                    lresult$ = [];
-                    if (!Shape[char]) {
-                      continue;
-                    }
-                    for (j$ = 0, len1$ = (ref$ = char + Shape[char]).length; j$ < len1$; ++j$) {
-                      ch = ref$[j$];
-                      lresult$.push(draw(ch));
-                    }
-                    results$.push(lresult$);
-                  }
-                  return results$;
+                  showChars(goSimilar(it));
+                  return $out.empty();
                 };
                 window.output = function(it){
                   if (window.muted) {
@@ -91,36 +75,85 @@
                     return goAlike($(this).text());
                   }
                 }
-                function goRadical(it){
-                  var i$, ref$, len$, ch;
-                  $out.empty();
-                  for (i$ = 0, len$ = (ref$ = RadicalSame[it]).length; i$ < len$; ++i$) {
-                    ch = ref$[i$];
-                    draw(ch);
+                window.renderChars = (function(){
+                  function renderChars(it){
+                    var table, i$, len$, ch, radical, bpmf;
+                    window.table = table = [];
+                    for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
+                      ch = it[i$];
+                      if (!Sound[ch]) {
+                        continue;
+                      }
+                      radical = Radical[ch];
+                      bpmf = Sound[ch][0];
+                      table.push({
+                        ch: ch,
+                        bpmf: bpmf,
+                        radical: radical
+                      });
+                    }
+                    window.init(table);
+                    return window.animate();
                   }
+                  return renderChars;
+                }());
+                window.showChars = (function(){
+                  function showChars(it){
+                    return window.location = "?" + encodeURIComponent(it);
+                  }
+                  return showChars;
+                }());
+                function goRadical(it){
+                  return showChars(RadicalSame[it]);
                 }
                 function goRhyme(it){
-                  var i$, ref$, ref1$, len$, ch, results$ = [];
-                  $out.empty();
-                  for (i$ = 0, len$ = (ref$ = SoundRhyme[(ref1$ = replace$.call(it, /[ˋˊˇ‧]/g, ''))[ref1$.length - 1]]).length; i$ < len$; ++i$) {
-                    ch = ref$[i$];
-                    results$.push(draw(ch));
-                  }
-                  return results$;
+                  var ref$;
+                  return showChars(SoundRhyme[(ref$ = replace$.call(it, /[ˋˊˇ‧]/g, ''))[ref$.length - 1]]);
                 }
                 function goAlike(it){
-                  var i$, ref$, len$, ch, results$ = [];
-                  $out.empty();
-                  for (i$ = 0, len$ = (ref$ = SoundAlike[replace$.call(it, /[ˋˊˇ‧]/g, '')]).length; i$ < len$; ++i$) {
-                    ch = ref$[i$];
-                    results$.push(draw(ch));
-                  }
-                  return results$;
+                  return showChars(SoundAlike[replace$.call(it, /[ˋˊˇ‧]/g, '')]);
                 }
-                return GET("Table.json", function(table){
-                  window.init(table);
-                  return window.animate();
-                });
+                window.goChar = (function(){
+                  function goChar(arg$){
+                    var ch, bpmf, radical;
+                    ch = arg$.ch, bpmf = arg$.bpmf, radical = arg$.radical;
+                    output(ch);
+                    return setTimeout(function(){
+                      var rads, snds, sims;
+                      rads = RadicalSame[radical] || '';
+                      snds = SoundAlike[bpmf] || '';
+                      sims = goSimilar(ch) || '';
+                      return showChars(rads + snds + sims);
+                    }, 1);
+                  }
+                  return goChar;
+                }());
+                window.goSimilar = (function(){
+                  function goSimilar(it){
+                    var sims, i$, len$, char;
+                    sims = "";
+                    for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
+                      char = it[i$];
+                      if (!Shape[char]) {
+                        continue;
+                      }
+                      sims += char + Shape[char];
+                    }
+                    return sims;
+                  }
+                  return goSimilar;
+                }());
+                if (location.search) {
+                  return setTimeout(function(){
+                    return renderChars(decodeURIComponent(location.search) + "");
+                  }, 1);
+                } else {
+                  return GET("Table.json", function(table){
+                    window.table = table;
+                    window.init(table);
+                    return window.animate();
+                  });
+                }
               });
             });
           });
