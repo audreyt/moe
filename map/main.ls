@@ -18,8 +18,6 @@ $(\#submitGeo).click ->
 
 window.input = ->
   window.geo = STR2GEO it
-  console.log STR2GEO it
-  console.log GEO2STR(STR2GEO it)
 window.output = ->
   return if window.muted
   input it
@@ -38,8 +36,8 @@ window.STR2GEO = STR2GEO = ->
     char = DATA['j'].indexOf(it[i])
     high = Math.floor(char / 64)
     low = char % 64
-    long = (long .<<. 6) .|. high
-    lat = (lat .<<. 6) .|. low
+    long = (long * 64) + high
+    lat = (lat * 64) + low
     
   rX = (parseInt long.toString(2), 2)
   rY = (parseInt lat.toString(2), 2)
@@ -49,37 +47,43 @@ window.STR2GEO = STR2GEO = ->
   { longitude: longMIN + (longMAX - longMIN) * rLong, latitude: latMIN + (latMAX - latMIN)*rLat, x: rX, y: rY }
   
 window.GEO2STR = GEO2STR = ->
-  long = parseInt(((it.longitude - longMIN) / (longMAX - longMIN)).toString(2).split('.')[1], 2)
-
-  lat = parseInt(((it.latitude - latMIN) / (latMAX - latMIN)).toString(2).split('.')[1], 2)
+  long = it.x
+  lat = it.y
 
   long_parts = []
   lat_parts = []
   
   if long >= lat
-    while long % 64 > 0
-      long_parts.push (long % 64).toString(2)
+    while long > 0
+      long_parts.unshift (long % 64).toString(2)
       long = Math.floor(long / 64)
-      lat_parts.push (lat % 64).toString(2)
+      lat_parts.unshift (lat % 64).toString(2)
       lat = Math.floor(lat / 64)
   else
-    while lat % 64 > 0
+    while lat > 0
       long_parts.unshift (long % 64).toString(2)
       long = Math.floor(long / 64)
       lat_parts.unshift (lat % 64).toString(2)
       lat = Math.floor(lat / 64)
 
+  if long_parts.length < 3
+    for til 3 - long_parts.length
+      long_parts.unshift "0"
+  if lat_parts.length < 3
+    for til 3 - lat_parts.length
+      lat_parts.unshift "0"
   result = ""
-  c1 = DATA['j'][(parseInt(long_parts[0],2) .<<. 6) .|. parseInt(long_parts[1],2)]
+  c1 = DATA['j'][(parseInt(long_parts[0],2) * 64) + parseInt(long_parts[1],2)]
   long_parts.shift!
   long_parts.shift!
   result += c1
-  c2 = DATA['j'][(parseInt(lat_parts[0],2) .<<. 6) .|. parseInt(lat_parts[1],2)]
+  c2 = DATA['j'][(parseInt(lat_parts[0],2) * 64) + parseInt(lat_parts[1],2)]
   lat_parts.shift!
   lat_parts.shift!
   result += c2
 
   for i from 0 til long_parts.length
-    result += DATA['j'][(parseInt(long_parts[i],2) .<<. 6) .|. parseInt(lat_parts[i],2)]
+    result += DATA['j'][(parseInt(long_parts[i],2) * 64) + parseInt(lat_parts[i],2)]
 
   result
+
