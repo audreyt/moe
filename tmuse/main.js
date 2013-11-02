@@ -6,6 +6,7 @@
     $out = $('#output');
     origin = "http://127.0.0.1:8888/";
     window.id = 'tmuse';
+    window.colors = [[0, 0, 0], [87, 87, 87], [173, 35, 35], [42, 75, 215], [29, 105, 20], [129, 38, 192], [160, 160, 160], [129, 197, 122], [157, 175, 255], [41, 208, 208], [255, 146, 51], [255, 238, 51], [233, 222, 187], [255, 205, 243]];
     window.reset = function(){
       return $in.val('');
     };
@@ -15,7 +16,7 @@
     window.input = function(it){
       $in.val(it);
       return GET("a/" + it + ".json", function(json){
-        var nodes, scene, camera, renderer, multiplier, i$, len$, coords, sphere_geo, mat, sphere, edges, edge, sv, tv, geometry, line, controls, render;
+        var nodes, scene, camera, renderer, multiplier, objs, i$, len$, i, n, coords, sphere_geo, mat, sphere, obj_coloring, clustering, cluster, labels, c, j$, len1$, l, edges, edge, color, sv, tv, geometry, line, controls, render, light;
         nodes = json.graph_json.nodes;
         $out.empty();
         scene = new THREE.Scene();
@@ -25,8 +26,11 @@
         $('#canvas').html(renderer.domElement);
         camera.position.z = 5;
         multiplier = 5;
+        objs = {};
         for (i$ = 0, len$ = nodes.length; i$ < len$; ++i$) {
-          coords = nodes[i$].coords;
+          i = i$;
+          n = nodes[i$];
+          coords = n.coords;
           sphere_geo = new THREE.SphereGeometry(0.1, 10, 10);
           mat = new THREE.MeshBasicMaterial({
             color: 0x0000ff
@@ -36,13 +40,34 @@
           sphere.position.y = coords[1] * multiplier;
           sphere.position.z = coords[2] * multiplier;
           scene.add(sphere);
+          objs[n.label] = sphere;
+        }
+        obj_coloring = {};
+        clustering = json.clustering_json;
+        for (i$ = 0, len$ = clustering.length; i$ < len$; ++i$) {
+          i = i$;
+          cluster = clustering[i$];
+          labels = cluster.labels;
+          c = i % window.colors.length;
+          for (j$ = 0, len1$ = labels.length; j$ < len1$; ++j$) {
+            l = labels[j$];
+            obj_coloring[l[0]] = {
+              r: window.colors[c][0] / 255,
+              g: window.colors[c][1] / 255,
+              b: window.colors[c][2] / 255
+            };
+            objs[l[0]].material.color.setRGB(window.colors[c][0] / 255, window.colors[c][1] / 255, window.colors[c][2] / 255);
+          }
         }
         edges = json.graph_json.edges;
         for (i$ = 0, len$ = edges.length; i$ < len$; ++i$) {
           edge = edges[i$];
           mat = new THREE.LineBasicMaterial({
-            color: 0x0000ff
+            color: 0x000000,
+            linewidth: 2
           });
+          color = obj_coloring[nodes[edge.s].label];
+          mat.color.setRGB(color.r, color.g, color.b);
           sv = nodes[edge.s].coords;
           tv = nodes[edge.t].coords;
           geometry = new THREE.Geometry();
@@ -56,6 +81,10 @@
           requestAnimationFrame(render);
           return renderer.render(scene, camera);
         };
+        renderer.setClearColor(0xdddddd, 1);
+        light = new THREE.PointLight(0xffffff);
+        light.position.set(-100, 200, 100);
+        scene.add(light);
         return render();
       });
     };
