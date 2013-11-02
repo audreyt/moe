@@ -11,7 +11,9 @@ window.addEventListener("message", -> window.input it.data, false);
 window.input = ->
   return if prev === it
   prev := it
-  for w in @frames => w.postMessage it, origin
+  for w in @frames => let w
+    <- setTimeout _, 50ms
+    w.postMessage prev, origin
 window.output = ->
   # record?
 

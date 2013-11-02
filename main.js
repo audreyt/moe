@@ -22,11 +22,17 @@
         return;
       }
       prev = it;
+      console.log(it);
       for (i$ = 0, len$ = (ref$ = this.frames).length; i$ < len$; ++i$) {
         w = ref$[i$];
-        results$.push(w.postMessage(it, origin));
+        results$.push((fn$.call(this, w)));
       }
       return results$;
+      function fn$(w){
+        return setTimeout(function(){
+          return w.postMessage(prev, origin);
+        }, 50);
+      }
     };
     window.output = function(){};
     CACHED = {};
