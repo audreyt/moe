@@ -1,7 +1,7 @@
-Array::powerset = ->
+Array::powerset = String::powerset = ->
   return @ if @length <= 1
-  xs = @slice!
-  x = xs.pop!
+  xs = Array::slice.call @
+  x = Array::pop.call xs
   p = xs.powerset!
   p.concat p.map -> it.concat [x]
 # global
@@ -20,9 +20,16 @@ msg-after-data = ({data}) ->
   my-input := data
   my-output := []
   comps = []
-  for char in my-input
-    continue if not CharComp[char]
-    for {c} in CharComp[char] => comps.push c
+  get-comps = ->
+    out = ""
+    return out if it.length <= 0
+    for char in it
+      comps = CharComp[char]
+      out += comps if comps
+    it + get-comps out
+  comps = get-comps my-input
+  comps = Array::filter.call comps, -> it not in my-input
+  console.log comps.powerset!
   for maybe in comps.powerset!
     c = CompChar[maybe]
     my-output.push c if c and c in OrigChars
@@ -37,9 +44,9 @@ window.output = ->
   return if window.muted
   window.top.postMessage it, origin
 # load char to comps and comps to char table
-d <- $.get \./data/char_comp.json
+d <- $.get \./data/char_comp_simple.json
 CharComp := d
-d <- $.get \./data/comp_char.json
+d <- $.get \./data/comp_char_simple.json
 CompChar := d
 d <- $.get \./data/orig-chars.json
 OrigChars := d
