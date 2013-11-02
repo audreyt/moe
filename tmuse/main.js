@@ -14,20 +14,49 @@
     });
     window.input = function(it){
       $in.val(it);
-      return GET("a/" + it + ".json", function(arg$){
-        var nodes, i$, len$, label, results$ = [];
-        nodes = arg$.graph_json.nodes;
+      return GET("a/" + it + ".json", function(json){
+        var nodes, scene, camera, renderer, multiplier, i$, len$, coords, sphere_geo, mat, sphere, edges, edge, sv, tv, geometry, line, controls, render;
+        nodes = json.graph_json.nodes;
         $out.empty();
+        scene = new THREE.Scene();
+        window.camera = camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        $('#canvas').html(renderer.domElement);
+        camera.position.z = 5;
+        multiplier = 5;
         for (i$ = 0, len$ = nodes.length; i$ < len$; ++i$) {
-          label = nodes[i$].label;
-          results$.push($out.append($('<li/>').append($('<a/>', {
-            href: '#'
-          }).text(label)).click(fn$)));
+          coords = nodes[i$].coords;
+          sphere_geo = new THREE.SphereGeometry(0.1, 10, 10);
+          mat = new THREE.MeshBasicMaterial({
+            color: 0x0000ff
+          });
+          sphere = new THREE.Mesh(sphere_geo, mat);
+          sphere.position.x = coords[0] * multiplier;
+          sphere.position.y = coords[1] * multiplier;
+          sphere.position.z = coords[2] * multiplier;
+          scene.add(sphere);
         }
-        return results$;
-        function fn$(){
-          return window.output($(this).text());
+        edges = json.graph_json.edges;
+        for (i$ = 0, len$ = edges.length; i$ < len$; ++i$) {
+          edge = edges[i$];
+          mat = new THREE.LineBasicMaterial({
+            color: 0x0000ff
+          });
+          sv = nodes[edge.s].coords;
+          tv = nodes[edge.t].coords;
+          geometry = new THREE.Geometry();
+          geometry.vertices.push(new THREE.Vector3(sv[0] * multiplier, sv[1] * multiplier, sv[2] * multiplier));
+          geometry.vertices.push(new THREE.Vector3(tv[0] * multiplier, tv[1] * multiplier, tv[2] * multiplier));
+          line = new THREE.Line(geometry, mat);
+          scene.add(line);
         }
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        render = function(){
+          requestAnimationFrame(render);
+          return renderer.render(scene, camera);
+        };
+        return render();
       });
     };
     window.output = function(it){
