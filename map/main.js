@@ -37,8 +37,8 @@
     $.getJSON('orig-chars.json', function(it){
       return DATA['j'] = it;
     });
-    STR2GEO = function(it){
-      var long, lat, i$, to$, i, char, high, low, rLong, rLat;
+    window.STR2GEO = STR2GEO = function(it){
+      var long, lat, i$, to$, i, char, high, low, rX, rY, rLong, rLat;
       long = DATA['j'].indexOf(it[0]);
       lat = DATA['j'].indexOf(it[1]);
       for (i$ = 2, to$ = it.length; i$ < to$; ++i$) {
@@ -49,14 +49,18 @@
         long = long << 6 | high;
         lat = lat << 6 | low;
       }
-      rLong = parseInt(long.toString(2), 2) / Math.pow(2, long.toString(2).length);
-      rLat = parseInt(lat.toString(2), 2) / Math.pow(2, lat.toString(2).length);
+      rX = parseInt(long.toString(2), 2);
+      rY = parseInt(lat.toString(2), 2);
+      rLong = rX / Math.pow(2, long.toString(2).length);
+      rLat = rY / Math.pow(2, long.toString(2).length);
       return {
         longitude: longMIN + (longMAX - longMIN) * rLong,
-        latitude: latMIN + (latMAX - latMIN) * rLat
+        latitude: latMIN + (latMAX - latMIN) * rLat,
+        x: rX,
+        y: rY
       };
     };
-    return GEO2STR = function(it){
+    return window.GEO2STR = GEO2STR = function(it){
       var long, lat, long_parts, lat_parts, result, c1, c2, i$, to$, i;
       long = parseInt(((it.longitude - longMIN) / (longMAX - longMIN)).toString(2).split('.')[1], 2);
       lat = parseInt(((it.latitude - latMIN) / (latMAX - latMIN)).toString(2).split('.')[1], 2);
