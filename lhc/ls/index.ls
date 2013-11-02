@@ -34,7 +34,9 @@ OrigChars <- $.get \./data/orig-chars.json
 # API
 origin = "http://127.0.0.1:8888/"
 window.id = \lhc
-window.reset = -> $input.val ""
+window.reset = !->
+  $input.val ""
+  $output.empty!
 window.output = ->
   return if window.muted
   window.top.postMessage it, origin
@@ -45,8 +47,8 @@ window.uniq = uniq = ->
   for w in it / '' => seen[w] = true
   Object.keys(seen).sort! * ''
 main = ({data}) ->
-  data = uniq($input.val! + data)
-  $input.val data
+  $input.val $input.val! + data
+  data = uniq($input.val!)
   comps = []
   get-comps = ->
     out = ""

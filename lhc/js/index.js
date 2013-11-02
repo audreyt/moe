@@ -40,7 +40,8 @@ String::permutate = ->
         origin = "http://127.0.0.1:8888/";
         window.id = 'lhc';
         window.reset = function(){
-          return $input.val("");
+          $input.val("");
+          $output.empty();
         };
         window.output = function(it){
           if (window.muted) {
@@ -62,8 +63,8 @@ String::permutate = ->
         main = function(arg$){
           var data, comps, getComps, seen, i$, len$, ch, scanned, queue, callback, count, ref$, taken, rest, c, head, keys, char;
           data = arg$.data;
-          data = uniq($input.val() + data);
-          $input.val(data);
+          $input.val($input.val() + data);
+          data = uniq($input.val());
           comps = [];
           getComps = function(it){
             var out, i$, len$, char, comps;
