@@ -41,7 +41,7 @@ msg-after-data = ({data}) ->
     out = ""
     for char in it
       comps = CharComp[char]
-      out += comps if get-comps comps else char
+      out += if CharComp[char] then get-comps CharComp[char] else char
     it + out
   comps = uniq(get-comps data)
   seen = {}
