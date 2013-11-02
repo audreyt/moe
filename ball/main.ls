@@ -15,7 +15,7 @@ CACHED = {}; GET = (url, data, onSuccess, dataType) ->
 $in = $ \#input
 $out = $ \#output
 
-Shape <- GET "prox.json"
+Shape <- GET "Shape.json"
 
 origin = "http://127.0.0.1:8888/"
 window.id = \tmuse
@@ -23,10 +23,11 @@ window.reset = -> $in.val ''
 window.addEventListener("message", -> window.input it.data, false);
 window.input = ->
   $in.val it
-  return unless Shape[it]
   $out.empty!
-  for label in Shape[it]
-    $out.append($(\<li/>).append $(\<a/> href: \#).text label .click -> window.output $(@).text!)
+  for char in it
+    continue unless Shape[char]
+    for label in Shape[char]
+      $out.append($(\<li/>).append $(\<a/> href: \#).text label .click -> window.output $(@).text!)
 window.output = ->
   return if window.muted
   input it

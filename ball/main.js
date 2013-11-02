@@ -17,7 +17,7 @@
     };
     $in = $('#input');
     $out = $('#output');
-    return GET("prox.json", function(Shape){
+    return GET("Shape.json", function(Shape){
       var origin;
       origin = "http://127.0.0.1:8888/";
       window.id = 'tmuse';
@@ -28,17 +28,22 @@
         return window.input(it.data, false);
       });
       window.input = function(it){
-        var i$, ref$, len$, label, results$ = [];
+        var i$, len$, char, lresult$, j$, ref$, len1$, label, results$ = [];
         $in.val(it);
-        if (!Shape[it]) {
-          return;
-        }
         $out.empty();
-        for (i$ = 0, len$ = (ref$ = Shape[it]).length; i$ < len$; ++i$) {
-          label = ref$[i$];
-          results$.push($out.append($('<li/>').append($('<a/>', {
-            href: '#'
-          }).text(label)).click(fn$)));
+        for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
+          char = it[i$];
+          lresult$ = [];
+          if (!Shape[char]) {
+            continue;
+          }
+          for (j$ = 0, len1$ = (ref$ = Shape[char]).length; j$ < len1$; ++j$) {
+            label = ref$[j$];
+            lresult$.push($out.append($('<li/>').append($('<a/>', {
+              href: '#'
+            }).text(label)).click(fn$)));
+          }
+          results$.push(lresult$);
         }
         return results$;
         function fn$(){
