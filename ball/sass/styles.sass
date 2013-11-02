@@ -1,2 +1,83 @@
+html
+  height: 100%
+
 body
-  background: #fff
+  height: 100%
+  background-color: #000000
+  margin: 0
+  font-family: Arial
+  overflow: hidden
+  cursor: move
+
+a
+  color: #ffffff
+
+.element
+  cursor: pointer !important
+
+#info
+  position: absolute
+  width: 100%
+  color: #ffffff
+  padding: 5px
+  font-family: Monospace
+  font-size: 13px
+  font-weight: bold
+  text-align: center
+  z-index: 1
+
+#menu
+  position: absolute
+  bottom: 20px
+  width: 100%
+  text-align: center
+
+.element
+  width: 120px
+  height: 160px
+  box-shadow: 0px 0px 12px rgba(0, 255, 255, 0.5)
+  border: 1px solid rgba(127, 255, 255, 0.25)
+  text-align: center
+  cursor: default
+  &:hover
+    box-shadow: 0px 0px 12px rgba(0, 255, 255, 0.75)
+    border: 1px solid rgba(127, 255, 255, 0.75)
+  .number
+    position: absolute
+    top: 20px
+    right: 20px
+    font-size: 12px
+    color: rgba(127, 255, 255, 0.75)
+  .symbol
+    position: absolute
+    top: 40px
+    left: 0px
+    right: 0px
+    font-size: 60px
+    font-weight: bold
+    color: rgba(255, 255, 255, 0.75)
+    -webkit-filter: drop-shadow(0px 0px 20px rgba(0, 255, 255, 0.95))
+    -moz-filter: drop-shadow(0px 0px 20px rgba(0, 255, 255, 0.95))
+    -o-filter: drop-shadow(0px 0px 20px rgba(0, 255, 255, 0.95))
+    -ms-filter: drop-shadow(0px 0px 20px rgba(0, 255, 255, 0.95))
+    filter: drop-shadow(0px 0px 20px rgba(0, 255, 255, 0.95))
+  .details
+    position: absolute
+    bottom: 15px
+    left: 0px
+    right: 0px
+    font-size: 12px
+    color: rgba(127, 255, 255, 0.75)
+
+button
+  color: rgba(127, 255, 255, 0.75)
+  background: transparent
+  outline: 1px solid rgba(127, 255, 255, 0.75)
+  border: 0px
+  padding: 5px 10px
+  cursor: pointer
+  &:hover
+    background-color: rgba(0, 255, 255, 0.5)
+  &:active
+    color: #000000
+    background-color: rgba(0, 255, 255, 0.75)
