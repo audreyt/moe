@@ -270,7 +270,8 @@ String::permutate = ->
                 data: data
               });
             }
-            return window.addEventListener('message', main);
+            window.addEventListener('message', main);
+            return window.input('萌');
           });
         });
       });
