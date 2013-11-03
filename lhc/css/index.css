@@ -36,12 +36,14 @@ body {
 
 #output li a {
   display: block;
-  font-size: 48px;
+  font-size: 32px;
   text-decoration: none;
   text-align: center;
   color: #999;
   background-color: #16161D;
-  padding: 10px 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  height: 100%;
 }
 
 #output li a:hover {
