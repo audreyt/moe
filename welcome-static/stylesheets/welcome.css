@@ -480,3 +480,36 @@ a:hover {
   position: relative;
   top: -40px;
 }
+
+.thx h3 {
+  border-bottom: #333 2px solid;
+  padding-bottom: 4px;
+}
+
+.thx ul {
+  margin: 0;
+  padding: 10px 0 0;
+  list-style: none;
+}
+
+.thx li {
+  margin-bottom: 20px;
+  display: block;
+  height: 50px;
+  float: left;
+  width: 50%;
+}
+
+.thx li img {
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  border-radius: 25px;
+  margin-right: 20px;
+  margin-left: 25px;
+}
+
+.thx li span {
+  position: relative;
+  top: -17px;
+}
