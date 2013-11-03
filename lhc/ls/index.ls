@@ -32,8 +32,8 @@ Physijs.scripts.ammo = \../js/ammo.js
 
 renderer = new THREE.WebGLRenderer
 renderer.setSize(window.innerWidth, window.innerHeight)
-renderer.shadowMapEnabled = yes
-renderer.shadowMapSoft = yes
+#renderer.shadowMapEnabled = yes
+#renderer.shadowMapSoft = yes
 $(\body).prepend renderer.domElement
 
 scene= new Physijs.Scene(fixedTimeStep: 1 / 120)
@@ -51,12 +51,6 @@ light = new THREE.DirectionalLight(0xffffff)
 light.position.set(0, 0, 2500)
 light.target.position.set(0, 0, 0)
 scene.add light
-
-cube = new THREE.Mesh do
-  new THREE.CubeGeometry(1000, 1000, 1000)
-  new THREE.MeshLambertMaterial(color: \red)
-cube.rotation.set(0, 30 * Math.PI / 180, 0)
-scene.add cube
 
 render = !->
   requestAnimationFrame(render)
@@ -141,44 +135,41 @@ main = ({data}) ->
   for char in keys
     $output.append $(\<li/>).append $(\<a/> href: \#).text char .click -> window.output $(@).text!
   JSON.stringify keys,, 2
-#getShapesOfMoe = ->
-#  getShapesOf moe
-getShapesOf = ->
+getShapeOf = ->
   ret = []
   for stroke in it
     shape = new THREE.Shape
     path = new THREE.Path
     tokens = stroke.split ' '
-    shiftNum = -> parseInt do tokens.shift, 10
+    shiftNum = -> parseInt tokens.shift!, 10
     isOutline = yes
     while tokens.length
       cmd = tokens.shift!
       switch cmd
-       when \M
-        if isOutline
-          shape.moveTo shiftNum!, shiftNum!
-        else
-          path.moveTo shiftNum!, shiftNum!
-      when \L
-        while tokens.length > 1
+        when \M
           if isOutline
-            shape.lineTo shiftNum!, shiftNum!
+            shape.moveTo shiftNum!, shiftNum!
           else
-            path.lineTo shiftNum!, shiftNum!
-          if tokens.0 is \Z
-            if not isOutline
-              shape.holes.push path
-              path = new THREE.Path
-            isOutline = no
-            break
+            path.moveTo shiftNum!, shiftNum!
+        when \L
+          while tokens.length > 1
+            if isOutline
+              shape.lineTo shiftNum!, shiftNum!
+            else
+              path.lineTo shiftNum!, shiftNum!
+            if tokens.0 is \Z
+              if not isOutline
+                shape.holes.push path
+                path = new THREE.Path
+              isOutline = no
+              break
     ret.push shape
   ret
 doAddChar = ->
   for char in it
     console.log "creating geometry for #char"
-    #console.log getShapesOfMoe!
-    for i, shapes of getShapesOf Outlines[char]
-      geometry = new THREE.ExtrudeGeometry(shapes, extrusionSettings)
+    for i, shape of getShapeOf Outlines[char]
+      geometry = new THREE.ExtrudeGeometry(shape, extrusionSettings)
       offset = new THREE.Vector3 do
         +Centroids[char][i].0
         -Centroids[char][i].1
