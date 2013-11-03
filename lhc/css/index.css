@@ -31,18 +31,22 @@ body {
   float: left;
   border-right: 5px dotted #DDD;
   height: 100%;
+  padding: 0;
 }
 
 #output li a {
   display: block;
-  font-size: 48px;
+  font-size: 32px;
   text-decoration: none;
   text-align: center;
   color: #999;
-  margin: 10px 20px;
+  background-color: #16161D;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  height: 100%;
 }
 
 #output li a:hover {
   color: #FFF;
-  text-decoration: underline;
+  background-color: #333;
 }

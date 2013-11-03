@@ -41,7 +41,7 @@ scene.addEventListener \update, ->
   scene.simulate(void, 2)
   controls.update!
 
-camera = new THREE.PerspectiveCamera(45, window.innerWidth / (window.innerHeight - 48), 1, 100000)
+camera = new THREE.PerspectiveCamera(45, window.innerWidth / (window.innerHeight - 48), 1, 50000)
 camera.position.set(0, 2000, 4000)
 camera.lookAt new THREE.Vector3(0, 0, 0)
 scene.add camera
@@ -139,6 +139,7 @@ main = ({data}) ->
     queue.push [taken, rest]
     queue.push [taken + head, rest]
   keys = Object.keys(seen)
+  keys = keys.slice(0, 10)
   $output.empty!
   for char in keys
     $output.append $(\<li/>).css(\width, ~~(window.innerWidth / keys.length) - 5).append $(\<a/> href: \#).text char .click -> window.output $(@).text!
