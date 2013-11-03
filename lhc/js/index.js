@@ -86,7 +86,7 @@ String::permutate = ->
         return $.get('./data/Outlines.json', function(Outlines){
           return $.get('./data/Centroids.json', function(Centroids){
             var cTime, cCounter, origin, $input, $output, uniq, main, getShapeOf, doAddChar, i$, ref$, len$, data;
-            cTime = 5.0;
+            cTime = 2.0;
             cCounter = 0;
             origin = "http://127.0.0.1:8888/";
             window.id = 'lhc';
@@ -98,7 +98,9 @@ String::permutate = ->
               if (window.muted) {
                 return;
               }
-              return window.top.postMessage(it, origin);
+              if (window.parent !== window) {
+                return window.parent.postMessage(it, origin);
+              }
             };
             $input = $('#input');
             $output = $('#output');
@@ -114,7 +116,6 @@ String::permutate = ->
             main = function(arg$){
               var data, comps, getComps, seen, i$, len$, ch, scanned, queue, callback, count, ref$, taken, rest, c, head, keys, char;
               data = arg$.data;
-              $input.val($input.val() + data);
               data = uniq($input.val() + data);
               $input.val(data);
               cCounter = 0;
@@ -253,7 +254,7 @@ String::permutate = ->
             };
             scene.addEventListener('update', function(){
               if (cCounter++ % ~~(cTime * 120) === 0) {
-                return doAddChar(uniq($input.val()));
+                return doAddChar($input.val());
               }
             });
             window.input = function(it){
