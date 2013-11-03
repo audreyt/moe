@@ -20,7 +20,7 @@ String::permutate = ->
   ret
 */
 (function(){
-  var buffer, bufferedMsgsFirst, renderer, scene, camera, light, cube, render, controls, blockMaterial, extrusionSettings, split$ = ''.split, join$ = [].join;
+  var buffer, bufferedMsgsFirst, renderer, scene, camera, light, render, controls, blockMaterial, extrusionSettings, split$ = ''.split, join$ = [].join;
   buffer = [];
   bufferedMsgsFirst = function(arg$){
     var data;
@@ -37,8 +37,6 @@ String::permutate = ->
   Physijs.scripts.ammo = '../js/ammo.js';
   renderer = new THREE.WebGLRenderer;
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.shadowMapEnabled = true;
-  renderer.shadowMapSoft = true;
   $('body').prepend(renderer.domElement);
   scene = new Physijs.Scene({
     fixedTimeStep: 1 / 120
@@ -56,11 +54,6 @@ String::permutate = ->
   light.position.set(0, 0, 2500);
   light.target.position.set(0, 0, 0);
   scene.add(light);
-  cube = new THREE.Mesh(new THREE.CubeGeometry(1000, 1000, 1000), new THREE.MeshLambertMaterial({
-    color: 'red'
-  }));
-  cube.rotation.set(0, 30 * Math.PI / 180, 0);
-  scene.add(cube);
   render = function(){
     requestAnimationFrame(render);
     renderer.render(scene, camera);
@@ -82,7 +75,9 @@ String::permutate = ->
       return $.get('./data/orig-chars.json', function(OrigChars){
         return $.get('./data/Outlines.json', function(Outlines){
           return $.get('./data/Centroids.json', function(Centroids){
-            var origin, $input, $output, uniq, main, getShapesOf, doAddChar, i$, ref$, len$, data;
+            var cTime, cCounter, origin, $input, $output, uniq, main, getShapeOf, doAddChar, i$, ref$, len$, data;
+            cTime = 3.0;
+            cCounter = 0;
             origin = "http://127.0.0.1:8888/";
             window.id = 'lhc';
             window.reset = function(){
@@ -111,6 +106,7 @@ String::permutate = ->
               data = arg$.data;
               $input.val($input.val() + data);
               data = uniq($input.val());
+              cCounter = 0;
               doAddChar(data);
               comps = [];
               getComps = function(it){
@@ -171,7 +167,7 @@ String::permutate = ->
                 return window.output($(this).text());
               }
             };
-            getShapesOf = function(it){
+            getShapeOf = function(it){
               var ret, i$, len$, stroke, shape, path, tokens, shiftNum, isOutline, cmd;
               ret = [];
               for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
@@ -217,28 +213,39 @@ String::permutate = ->
               }
             };
             doAddChar = function(it){
-              var i$, len$, char, lresult$, i, ref$, shapes, geometry, offset, m, mesh, results$ = [];
+              var i$, len$, char, lresult$, randX, randY, i, ref$, shape, geometry, offset, m, mesh, results$ = [];
               for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
                 char = it[i$];
                 lresult$ = [];
                 console.log("creating geometry for " + char);
-                for (i in ref$ = getShapesOf(Outlines[char])) {
-                  shapes = ref$[i];
-                  geometry = new THREE.ExtrudeGeometry(shapes, extrusionSettings);
+                randX = Math.random() * 500 - 250;
+                randY = Math.random() * 500 - 250;
+                for (i in ref$ = getShapeOf(Outlines[char])) {
+                  shape = ref$[i];
+                  geometry = new THREE.ExtrudeGeometry(shape, extrusionSettings);
                   offset = new THREE.Vector3(+Centroids[char][i][0], -Centroids[char][i][1], extrusionSettings.amount / 2);
                   m = new THREE.Matrix4;
                   m.makeTranslation(-offset.x, -offset.y, -offset.z);
                   geometry.applyMatrix(m);
                   mesh = new Physijs.ConvexMesh(geometry, blockMaterial, 9);
                   mesh.position = offset.clone();
+                  mesh.position.add(new THREE.Vector3(randX - 1075, randY + 1075, 0));
                   mesh.castShadow = true;
                   mesh.receiveShadow = true;
+                  mesh._physijs.linearVelocity.x = 0;
+                  mesh._physijs.linearVelocity.y = 0;
+                  mesh._physijs.linearVelocity.z = 200;
                   lresult$.push(scene.add(mesh));
                 }
                 results$.push(lresult$);
               }
               return results$;
             };
+            scene.addEventListener('update', function(){
+              if (cCounter++ % ~~(cTime * 120) === 0) {
+                return doAddChar(uniq($input.val()));
+              }
+            });
             window.input = function(it){
               return main({
                 data: it
