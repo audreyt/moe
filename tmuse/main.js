@@ -49,6 +49,8 @@
         obj_coloring = {};
         obj_radius = {};
         clustering = json.clustering_json;
+        window.labels = [];
+        window.sprite_id_to_label = {};
         for (i$ = 0, len$ = clustering.length; i$ < len$; ++i$) {
           i = i$;
           cluster = clustering[i$];
@@ -79,7 +81,9 @@
           sphere.position.z = coords[2] * multiplier;
           spritey = makeTextSprite(" " + n.label + " ", obj_coloring[n.label]);
           spritey.position = sphere.position.clone().multiplyScalar(1.01);
+          window.labels.push(spritey);
           scene.add(spritey);
+          window.sprite_id_to_label[spritey.id] = n.label;
         }
         edges = json.graph_json.edges;
         for (i$ = 0, len$ = edges.length; i$ < len$; ++i$) {
@@ -90,6 +94,8 @@
           });
           color = obj_coloring[nodes[edge.s].label];
           mat.color.setRGB(color.r, color.g, color.b);
+          mat.transparent = true;
+          mat.opacity = 0.1;
           sv = nodes[edge.s].coords;
           tv = nodes[edge.t].coords;
           geometry = new THREE.Geometry();
@@ -107,7 +113,8 @@
         light = new THREE.PointLight(0xffffff);
         light.position.set(-100, 200, 100);
         scene.add(light);
-        return render();
+        render();
+        return document.addEventListener('mousedown', window.onDocumentMouseDown, false);
         function fn$(){
           return window.output($(this).text());
         }
@@ -178,7 +185,7 @@
       sprite.scale.set(2, 1, 0.04);
       return sprite;
     };
-    return window.roundRect = function(ctx, x, y, w, h, r){
+    window.roundRect = function(ctx, x, y, w, h, r){
       ctx.beginPath();
       ctx.moveTo(x + r, y);
       ctx.lineTo(x + w - r, y);
@@ -192,6 +199,17 @@
       ctx.closePath();
       ctx.fill();
       return ctx.stroke();
+    };
+    return window.onDocumentMouseDown = function(event){
+      var vector, projector, raycaster, intersects;
+      event.preventDefault();
+      vector = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5);
+      projector = new THREE.Projector();
+      projector.unprojectVector(vector, camera);
+      raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+      intersects = raycaster.intersectObjects(window.labels);
+      console.log(window.sprite_id_to_label[intersects[0].object.id]);
+      return window.output(window.sprite_id_to_label[intersects[0].object.id]);
     };
   });
   function deepEq$(x, y, type){

@@ -1,0 +1,42 @@
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  height: 100%;
+}
+
+#input {
+  display: none;
+}
+
+#output {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  height: 30%;
+  border-top: 5px dotted #333
+}
+
+#output li {
+  position: relative;
+  float: left;
+  border-right: 5px dotted #333;
+  height: 100%;
+}
+
+#output li a {
+  display: block;
+  font-size: 48px;
+  text-decoration: none;
+  text-align: center;
+  color: black;
+  margin: 10px 20px;
+}

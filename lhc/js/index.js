@@ -20,7 +20,7 @@ String::permutate = ->
   ret
 */
 (function(){
-  var buffer, bufferedMsgsFirst, renderer, scene, camera, light, render, controls, blockMaterial, extrusionSettings, split$ = ''.split, join$ = [].join;
+  var buffer, bufferedMsgsFirst, renderer, scene, camera, light, render, controls, materialFront, material, blockMaterial, extrusionSettings, split$ = ''.split, join$ = [].join;
   buffer = [];
   bufferedMsgsFirst = function(arg$){
     var data;
@@ -36,7 +36,7 @@ String::permutate = ->
   Physijs.scripts.worker = '../js/physijs_worker.js';
   Physijs.scripts.ammo = '../js/ammo.js';
   renderer = new THREE.WebGLRenderer;
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(window.innerWidth, window.innerHeight * 0.7);
   $('body').prepend(renderer.domElement);
   scene = new Physijs.Scene({
     fixedTimeStep: 1 / 120
@@ -45,13 +45,13 @@ String::permutate = ->
     scene.simulate(void 8, 2);
     return controls.update();
   });
-  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 100000);
+  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight / 0.7, 1, 100000);
   camera.position.set(0, 2000, 4000);
   camera.lookAt(new THREE.Vector3(0, 0, 0));
   scene.add(camera);
   scene.add(new THREE.AmbientLight(0x333333));
   light = new THREE.DirectionalLight(0xffffff);
-  light.position.set(0, 0, 2500);
+  light.position.set(0, 2000, 500);
   light.target.position.set(0, 0, 0);
   scene.add(light);
   render = function(){
@@ -61,9 +61,19 @@ String::permutate = ->
   requestAnimationFrame(render);
   scene.simulate();
   controls = new THREE.OrbitControls(camera);
+  materialFront = new THREE.MeshLambertMaterial({
+    map: THREE.ImageUtils.loadTexture('./images/wood.jpg'),
+    color: 0x999999,
+    ambient: 0xF0F0F0
+  });
+  material = new Physijs.createMaterial(materialFront, 8, 0.4);
   blockMaterial = Physijs.createMaterial(new THREE.MeshLambertMaterial({
-    color: 'red'
+    map: new THREE.ImageUtils.loadTexture('./images/plywood.jpg', {
+      ambient: 0xFF9999
+    })
   }), 0.9, 0.5);
+  blockMaterial.map.wrapS = blockMaterial.map.wrapT = THREE.RepeatWrapping;
+  blockMaterial.map.repeat.set(1, 0.5);
   extrusionSettings = {
     amount: 100,
     bevelEnabled: false,
@@ -158,7 +168,7 @@ String::permutate = ->
               $output.empty();
               for (i$ = 0, len$ = keys.length; i$ < len$; ++i$) {
                 char = keys[i$];
-                $output.append($('<li/>').append($('<a/>', {
+                $output.append($('<li/>').css('width', ~~(window.innerWidth / keys.length) - 5).append($('<a/>', {
                   href: '#'
                 }).text(char))).click(fn$);
               }

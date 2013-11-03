@@ -31,7 +31,7 @@ Physijs.scripts.worker = \../js/physijs_worker.js
 Physijs.scripts.ammo = \../js/ammo.js
 
 renderer = new THREE.WebGLRenderer
-renderer.setSize(window.innerWidth, window.innerHeight)
+renderer.setSize(window.innerWidth, window.innerHeight * 0.7)
 #renderer.shadowMapEnabled = yes
 #renderer.shadowMapSoft = yes
 $(\body).prepend renderer.domElement
@@ -41,14 +41,14 @@ scene.addEventListener \update, ->
   scene.simulate(void, 2)
   controls.update!
 
-camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 100000)
+camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight / 0.7, 1, 100000)
 camera.position.set(0, 2000, 4000)
 camera.lookAt new THREE.Vector3(0, 0, 0)
 scene.add camera
 
 scene.add new THREE.AmbientLight(0x333333)
 light = new THREE.DirectionalLight(0xffffff)
-light.position.set(0, 0, 2500)
+light.position.set(0, 2000, 500)
 light.target.position.set(0, 0, 0)
 scene.add light
 
@@ -60,12 +60,17 @@ scene.simulate!
 
 controls = new THREE.OrbitControls camera
 
+materialFront = new THREE.MeshLambertMaterial do
+  map: THREE.ImageUtils.loadTexture \./images/wood.jpg
+  color: 0x999999
+  ambient: 0xF0F0F0
+material = new Physijs.createMaterial(materialFront, 8, 0.4)
 block-material = Physijs.createMaterial do
-  new THREE.MeshLambertMaterial(color: \red)
+  new THREE.MeshLambertMaterial map: new THREE.ImageUtils.loadTexture \./images/plywood.jpg, ambient: 0xFF9999
   0.9 # medium friction
   0.5 # medium restitution
-#block-material.map.wrapS = block-material.map.wrapT = THREE.RepeatWrapping
-#block-material.map.repeat.set( 1, 0.5 )
+block-material.map.wrapS = block-material.map.wrapT = THREE.RepeatWrapping
+block-material.map.repeat.set( 1, 0.5 )
 
 extrusionSettings =
   amount: 100
@@ -136,7 +141,7 @@ main = ({data}) ->
   keys = Object.keys(seen)
   $output.empty!
   for char in keys
-    $output.append $(\<li/>).append $(\<a/> href: \#).text char .click -> window.output $(@).text!
+    $output.append $(\<li/>).css(\width, ~~(window.innerWidth / keys.length) - 5).append $(\<a/> href: \#).text char .click -> window.output $(@).text!
   JSON.stringify keys,, 2
 getShapeOf = ->
   ret = []
