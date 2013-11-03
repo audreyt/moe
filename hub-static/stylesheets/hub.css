@@ -2844,6 +2844,7 @@ body {
 }
 /* line 74, ../sass/hub.scss */
 .iframe-wrapper .iframe-header input {
+  opacity: 0.15;
   width: 60%;
   display: inline-block;
   height: 15px;
@@ -2852,12 +2853,14 @@ body {
   color: #555555;
   vertical-align: top;
   border: #420000 1px solid;
+  transition: all 0.2s ease;
 }
-/* line 84, ../sass/hub.scss */
+/* line 86, ../sass/hub.scss */
 .iframe-wrapper .iframe-header button {
+  opacity: 0.15;
   box-sizing: border-box;
   display: inline-block;
-  padding: 4px 12px;
+  padding: 7px 12px 1px;
   margin-bottom: 0;
   line-height: 15px;
   background: #ddd;
@@ -2868,17 +2871,25 @@ body {
   border: #420000 1px solid;
   transition: all 0.2s ease;
 }
-/* line 97, ../sass/hub.scss */
+/* line 100, ../sass/hub.scss */
 .iframe-wrapper .iframe-header button:hover {
   background: #333;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.75);
   color: #fff;
 }
-/* line 104, ../sass/hub.scss */
+/* line 107, ../sass/hub.scss */
+.iframe-wrapper .iframe-header:hover input, .iframe-wrapper .iframe-header:hover button {
+  opacity: 1;
+}
+/* line 111, ../sass/hub.scss */
+.iframe-wrapper .iframe-header input:focus, .iframe-wrapper .iframe-header button:focus {
+  opacity: 1;
+}
+/* line 116, ../sass/hub.scss */
 .iframe-wrapper .controls {
   float: right;
 }
-/* line 106, ../sass/hub.scss */
+/* line 118, ../sass/hub.scss */
 .iframe-wrapper .controls a {
   display: block;
   text-decoration: none;
@@ -2890,15 +2901,15 @@ body {
   line-height: 23px;
   transition: all 0.2s ease;
 }
-/* line 116, ../sass/hub.scss */
+/* line 128, ../sass/hub.scss */
 .iframe-wrapper .controls a:hover {
   background: #520000;
 }
-/* line 121, ../sass/hub.scss */
+/* line 133, ../sass/hub.scss */
 .iframe-wrapper .iframe {
   margin: 0 8px;
 }
-/* line 124, ../sass/hub.scss */
+/* line 136, ../sass/hub.scss */
 .iframe-wrapper iframe {
   display: block;
   border: none;
@@ -2906,7 +2917,7 @@ body {
   height: 100%;
 }
 
-/* line 133, ../sass/hub.scss */
+/* line 145, ../sass/hub.scss */
 .main-control .main-btn {
   width: 84px;
   height: 84px;
@@ -2921,17 +2932,17 @@ body {
   transition: all 0.2s ease;
   box-shadow: #380000 0 2px 2px, #380000 0 2px 4px, #380000 0 2px 6px, #380000 0 0 6px;
 }
-/* line 146, ../sass/hub.scss */
+/* line 158, ../sass/hub.scss */
 .main-control .main-btn:hover {
   background: #eeeeee url("../images/meng_hover.png") center center;
   background-size: 100% 100%;
   box-shadow: #380000 0 2px 1px, #050000 0 0 2px;
 }
-/* line 151, ../sass/hub.scss */
+/* line 163, ../sass/hub.scss */
 .main-control .main-btn:active {
   box-shadow: #050000 0 0 2px;
 }
-/* line 155, ../sass/hub.scss */
+/* line 167, ../sass/hub.scss */
 .main-control .moving-word {
   display: block;
   position: absolute;
@@ -2942,7 +2953,7 @@ body {
   border: #6b0000 10px solid;
   z-index: 3;
 }
-/* line 165, ../sass/hub.scss */
+/* line 177, ../sass/hub.scss */
 .main-control a.tube-status {
   display: block;
   width: 24px;
@@ -2957,21 +2968,21 @@ body {
   position: absolute;
   z-index: 8;
 }
-/* line 178, ../sass/hub.scss */
+/* line 190, ../sass/hub.scss */
 .main-control a.tube-status:hover {
   background: #fff;
 }
-/* line 181, ../sass/hub.scss */
+/* line 193, ../sass/hub.scss */
 .main-control a.tube-status.close {
   background: #999;
   color: #6b0000;
 }
-/* line 184, ../sass/hub.scss */
+/* line 196, ../sass/hub.scss */
 .main-control a.tube-status.close:hover {
   background: #aaa;
 }
 
-/* line 191, ../sass/hub.scss */
+/* line 203, ../sass/hub.scss */
 .lightbox {
   display: block;
   position: fixed;
@@ -2984,7 +2995,7 @@ body {
   width: 100%;
   height: 100%;
 }
-/* line 202, ../sass/hub.scss */
+/* line 214, ../sass/hub.scss */
 .lightbox a.lightbox-close {
   position: fixed;
   padding: 8px 10px;
@@ -2996,12 +3007,12 @@ body {
   color: #6b0000;
   transition: all 0.2s ease;
 }
-/* line 212, ../sass/hub.scss */
+/* line 224, ../sass/hub.scss */
 .lightbox a.lightbox-close:hover {
   background: #6b0000;
   color: #fff;
 }
-/* line 217, ../sass/hub.scss */
+/* line 229, ../sass/hub.scss */
 .lightbox .big-iframe {
   display: block;
   width: 92%;
@@ -3009,14 +3020,14 @@ body {
   background: #fee;
   margin: 1% auto 0;
 }
-/* line 223, ../sass/hub.scss */
+/* line 235, ../sass/hub.scss */
 .lightbox .big-iframe iframe {
   display: block;
   width: 100%;
   height: 100%;
   border: #eee 1px solid;
 }
-/* line 230, ../sass/hub.scss */
+/* line 242, ../sass/hub.scss */
 .lightbox .nav {
   display: block;
   width: 100%;
@@ -3026,26 +3037,26 @@ body {
   background: #6b0000;
   text-align: center;
 }
-/* line 238, ../sass/hub.scss */
+/* line 250, ../sass/hub.scss */
 .lightbox .nav a {
   color: #eee;
   text-decoration: none;
 }
-/* line 241, ../sass/hub.scss */
+/* line 253, ../sass/hub.scss */
 .lightbox .nav a:hover {
   color: #fff;
 }
-/* line 245, ../sass/hub.scss */
+/* line 257, ../sass/hub.scss */
 .lightbox .nav ul {
   margin: 0;
   padding: 10px 0;
   list-style: none;
 }
-/* line 250, ../sass/hub.scss */
+/* line 262, ../sass/hub.scss */
 .lightbox .nav ul li {
   display: inline-block;
 }
-/* line 253, ../sass/hub.scss */
+/* line 265, ../sass/hub.scss */
 .lightbox .nav ul li > a {
   display: inline-block;
   padding: 5px 20px;
@@ -3053,21 +3064,21 @@ body {
   border-radius: 12px;
   transition: all 0.2s ease;
 }
-/* line 259, ../sass/hub.scss */
+/* line 271, ../sass/hub.scss */
 .lightbox .nav ul li > a:hover {
   background: #380000;
 }
-/* line 263, ../sass/hub.scss */
+/* line 275, ../sass/hub.scss */
 .lightbox .nav ul li.share {
   margin: 0 30px;
 }
-/* line 266, ../sass/hub.scss */
+/* line 278, ../sass/hub.scss */
 .lightbox .nav ul li.share > a {
   padding: 5px 10px;
   margin: 0;
 }
 
-/* line 273, ../sass/hub.scss */
+/* line 285, ../sass/hub.scss */
 .testpoint {
   position: absolute;
   color: #0f0;
