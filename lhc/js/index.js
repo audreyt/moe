@@ -166,6 +166,7 @@ String::permutate = ->
                 queue.push([taken + head, rest]);
               }
               keys = Object.keys(seen);
+              keys = keys.slice(0, 10);
               $output.empty();
               for (i$ = 0, len$ = keys.length; i$ < len$; ++i$) {
                 char = keys[i$];
