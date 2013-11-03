@@ -72,6 +72,7 @@ body {
         margin: 8px 8px 5px;
         position: relative;
         input {
+            opacity: 0.15;
             width: 60%;
             display: inline-block;
             height: 15px;
@@ -80,11 +81,13 @@ body {
             color: #555555;
             vertical-align: top;
             border: darken($darkRed, 8) 1px solid;
+            transition: all 0.2s ease;
         }
         button {
+            opacity: 0.15;
             box-sizing: border-box;
             display: inline-block;
-            padding: 4px 12px;
+            padding: 7px 12px 1px;
             margin-bottom: 0;
             line-height: 15px;
             background: #ddd;
@@ -100,6 +103,15 @@ body {
                 color: #fff;
             }
         }
+        &:hover {
+            input, button {
+                opacity: 1;
+            }
+        }
+        input:focus, button:focus {
+            opacity: 1;
+        }
+
     }
     .controls {
         float: right;
@@ -270,5 +282,10 @@ body {
     }
 }
 
+.testpoint {
+    position: absolute;
+    color: #0f0;
+    z-index: 1000000;
 
+}
 

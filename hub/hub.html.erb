@@ -14,12 +14,10 @@
     <div class="twinkling"></div>
     <div class="content-wrapper">
         <div class="main-control">
+            <span class="testpoint">.</span>
             <a href="#" class="gogo">gogo</a>
             <a href="#" class="main-btn">主選單</a>
-            <div class="tube project-users">
-                <a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a>
-                <span class="moving-word output">草木</span>
-            </div>
+            <div class="tube project-users"><a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a></div>
             <div class="tube project-tmuse"><a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a></div>
             <div class="tube project-tmuse"><a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a></div>
             <div class="tube project-dict"><a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a></div>
@@ -34,7 +32,7 @@
                 </div>
                 <div class="input">
                     <input type="text" class="input-words" />
-                    <button>Push</button>
+                    <button>↩</button>
                 </div>
             </div>
             <div class="iframe">
@@ -48,7 +46,7 @@
                 </div>
                 <div class="input">
                     <input type="text" class="input-words" />
-                    <button>Push</button>
+                    <button>↩</button>
                 </div>
             </div>
             <div class="iframe">
@@ -62,7 +60,7 @@
                 </div>
                 <div class="input">
                     <input type="text" class="input-words" />
-                    <button>Push</button>
+                    <button>↩</button>
                 </div>
             </div>
             <div class="iframe">
@@ -76,7 +74,7 @@
                 </div>
                 <div class="input">
                     <input type="text" class="input-words" />
-                    <button>Push</button>
+                    <button>↩</button>
                 </div>
             </div>
             <div class="iframe">
@@ -90,7 +88,7 @@
                 </div>
                 <div class="input">
                     <input type="text" class="input-words" />
-                    <button>Push</button>
+                    <button>↩</button>
                 </div>
             </div>
             <div class="iframe">
@@ -104,7 +102,7 @@
                 </div>
                 <div class="input">
                     <input type="text" class="input-words" />
-                    <button>Push</button>
+                    <button>↩</button>
                 </div>
             </div>
             <div class="iframe">
@@ -203,23 +201,123 @@ $(function(){
     });
 
     // input / output words
-    // 僅供樣式測試，功能不正確
-    var pUserWordPosition = {top: contentHeight*0.3, left: contentWidth*0.02+nBlockWidth/2};
-    var pMapWordPosition = {top: contentHeight*0.52+nBlockHeight/2, left: contentWidth*0.98-nBlockWidth/2};
+    var rCenterPointX = centerPointX - 1;
+    var rCenterPointY = centerPointY - 10;
+    var pUserWordPosition = {"top": rCenterPointY-contentWidth*0.3*0.31, "left": rCenterPointX-contentWidth*0.3};
+    var pTmuseWordPosition = {"top": rCenterPointY-contentHeight*0.3, "left": rCenterPointX};
+    var pDictWordPosition = {"top": rCenterPointY-contentWidth*0.3*0.31, "left": rCenterPointX+contentWidth*0.3};
+    var pBallWordPosition = {"top": rCenterPointY+contentWidth*0.3*0.31, "left": rCenterPointX-contentWidth*0.3};
+    var pThcWordPosition = {"top": rCenterPointY+contentHeight*0.3, "left": rCenterPointX};
+    var pMapWordPosition = {"top": rCenterPointY+contentWidth*0.3*0.31, "left": rCenterPointX+contentWidth*0.3};
 
-
-    $(".tube.project-users .moving-word").css(pUserWordPosition);
-    $(".gogo").on("click", function(e) {
-        e.preventDefault();
-        var currentWordWidth = $(".tube.project-users .moving-word").width();
-        var currentWordHeight = $(".tube.project-users .moving-word").height();
-        var centerPosition = { top: (contentHeight - currentWordHeight)/2, left: (contentWidth - currentWordWidth)/2};
-        $(".tube.project-users .moving-word").animate(centerPosition,{
+    // dirty code...
+    var pUserWord = function(word) {
+        $(".tube.project-users").append('<span class="moving-word output">'+word+'</span>');
+        var wWidth = $(".tube.project-users .moving-word").width();
+        var wHeight = $(".tube.project-users .moving-word").height();
+        var startPointX = pUserWordPosition.left - (wWidth+30)/2;
+        var startPointY = pUserWordPosition.top - (wHeight+26)/2;
+        $(".tube.project-users .moving-word").css({top: startPointY, left: startPointX});
+        $(".tube.project-users .moving-word").animate({top: rCenterPointY - (wHeight+26)/2, left: rCenterPointX - (wWidth+30)/2}, {
             duration: 2500,
             complete: function() {
-                $(".tube.project-users .moving-word").animate(pMapWordPosition, 2500);
+                $(".tube.project-users .moving-word").fadeOut('slow', function(){
+                    $(this).remove();
+                });
             }
         });
+    };
+    var pTmuseWord = function(word) {
+        $(".tube.project-tmuse").append('<span class="moving-word output">'+word+'</span>');
+        var wWidth = $(".tube.project-tmuse .moving-word").width();
+        var wHeight = $(".tube.project-tmuse .moving-word").height();
+        var startPointX = pTmuseWordPosition.left - (wWidth+30)/2;
+        var startPointY = pTmuseWordPosition.top - (wHeight+26)/2;
+        $(".tube.project-tmuse .moving-word").css({top: startPointY, left: startPointX});
+        $(".tube.project-tmuse .moving-word").animate({top: rCenterPointY - (wHeight+26)/2, left: rCenterPointX - (wWidth+30)/2}, {
+            duration: 2500,
+            complete: function() {
+                $(".tube.project-tmuse .moving-word").fadeOut('slow', function(){
+                    $(this).remove();
+                });
+            }
+        });
+    };
+    var pDictWord = function(word) {
+        $(".tube.project-dict").append('<span class="moving-word output">'+word+'</span>');
+        var wWidth = $(".tube.project-dict .moving-word").width();
+        var wHeight = $(".tube.project-dict .moving-word").height();
+        var startPointX = pDictWordPosition.left - (wWidth+30)/2;
+        var startPointY = pDictWordPosition.top - (wHeight+26)/2;
+        $(".tube.project-dict .moving-word").css({top: startPointY, left: startPointX});
+        $(".tube.project-dict .moving-word").animate({top: rCenterPointY - (wHeight+26)/2, left: rCenterPointX - (wWidth+30)/2}, {
+            duration: 2500,
+            complete: function() {
+                $(".tube.project-dict .moving-word").fadeOut('slow', function(){
+                    $(this).remove();
+                });
+            }
+        });
+    };
+    var pBallWord = function(word) {
+        $(".tube.project-ball").append('<span class="moving-word output">'+word+'</span>');
+        var wWidth = $(".tube.project-ball .moving-word").width();
+        var wHeight = $(".tube.project-ball .moving-word").height();
+        var startPointX = pBallWordPosition.left - (wWidth+30)/2;
+        var startPointY = pBallWordPosition.top - (wHeight+26)/2;
+        $(".tube.project-ball .moving-word").css({top: startPointY, left: startPointX});
+        $(".tube.project-ball .moving-word").animate({top: rCenterPointY - (wHeight+26)/2, left: rCenterPointX - (wWidth+30)/2}, {
+            duration: 2500,
+            complete: function() {
+                $(".tube.project-ball .moving-word").fadeOut('slow', function(){
+                    $(this).remove();
+                });
+            }
+        });
+    };
+    var pThcWord = function(word) {
+        $(".tube.project-thc").append('<span class="moving-word output">'+word+'</span>');
+        var wWidth = $(".tube.project-thc .moving-word").width();
+        var wHeight = $(".tube.project-thc .moving-word").height();
+        var startPointX = pThcWordPosition.left - (wWidth+30)/2;
+        var startPointY = pThcWordPosition.top - (wHeight+26)/2;
+        $(".tube.project-thc .moving-word").css({top: startPointY, left: startPointX});
+        $(".tube.project-thc .moving-word").animate({top: rCenterPointY - (wHeight+26)/2, left: rCenterPointX - (wWidth+30)/2}, {
+            duration: 2500,
+            complete: function() {
+                $(".tube.project-thc .moving-word").fadeOut('slow', function(){
+                    $(this).remove();
+                });
+            }
+        });
+    };
+    var pMapWord = function(word) {
+        $(".tube.project-map").append('<span class="moving-word output">'+word+'</span>');
+        var wWidth = $(".tube.project-map .moving-word").width();
+        var wHeight = $(".tube.project-map .moving-word").height();
+        var startPointX = pMapWordPosition.left - (wWidth+30)/2;
+        var startPointY = pMapWordPosition.top - (wHeight+26)/2;
+        $(".tube.project-map .moving-word").css({top: startPointY, left: startPointX});
+        $(".tube.project-map .moving-word").animate({top: rCenterPointY - (wHeight+26)/2, left: rCenterPointX - (wWidth+30)/2}, {
+            duration: 2500,
+            complete: function() {
+                $(".tube.project-map .moving-word").fadeOut('slow', function(){
+                    $(this).remove();
+                });
+            }
+        });
+    };
+    //$(".testpoint").css(pTmuseWordPosition);
+
+    $(".tube.project-users .moving-word").css(pThcWordPosition);
+    $(".gogo").on("click", function(e) {
+        e.preventDefault();
+        pUserWord("errrrrr");
+        pTmuseWord("errrrrr");
+        pDictWord("errrrrr");
+        pBallWord("errrrrr");
+        pThcWord("errrrrr");
+        pMapWord("errrrrr");
     });
 
 
@@ -235,10 +333,15 @@ $(function(){
             originTop = thisBlock.css("top");
             originLeft = thisBlock.css("left");
             thisBlock.css({"z-index": 9999, position: "fixed"}).animate({width: windowWidth*0.98, height: windowHeight*0.98, top: "1%", left: "1%"});
-            thisIframe.animate({width: windowWidth*0.98-16, height: windowHeight*0.98-46});
+            thisIframe.animate({width: windowWidth*0.98-16, height: windowHeight*0.98-46}, {
+                complete: function() {
+                    thisBlock.siblings(".iframe-wrapper").find(".iframe").css({visibility: "hidden"});
+                }
+            });
             $(this).find("i").removeClass("icon-zoom-in").addClass("icon-zoom-out");
         }
         else {
+            $(".iframe-wrapper .iframe").css({visibility: "visible"});
             thisBlock.animate({width: originWidth, height: originHeight, top: originTop, left: originLeft});
             thisIframe.animate({width: originWidth-16, height: originHeight-46}, {
                 complete: function() {
