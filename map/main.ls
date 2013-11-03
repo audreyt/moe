@@ -27,6 +27,10 @@ $(\#submitStr).click ->
   $(\#inputY).val geo.y
   $(\#spanLat).text geo.latitude
 
+$(window).resize ->
+  $('#map').width('100%')
+  $('#map').height('100%')
+
 $(\#submitGeo).click ->
   $(\#inputStr).val GEO2STR({ x: parseInt($(\#inputX).val!), y: parseInt($(\#inputY).val! )})
 

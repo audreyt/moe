@@ -35,6 +35,10 @@
       $('#inputY').val(geo.y);
       return $('#spanLat').text(geo.latitude);
     });
+    $(window).resize(function(){
+      $('#map').width('100%');
+      return $('#map').height('100%');
+    });
     $('#submitGeo').click(function(){
       return $('#inputStr').val(GEO2STR({
         x: parseInt($('#inputX').val()),
