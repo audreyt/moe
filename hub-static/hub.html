@@ -6,9 +6,11 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Hub</title>
+<title>萌典字宙反應爐</title>
 <meta name="viewport" content="width=device-width">
-<link rel="stylesheet" media="screen" href="../stylesheets/hub.css">
+<link rel="stylesheet" media="screen" href="./stylesheets/hub.css">
+<script src="js/jquery.js"></script>
+<script src="main.js"></script>
 </head>
 <body>
     <div class="twinkling"></div>
@@ -32,11 +34,11 @@
                 </div>
                 <div class="input">
                     <input type="text" class="input-words" />
-                    <button>↩</button>
+                    <button>⏎</button>
                 </div>
             </div>
             <div class="iframe">
-                <iframe src="https://www.moedict.tw/#萌"></iframe>
+            <iframe src="../users/index.html"></iframe>
             </div>
         </div>
         <div class="iframe-wrapper w-type project-tmuse">
@@ -46,25 +48,26 @@
                 </div>
                 <div class="input">
                     <input type="text" class="input-words" />
-                    <button>↩</button>
+                    <button>⏎</button>
                 </div>
             </div>
             <div class="iframe">
-                <iframe src="https://www.moedict.tw/#萌"></iframe>
+            <iframe src="../tmuse/index.html"></iframe>
             </div>
         </div>
         <div class="iframe-wrapper v-type project-dict">
             <div class="iframe-header">
+            ⏎
                 <div class="controls">
                     <a href="#" class="zoom"><i class="icon-zoom-in"></i></a>
                 </div>
                 <div class="input">
                     <input type="text" class="input-words" />
-                    <button>↩</button>
+                    <button>⏎</button>
                 </div>
             </div>
             <div class="iframe">
-                <iframe src="https://www.moedict.tw/#萌"></iframe>
+            <iframe src="../dict/index.html"></iframe>
             </div>
         </div>
         <div class="iframe-wrapper n-type project-ball">
@@ -74,11 +77,11 @@
                 </div>
                 <div class="input">
                     <input type="text" class="input-words" />
-                    <button>↩</button>
+                    <button>⏎</button>
                 </div>
             </div>
             <div class="iframe">
-                <iframe src="https://www.moedict.tw/#萌"></iframe>
+            <iframe src="../ball/index.html"></iframe>
             </div>
         </div>
         <div class="iframe-wrapper w-type project-thc">
@@ -88,11 +91,11 @@
                 </div>
                 <div class="input">
                     <input type="text" class="input-words" />
-                    <button>↩</button>
+                    <button>⏎</button>
                 </div>
             </div>
             <div class="iframe">
-                <iframe src="https://www.moedict.tw/#萌"></iframe>
+            <iframe src="../lhc/index.html"></iframe>
             </div>
         </div>
         <div class="iframe-wrapper n-type project-map">
@@ -102,18 +105,18 @@
                 </div>
                 <div class="input">
                     <input type="text" class="input-words" />
-                    <button>↩</button>
+                    <button>⏎</button>
                 </div>
             </div>
             <div class="iframe">
-                <iframe src="https://www.moedict.tw/#萌"></iframe>
+            <iframe src="../map/index.html"></iframe>
             </div>
         </div>
     </div>
     <div class="lightbox">
         <a href="#" class="lightbox-close"><i class="icon-remove"></i></a>
         <div class="big-iframe">
-            <iframe src="https://www.moedict.tw/#萌"></iframe>
+            <iframe src="./welcome/index.html"></iframe>
         </div>
         <div class="nav">
             <ul>
@@ -310,14 +313,22 @@ $(function(){
     //$(".testpoint").css(pTmuseWordPosition);
 
     $(".tube.project-users .moving-word").css(pThcWordPosition);
+    window.pushText = function(t) {
+        pUserWord(t);
+        pTmuseWord(t);
+        pDictWord(t);
+        pBallWord(t);
+        pThcWord(t);
+        pMapWord(t);
+    };
     $(".gogo").on("click", function(e) {
         e.preventDefault();
-        pUserWord("errrrrr");
-        pTmuseWord("errrrrr");
-        pDictWord("errrrrr");
-        pBallWord("errrrrr");
-        pThcWord("errrrrr");
-        pMapWord("errrrrr");
+        pUserWord("中文");
+        pTmuseWord("中文");
+        pDictWord("中文");
+        pBallWord("中文");
+        pThcWord("中文");
+        pMapWord("中文");
     });
 
 
@@ -357,4 +368,3 @@ $(function(){
 </script>
 </body>
 </html>
-html>

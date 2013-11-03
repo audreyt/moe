@@ -111,7 +111,7 @@
           requestAnimationFrame(render);
           return renderer.render(scene, camera);
         };
-        renderer.setClearColor(0xdddddd, 1);
+        renderer.setClearColor(0x333333, 1);
         light = new THREE.PointLight(0xffffff);
         light.position.set(-100, 200, 100);
         scene.add(light);
@@ -210,7 +210,7 @@
       projector = new THREE.Projector();
       return projector.unprojectVector(vector, camera);
     };
-    return window.onDocumentMouseUp = function(event){
+    window.onDocumentMouseUp = function(event){
       var vector, raycaster, intersects;
       event.preventDefault();
       vector = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5);
@@ -220,6 +220,7 @@
         return window.output(window.sprite_id_to_label[intersects[0].object.id]);
       }
     };
+    return window.input($in.val());
   });
   function deepEq$(x, y, type){
     var toString = {}.toString, hasOwnProperty = {}.hasOwnProperty,

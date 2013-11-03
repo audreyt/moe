@@ -22,6 +22,9 @@
         return;
       }
       prev = it;
+      if (typeof window.pushText === 'function') {
+        window.pushText(it);
+      }
       for (i$ = 0, len$ = (ref$ = this.frames).length; i$ < len$; ++i$) {
         w = ref$[i$];
         results$.push((fn$.call(this, w)));
