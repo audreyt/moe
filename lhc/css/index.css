@@ -1,0 +1,48 @@
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  height: 100%;
+  background: #16161D;
+}
+
+#input {
+  display: none;
+}
+
+#output {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  height: 68px;
+  border-top: 5px dotted #DDD;
+}
+
+#output li {
+  position: relative;
+  float: left;
+  border-right: 5px dotted #DDD;
+  height: 100%;
+}
+
+#output li a {
+  display: block;
+  font-size: 48px;
+  text-decoration: none;
+  text-align: center;
+  color: #999;
+  margin: 10px 20px;
+}
+
+#output li a:hover {
+  color: #FFF;
+  text-decoration: underline;
+}

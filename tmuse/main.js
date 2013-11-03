@@ -24,19 +24,21 @@
         var nodes, i$, ref$, len$, labels, $li, j$, len1$, ref1$, label, score, scene, camera, renderer, multiplier, objs, obj_coloring, obj_radius, clustering, i, cluster, c, l, n, coords, sphere_geo, mat, sphere, spritey, edges, edge, color, sv, tv, geometry, line, controls, render, light;
         nodes = json.graph_json.nodes;
         $out.empty();
-        for (i$ = 0, len$ = (ref$ = json.clustering_json).length; i$ < len$; ++i$) {
-          labels = ref$[i$].labels;
-          $li = $('<li/>');
-          for (j$ = 0, len1$ = labels.length; j$ < len1$; ++j$) {
-            ref1$ = labels[j$], label = ref1$[0], score = ref1$[1];
-            $li.append($('<a/>', {
-              href: '#'
-            }).text(label).click(fn$).css({
-              fontSize: 15 * score + 'px'
-            }));
-            $li.append('&nbsp;');
+        if (false) {
+          for (i$ = 0, len$ = (ref$ = json.clustering_json).length; i$ < len$; ++i$) {
+            labels = ref$[i$].labels;
+            $li = $('<li/>');
+            for (j$ = 0, len1$ = labels.length; j$ < len1$; ++j$) {
+              ref1$ = labels[j$], label = ref1$[0], score = ref1$[1];
+              $li.append($('<a/>', {
+                href: '#'
+              }).text(label).click(fn$).css({
+                fontSize: 15 * score + 'px'
+              }));
+              $li.append('&nbsp;');
+            }
+            $li.appendTo($out);
           }
-          $li.appendTo($out);
         }
         scene = new THREE.Scene();
         window.camera = camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -49,6 +51,8 @@
         obj_coloring = {};
         obj_radius = {};
         clustering = json.clustering_json;
+        window.labels = [];
+        window.sprite_id_to_label = {};
         for (i$ = 0, len$ = clustering.length; i$ < len$; ++i$) {
           i = i$;
           cluster = clustering[i$];
@@ -79,7 +83,9 @@
           sphere.position.z = coords[2] * multiplier;
           spritey = makeTextSprite(" " + n.label + " ", obj_coloring[n.label]);
           spritey.position = sphere.position.clone().multiplyScalar(1.01);
+          window.labels.push(spritey);
           scene.add(spritey);
+          window.sprite_id_to_label[spritey.id] = n.label;
         }
         edges = json.graph_json.edges;
         for (i$ = 0, len$ = edges.length; i$ < len$; ++i$) {
@@ -90,6 +96,8 @@
           });
           color = obj_coloring[nodes[edge.s].label];
           mat.color.setRGB(color.r, color.g, color.b);
+          mat.transparent = true;
+          mat.opacity = 0.1;
           sv = nodes[edge.s].coords;
           tv = nodes[edge.t].coords;
           geometry = new THREE.Geometry();
@@ -107,7 +115,10 @@
         light = new THREE.PointLight(0xffffff);
         light.position.set(-100, 200, 100);
         scene.add(light);
-        return render();
+        render();
+        document.addEventListener('mousedown', window.onDocumentMouseDown, false);
+        document.addEventListener('doubleclick', window.onDocumentMouseUp, false);
+        return document.addEventListener('dblclick', window.onDocumentMouseUp, false);
         function fn$(){
           return window.output($(this).text());
         }
@@ -154,7 +165,6 @@
         b: Math.round(200 + b * 55),
         a: 1.0
       };
-      console.log(JSON.stringify(backgroundColor, void 8, 2));
       spriteAlignment = THREE.SpriteAlignment.topLeft;
       canvas = document.createElement('canvas');
       context = canvas.getContext('2d');
@@ -178,7 +188,7 @@
       sprite.scale.set(2, 1, 0.04);
       return sprite;
     };
-    return window.roundRect = function(ctx, x, y, w, h, r){
+    window.roundRect = function(ctx, x, y, w, h, r){
       ctx.beginPath();
       ctx.moveTo(x + r, y);
       ctx.lineTo(x + w - r, y);
@@ -192,6 +202,23 @@
       ctx.closePath();
       ctx.fill();
       return ctx.stroke();
+    };
+    window.onDocumentMouseDown = function(event){
+      var vector, projector;
+      event.preventDefault();
+      vector = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5);
+      projector = new THREE.Projector();
+      return projector.unprojectVector(vector, camera);
+    };
+    return window.onDocumentMouseUp = function(event){
+      var vector, raycaster, intersects;
+      event.preventDefault();
+      vector = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5);
+      raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+      intersects = raycaster.intersectObjects(window.labels);
+      if (intersects.length) {
+        return window.output(window.sprite_id_to_label[intersects[0].object.id]);
+      }
     };
   });
   function deepEq$(x, y, type){

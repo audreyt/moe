@@ -20,7 +20,7 @@ String::permutate = ->
   ret
 */
 (function(){
-  var buffer, bufferedMsgsFirst, renderer, scene, camera, light, render, controls, blockMaterial, extrusionSettings, split$ = ''.split, join$ = [].join;
+  var buffer, bufferedMsgsFirst, renderer, scene, camera, light, render, controls, materialFront, material, blockMaterial, extrusionSettings, split$ = ''.split, join$ = [].join;
   buffer = [];
   bufferedMsgsFirst = function(arg$){
     var data;
@@ -36,7 +36,7 @@ String::permutate = ->
   Physijs.scripts.worker = '../js/physijs_worker.js';
   Physijs.scripts.ammo = '../js/ammo.js';
   renderer = new THREE.WebGLRenderer;
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(window.innerWidth, window.innerHeight - 48);
   $('body').prepend(renderer.domElement);
   scene = new Physijs.Scene({
     fixedTimeStep: 1 / 120
@@ -45,13 +45,13 @@ String::permutate = ->
     scene.simulate(void 8, 2);
     return controls.update();
   });
-  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 100000);
+  camera = new THREE.PerspectiveCamera(45, window.innerWidth / (window.innerHeight - 48), 1, 100000);
   camera.position.set(0, 2000, 4000);
   camera.lookAt(new THREE.Vector3(0, 0, 0));
   scene.add(camera);
   scene.add(new THREE.AmbientLight(0x333333));
   light = new THREE.DirectionalLight(0xffffff);
-  light.position.set(0, 0, 2500);
+  light.position.set(0, 2000, 500);
   light.target.position.set(0, 0, 0);
   scene.add(light);
   render = function(){
@@ -61,9 +61,19 @@ String::permutate = ->
   requestAnimationFrame(render);
   scene.simulate();
   controls = new THREE.OrbitControls(camera);
+  materialFront = new THREE.MeshLambertMaterial({
+    map: THREE.ImageUtils.loadTexture('./images/wood.jpg'),
+    color: 0x999999,
+    ambient: 0xF0F0F0
+  });
+  material = new Physijs.createMaterial(materialFront, 8, 0.4);
   blockMaterial = Physijs.createMaterial(new THREE.MeshLambertMaterial({
-    color: 'red'
+    map: new THREE.ImageUtils.loadTexture('./images/plywood.jpg', {
+      ambient: 0xFF9999
+    })
   }), 0.9, 0.5);
+  blockMaterial.map.wrapS = blockMaterial.map.wrapT = THREE.RepeatWrapping;
+  blockMaterial.map.repeat.set(1, 0.5);
   extrusionSettings = {
     amount: 100,
     bevelEnabled: false,
@@ -75,7 +85,9 @@ String::permutate = ->
       return $.get('./data/orig-chars.json', function(OrigChars){
         return $.get('./data/Outlines.json', function(Outlines){
           return $.get('./data/Centroids.json', function(Centroids){
-            var origin, $input, $output, uniq, main, getShapeOf, doAddChar, i$, ref$, len$, data;
+            var cTime, cCounter, origin, $input, $output, uniq, main, getShapeOf, doAddChar, i$, ref$, len$, data;
+            cTime = 2.0;
+            cCounter = 0;
             origin = "http://127.0.0.1:8888/";
             window.id = 'lhc';
             window.reset = function(){
@@ -86,7 +98,9 @@ String::permutate = ->
               if (window.muted) {
                 return;
               }
-              return window.top.postMessage(it, origin);
+              if (window.parent !== window) {
+                return window.parent.postMessage(it, origin);
+              }
             };
             $input = $('#input');
             $output = $('#output');
@@ -102,9 +116,9 @@ String::permutate = ->
             main = function(arg$){
               var data, comps, getComps, seen, i$, len$, ch, scanned, queue, callback, count, ref$, taken, rest, c, head, keys, char;
               data = arg$.data;
-              $input.val($input.val() + data);
-              data = uniq($input.val());
-              doAddChar(data);
+              data = uniq($input.val() + data);
+              $input.val(data);
+              cCounter = 0;
               comps = [];
               getComps = function(it){
                 var out, i$, len$, char, comps;
@@ -155,7 +169,7 @@ String::permutate = ->
               $output.empty();
               for (i$ = 0, len$ = keys.length; i$ < len$; ++i$) {
                 char = keys[i$];
-                $output.append($('<li/>').append($('<a/>', {
+                $output.append($('<li/>').css('width', ~~(window.innerWidth / keys.length) - 5).append($('<a/>', {
                   href: '#'
                 }).text(char))).click(fn$);
               }
@@ -210,11 +224,13 @@ String::permutate = ->
               }
             };
             doAddChar = function(it){
-              var i$, len$, char, lresult$, i, ref$, shape, geometry, offset, m, mesh, results$ = [];
+              var i$, len$, char, lresult$, randX, randY, i, ref$, shape, geometry, offset, m, mesh, results$ = [];
               for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
                 char = it[i$];
                 lresult$ = [];
                 console.log("creating geometry for " + char);
+                randX = Math.random() * 500 - 250;
+                randY = Math.random() * 500 - 250;
                 for (i in ref$ = getShapeOf(Outlines[char])) {
                   shape = ref$[i];
                   geometry = new THREE.ExtrudeGeometry(shape, extrusionSettings);
@@ -224,14 +240,23 @@ String::permutate = ->
                   geometry.applyMatrix(m);
                   mesh = new Physijs.ConvexMesh(geometry, blockMaterial, 9);
                   mesh.position = offset.clone();
+                  mesh.position.add(new THREE.Vector3(randX - 1075, randY + 1075, 0));
                   mesh.castShadow = true;
                   mesh.receiveShadow = true;
+                  mesh._physijs.linearVelocity.x = 0;
+                  mesh._physijs.linearVelocity.y = 0;
+                  mesh._physijs.linearVelocity.z = 200;
                   lresult$.push(scene.add(mesh));
                 }
                 results$.push(lresult$);
               }
               return results$;
             };
+            scene.addEventListener('update', function(){
+              if (cCounter++ % ~~(cTime * 120) === 0) {
+                return doAddChar($input.val());
+              }
+            });
             window.input = function(it){
               return main({
                 data: it

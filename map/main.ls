@@ -1,5 +1,15 @@
 <- $
 
+CACHED = {}; window.GET = GET = (url, data, onSuccess, dataType) ->
+  if data instanceof Function
+    [data, dataType, onSuccess] = [null, onSuccess, data]
+  return onSuccess(CACHED[url]) if CACHED[url]
+  $.get(url, data, (->
+    onSuccess(CACHED[url] = it)
+  ), (dataType || \json)).fail ->
+    #x = decodeURIComponent(url) - /\.json$/ - /^\w/
+    #window.input x
+
 longMIN = 120
 longMAX = 122
 latMIN = 22
@@ -9,6 +19,7 @@ origin = "http://127.0.0.1:8888/"
 window.id = \map
 window.addEventListener("message", -> window.input it.data , false)
 
+$(\body).on \click 'a.poi' -> output("#{ $(@).text() }")
 $(\#submitStr).click ->
   geo = STR2GEO($(\#inputStr).val!)
   $(\#inputX).val geo.x
@@ -20,10 +31,11 @@ $(\#submitGeo).click ->
   $(\#inputStr).val GEO2STR({ x: parseInt($(\#inputX).val!), y: parseInt($(\#inputY).val! )})
 
 window.input = ->
-  window.geo = STR2GEO it
+  #window.geo = STR2GEO it
+  fill it
 window.output = ->
-  return if window.muted
   input it
+  return if window.muted
   window.top.postMessage(it, origin)
 
 DATA = {}
@@ -90,3 +102,4 @@ window.GEO2STR = GEO2STR = ->
 
   result
 
+fill \北

@@ -34,8 +34,7 @@
         $(element).data(entry);
         element = document.createElement('div');
         element.className = 'element';
-        //element.style.backgroundColor = 'rgba(0,127,127,' + (Math.random() * 0.5 + 0.25) + ')';
-        element.style.backgroundImage = 'url("images/bg_element.png")';
+        element.style.backgroundColor = 'rgba(0,127,127,' + (Math.random() * 0.5 + 0.25) + ')';
         number = document.createElement('div');
         if (strokes) {
           number.className = 'number';
@@ -114,20 +113,14 @@
       controls.addEventListener('change', render);
       button = document.getElementById('sphere');
       button.addEventListener('click', function(){
-        $("#menu button").removeClass();
-        $("#sphere").addClass("active");
         return transform(targets.sphere, 2000);
       }, false);
       button = document.getElementById('helix');
       button.addEventListener('click', function(){
-        $("#menu button").removeClass();
-        $("#helix").addClass("active");
         return transform(targets.helix, 2000);
       }, false);
       button = document.getElementById('grid');
       button.addEventListener('click', function(){
-        $("#menu button").removeClass();
-        $("#grid").addClass("active");
         return transform(targets.grid, 2000);
       }, false);
       transform(targets.sphere, 5000);
