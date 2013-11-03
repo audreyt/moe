@@ -1,5 +1,15 @@
 <- $
 
+CACHED = {}; window.GET = GET = (url, data, onSuccess, dataType) ->
+  if data instanceof Function
+    [data, dataType, onSuccess] = [null, onSuccess, data]
+  return onSuccess(CACHED[url]) if CACHED[url]
+  $.get(url, data, (->
+    onSuccess(CACHED[url] = it)
+  ), (dataType || \json)).fail ->
+    #x = decodeURIComponent(url) - /\.json$/ - /^\w/
+    #window.input x
+
 longMIN = 120
 longMAX = 122
 latMIN = 22
@@ -20,7 +30,8 @@ $(\#submitGeo).click ->
   $(\#inputStr).val GEO2STR({ x: parseInt($(\#inputX).val!), y: parseInt($(\#inputY).val! )})
 
 window.input = ->
-  window.geo = STR2GEO it
+  #window.geo = STR2GEO it
+  fill it
 window.output = ->
   return if window.muted
   input it
@@ -90,3 +101,4 @@ window.GEO2STR = GEO2STR = ->
 
   result
 
+fill \北
