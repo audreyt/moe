@@ -38,6 +38,8 @@ window.input = ->
   obj_coloring = {}
   obj_radius = {}
   clustering = json.clustering_json
+  window.labels = []
+  window.sprite_id_to_label = {}
   for cluster,i in clustering
     labels = cluster.labels
     c = i % window.colors.length
@@ -60,13 +62,18 @@ window.input = ->
     spritey = makeTextSprite( " #{n.label} ", obj_coloring[n.label]);
     spritey.position = sphere.position.clone().multiplyScalar(1.01);
     # scene.add(sphere)
+    window.labels.push spritey
     scene.add( spritey );
+    window.sprite_id_to_label[spritey.id] = n.label
+
 #draw edges
   edges = json.graph_json.edges
   for edge in edges
     mat = new THREE.LineBasicMaterial({color: 0x000000, linewidth:2})
     color = obj_coloring[nodes[edge.s].label]
     mat.color.setRGB(color.r,color.g,color.b)
+    mat.transparent = true
+    mat.opacity = 0.1
     sv = nodes[edge.s].coords
     tv = nodes[edge.t].coords
     geometry = new THREE.Geometry()
@@ -86,6 +93,8 @@ window.input = ->
   light.position.set(-100,200,100);
   scene.add(light);
   render!;
+
+  document.addEventListener( 'mousedown', window.onDocumentMouseDown, false );
 
 window.output = ->
   return if window.muted
@@ -161,3 +170,18 @@ window.roundRect = (ctx, x, y, w, h, r) ->
   ctx.closePath();
   ctx.fill();
   ctx.stroke();   
+
+window.onDocumentMouseDown = ( event ) ->
+  event.preventDefault();
+
+  vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
+  projector = new THREE.Projector()
+  projector.unprojectVector( vector, camera );
+
+  raycaster = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
+
+  intersects = raycaster.intersectObjects( window.labels );
+
+  console.log window.sprite_id_to_label[intersects[0].object.id]
+  window.output window.sprite_id_to_label[intersects[0].object.id]
+
