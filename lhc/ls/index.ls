@@ -31,7 +31,7 @@ Physijs.scripts.worker = \../js/physijs_worker.js
 Physijs.scripts.ammo = \../js/ammo.js
 
 renderer = new THREE.WebGLRenderer
-renderer.setSize(window.innerWidth, window.innerHeight)
+renderer.setSize(window.innerWidth, window.innerHeight * 0.7)
 #renderer.shadowMapEnabled = yes
 #renderer.shadowMapSoft = yes
 $(\body).prepend renderer.domElement
@@ -41,7 +41,7 @@ scene.addEventListener \update, ->
   scene.simulate(void, 2)
   controls.update!
 
-camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 100000)
+camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight / 0.7, 1, 100000)
 camera.position.set(0, 2000, 4000)
 camera.lookAt new THREE.Vector3(0, 0, 0)
 scene.add camera
@@ -141,7 +141,7 @@ main = ({data}) ->
   keys = Object.keys(seen)
   $output.empty!
   for char in keys
-    $output.append $(\<li/>).append $(\<a/> href: \#).text char .click -> window.output $(@).text!
+    $output.append $(\<li/>).css(\width, ~~(window.innerWidth / keys.length) - 5).append $(\<a/> href: \#).text char .click -> window.output $(@).text!
   JSON.stringify keys,, 2
 getShapeOf = ->
   ret = []
