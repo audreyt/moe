@@ -99,7 +99,11 @@
                 }());
                 window.showChars = (function(){
                   function showChars(it){
-                    return window.location = "?" + encodeURIComponent(it);
+                    if (it) {
+                      if (!(window.location === "?" + encodeURIComponent(it) || window.location === "?" + it)) {
+                        return window.location = "?" + encodeURIComponent(it);
+                      }
+                    }
                   }
                   return showChars;
                 }());

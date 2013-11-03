@@ -2,7 +2,7 @@
 (function(){
   $(function(){
     var origin, i$, ref$, len$, x, prev, CACHED, GET;
-    origin = "http://127.0.0.1:8888/";
+    origin = "http://direct.moedict.tw/";
     this.frames = [];
     for (i$ = 0, len$ = (ref$ = $('iframe').get()).length; i$ < len$; ++i$) {
       x = ref$[i$];

@@ -61,7 +61,8 @@ window.render-chars = function render-chars
   window.animate!
 
 window.show-chars = function show-chars
-  window.location ="?#{ encodeURIComponent it }"
+  if it
+    window.location ="?#{ encodeURIComponent it }" unless window.location is "?#{ encodeURIComponent it }" or window.location is "?#it"
 
 function go-radical
   show-chars RadicalSame[ it ]

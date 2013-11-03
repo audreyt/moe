@@ -9,5 +9,5 @@
   if (!win.document) {
     win = win.getParentNode();
   }
-  win.postMessage($('#in').val(), "http://127.0.0.1:8888/");
+  win.postMessage($('#in').val(), "http://direct.moedict.tw/");
 }).call(this);

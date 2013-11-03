@@ -97,7 +97,7 @@ Centroids <- $.get \./data/Centroids.json
 # API
 cTime = 2.0
 cCounter = 0
-origin = "http://127.0.0.1:8888/"
+origin = "http://direct.moedict.tw/"
 window.id = \lhc
 window.reset = !->
   $input.val ""

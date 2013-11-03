@@ -1,6 +1,6 @@
 <- $
 
-origin = "http://127.0.0.1:8888/"
+origin = "http://direct.moedict.tw/"
 @frames = []
 for x in $('iframe').get! => @frames.push x.contentWindow.window
 
