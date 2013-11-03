@@ -88,7 +88,7 @@ window.input = ->
     requestAnimationFrame(render);
     renderer.render(scene, camera);
 
-  renderer.setClearColor(0xdddddd, 1);
+  renderer.setClearColor(0x333333, 1);
   light = new THREE.PointLight(0xffffff);
   light.position.set(-100,200,100);
   scene.add(light);
@@ -189,3 +189,4 @@ window.onDocumentMouseUp = ( event ) ->
   if intersects.length
     window.output window.sprite_id_to_label[intersects[0].object.id]
 
+window.input $in.val!
