@@ -24,6 +24,9 @@
     window.addEventListener("message", function(it){
       return window.input(it.data, false);
     });
+    $('body').on('click', 'a.poi', function(){
+      return output($(this).text() + "");
+    });
     $('#submitStr').click(function(){
       var geo;
       geo = STR2GEO($('#inputStr').val());
@@ -42,10 +45,10 @@
       return fill(it);
     };
     window.output = function(it){
+      input(it);
       if (window.muted) {
         return;
       }
-      input(it);
       return window.top.postMessage(it, origin);
     };
     DATA = {};

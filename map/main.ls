@@ -19,6 +19,7 @@ origin = "http://127.0.0.1:8888/"
 window.id = \map
 window.addEventListener("message", -> window.input it.data , false)
 
+$(\body).on \click 'a.poi' -> output("#{ $(@).text() }")
 $(\#submitStr).click ->
   geo = STR2GEO($(\#inputStr).val!)
   $(\#inputX).val geo.x
@@ -33,8 +34,8 @@ window.input = ->
   #window.geo = STR2GEO it
   fill it
 window.output = ->
-  return if window.muted
   input it
+  return if window.muted
   window.top.postMessage(it, origin)
 
 DATA = {}
