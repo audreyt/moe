@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="https://cdn.goinstant.net/widgets/user-list/latest/user-list.css" />
     <script src="main.js"></script>
     <style>
+body {
+  background-color: black;
+}
 .gi-userlist {
   width: 90%;
   max-width: 90% !important;
@@ -20,6 +23,17 @@
 .gi-userlist .gi-name {
   width: 90%;
   text-align: right;
+}
+.gi-collapse {
+  visibility: hidden;
+}
+.gi-userlist .gi-inner {
+  background-color: #222222;
+  color: white;
+}
+
+.gi-userlist li.gi-local-user {
+  background-color: #555555;
 }
 </style>
   </head>
