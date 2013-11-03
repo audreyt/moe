@@ -31,7 +31,7 @@ Physijs.scripts.worker = \../js/physijs_worker.js
 Physijs.scripts.ammo = \../js/ammo.js
 
 renderer = new THREE.WebGLRenderer
-renderer.setSize(window.innerWidth, window.innerHeight * 0.7)
+renderer.setSize(window.innerWidth, (window.innerHeight - 48))
 #renderer.shadowMapEnabled = yes
 #renderer.shadowMapSoft = yes
 $(\body).prepend renderer.domElement
@@ -41,7 +41,7 @@ scene.addEventListener \update, ->
   scene.simulate(void, 2)
   controls.update!
 
-camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight / 0.7, 1, 100000)
+camera = new THREE.PerspectiveCamera(45, window.innerWidth / (window.innerHeight - 48), 1, 100000)
 camera.position.set(0, 2000, 4000)
 camera.lookAt new THREE.Vector3(0, 0, 0)
 scene.add camera
@@ -90,7 +90,7 @@ Centroids <- $.get \./data/Centroids.json
 # main function for Large Henzi Collider
 ###
 # API
-cTime = 3.0
+cTime = 5.0
 cCounter = 0
 origin = "http://127.0.0.1:8888/"
 window.id = \lhc
@@ -108,9 +108,9 @@ window.uniq = uniq = ->
   Object.keys(seen).sort! * ''
 main = ({data}) ->
   $input.val $input.val! + data
-  data = uniq($input.val!)
+  data = uniq($input.val! + data)
+  $input.val data
   cCounter := 0
-  doAddChar(data)
   comps = []
   get-comps = ->
     out = ""

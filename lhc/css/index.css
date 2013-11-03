@@ -7,6 +7,7 @@ body {
   padding: 0;
   position: relative;
   height: 100%;
+  background: #16161D;
 }
 
 #input {
@@ -21,14 +22,14 @@ body {
   margin: 0;
   padding: 0;
   list-style: none;
-  height: 30%;
-  border-top: 5px dotted #333
+  height: 68px;
+  border-top: 5px dotted #DDD;
 }
 
 #output li {
   position: relative;
   float: left;
-  border-right: 5px dotted #333;
+  border-right: 5px dotted #DDD;
   height: 100%;
 }
 
@@ -37,6 +38,11 @@ body {
   font-size: 48px;
   text-decoration: none;
   text-align: center;
-  color: black;
+  color: #999;
   margin: 10px 20px;
+}
+
+#output li a:hover {
+  color: #FFF;
+  text-decoration: underline;
 }
