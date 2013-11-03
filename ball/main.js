@@ -25,7 +25,7 @@
             return GET("SoundRhyme.json", function(SoundRhyme){
               return GET("SoundAlike.json", function(SoundAlike){
                 var origin;
-                origin = "http://127.0.0.1:8888/";
+                origin = "http://direct.moedict.tw/";
                 window.id = 'tmuse';
                 window.reset = function(){
                   return $in.val('');

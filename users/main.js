@@ -2,7 +2,7 @@
 (function(){
   $(function(){
     var origin, url, connection;
-    origin = "http://127.0.0.1:8888/";
+    origin = "http://direct.moedict.tw/";
     url = 'https://goinstant.net/poga/yhd2013-moe-users';
     window.id = 'users';
     window.addEventListener("message", function(it){

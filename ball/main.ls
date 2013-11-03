@@ -22,7 +22,7 @@ RadicalSame <- GET "RadicalSame.json"
 SoundRhyme <- GET "SoundRhyme.json"
 SoundAlike <- GET "SoundAlike.json"
 
-origin = "http://127.0.0.1:8888/"
+origin = "http://direct.moedict.tw/"
 window.id = \tmuse
 window.reset = -> $in.val ''
 window.addEventListener("message", -> window.input it.data, false);
