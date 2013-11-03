@@ -189,3 +189,4 @@ window.onDocumentMouseUp = ( event ) ->
   if intersects.length
     window.output window.sprite_id_to_label[intersects[0].object.id]
 
+window.input $in.val!
