@@ -1,0 +1,50 @@
+{
+   "graph_json" : {
+      "extras" : {
+         "directed" : false,
+         "bipartite" : true
+      },
+      "edges" : [
+         {
+            "s" : 0,
+            "t" : 1
+         }
+      ],
+      "nodes" : [
+         {
+            "coords" : [
+               0.125,
+               -0.125,
+               0
+            ],
+            "degree_in" : 1,
+            "label" : "遴派",
+            "score" : 0.5
+         },
+         {
+            "coords" : [
+               -0.125,
+               0.125,
+               0
+            ],
+            "degree_in" : 1,
+            "label" : "選派",
+            "score" : 0.5
+         }
+      ]
+   },
+   "clustering_json" : [
+      {
+         "labels" : [
+            [
+               "遴派",
+               1
+            ],
+            [
+               "選派",
+               1
+            ]
+         ]
+      }
+   ]
+}

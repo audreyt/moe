@@ -1,0 +1,50 @@
+{
+   "graph_json" : {
+      "extras" : {
+         "directed" : false,
+         "bipartite" : true
+      },
+      "edges" : [
+         {
+            "s" : 0,
+            "t" : 1
+         }
+      ],
+      "nodes" : [
+         {
+            "coords" : [
+               0.125,
+               -0.125,
+               0
+            ],
+            "degree_in" : 1,
+            "label" : "受賄",
+            "score" : 0.5
+         },
+         {
+            "coords" : [
+               -0.125,
+               0.125,
+               0
+            ],
+            "degree_in" : 1,
+            "label" : "納賄",
+            "score" : 0.5
+         }
+      ]
+   },
+   "clustering_json" : [
+      {
+         "labels" : [
+            [
+               "受賄",
+               1
+            ],
+            [
+               "納賄",
+               1
+            ]
+         ]
+      }
+   ]
+}

@@ -1,0 +1,50 @@
+{
+   "graph_json" : {
+      "extras" : {
+         "directed" : false,
+         "bipartite" : true
+      },
+      "edges" : [
+         {
+            "s" : 0,
+            "t" : 1
+         }
+      ],
+      "nodes" : [
+         {
+            "coords" : [
+               0.125,
+               -0.125,
+               0
+            ],
+            "degree_in" : 1,
+            "label" : "床上安床",
+            "score" : 0.5
+         },
+         {
+            "coords" : [
+               -0.125,
+               0.125,
+               0
+            ],
+            "degree_in" : 1,
+            "label" : "疊床架屋",
+            "score" : 0.5
+         }
+      ]
+   },
+   "clustering_json" : [
+      {
+         "labels" : [
+            [
+               "床上安床",
+               1
+            ],
+            [
+               "疊床架屋",
+               1
+            ]
+         ]
+      }
+   ]
+}

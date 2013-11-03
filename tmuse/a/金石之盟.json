@@ -1,0 +1,50 @@
+{
+   "graph_json" : {
+      "extras" : {
+         "directed" : false,
+         "bipartite" : true
+      },
+      "edges" : [
+         {
+            "s" : 0,
+            "t" : 1
+         }
+      ],
+      "nodes" : [
+         {
+            "coords" : [
+               0.125,
+               -0.125,
+               0
+            ],
+            "degree_in" : 1,
+            "label" : "金石之盟",
+            "score" : 0.5
+         },
+         {
+            "coords" : [
+               -0.125,
+               0.125,
+               0
+            ],
+            "degree_in" : 1,
+            "label" : "山盟海誓",
+            "score" : 0.5
+         }
+      ]
+   },
+   "clustering_json" : [
+      {
+         "labels" : [
+            [
+               "金石之盟",
+               1
+            ],
+            [
+               "山盟海誓",
+               1
+            ]
+         ]
+      }
+   ]
+}

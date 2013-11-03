@@ -1,0 +1,50 @@
+{
+   "graph_json" : {
+      "extras" : {
+         "directed" : false,
+         "bipartite" : true
+      },
+      "edges" : [
+         {
+            "s" : 0,
+            "t" : 1
+         }
+      ],
+      "nodes" : [
+         {
+            "coords" : [
+               0.125,
+               -0.125,
+               0
+            ],
+            "degree_in" : 1,
+            "label" : "儀態萬千",
+            "score" : 0.5
+         },
+         {
+            "coords" : [
+               -0.125,
+               0.125,
+               0
+            ],
+            "degree_in" : 1,
+            "label" : "儀態萬方",
+            "score" : 0.5
+         }
+      ]
+   },
+   "clustering_json" : [
+      {
+         "labels" : [
+            [
+               "儀態萬千",
+               1
+            ],
+            [
+               "儀態萬方",
+               1
+            ]
+         ]
+      }
+   ]
+}

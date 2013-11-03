@@ -3,6 +3,8 @@
 $in = $ \#input
 $out = $ \#output
 
+$ \#submit .click -> input $in.val! if $in.val!
+
 origin = "http://127.0.0.1:8888/"
 window.id = \tmuse
 window.colors = [[0,0,0],[87,87,87],[173,35,35],[42,75,215],[29,105,20],[129,38,192],[160,160,160],[129,197,122],[157,175,255],[41,208,208],[255,146,51],[255,238,51],[233,222,187],[255,205,243]]
@@ -14,8 +16,14 @@ window.input = ->
 #draw nodes
   nodes = json.graph_json.nodes
   $out.empty!
-  #for {label} in nodes
-  #  $out.append($(\<li/>).append $(\<a/> href: \#).text label .click -> window.output $(@).text!)
+  for {labels} in json.clustering_json
+    $li = $ \<li/>
+    for [label, score] in labels
+      $li.append(
+        $(\<a/> href: \#).text(label).click(-> window.output $(@).text!).css(fontSize: (15 * score) + 'px')
+      )
+      $li.append('&nbsp;')
+    $li.appendTo $out
 
   scene = new THREE.Scene()
   window.camera = camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000)
@@ -51,6 +59,8 @@ window.input = ->
 
     spritey = makeTextSprite( " #{n.label} " );
     spritey.position = sphere.position.clone().multiplyScalar(1.01);
+    spritey.position.z += 0.2
+    scene.add(sphere)
     scene.add( spritey );
 #draw edges
   edges = json.graph_json.edges
