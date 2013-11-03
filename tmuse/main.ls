@@ -16,7 +16,7 @@ window.input = ->
 #draw nodes
   nodes = json.graph_json.nodes
   $out.empty!
-  for {labels} in json.clustering_json
+  if false => for {labels} in json.clustering_json
     $li = $ \<li/>
     for [label, score] in labels
       $li.append(
@@ -95,6 +95,8 @@ window.input = ->
   render!;
 
   document.addEventListener( 'mousedown', window.onDocumentMouseDown, false );
+  document.addEventListener( 'doubleclick', window.onDocumentMouseUp, false );
+  document.addEventListener( 'dblclick', window.onDocumentMouseUp, false );
 
 window.output = ->
   return if window.muted
@@ -121,7 +123,7 @@ window.makeTextSprite = ( message, {r, g, b}, parameters ) ->
   borderThickness = 1;
   borderColor = { r:0, g:0, b:0, a:1.0 };
   backgroundColor = { r: Math.round(200 + r * 55), g: Math.round(200 + g * 55), b: Math.round(200 + b * 55), a:1.0 };
-  console.log JSON.stringify backgroundColor,,2
+  #console.log JSON.stringify backgroundColor,,2
 
   spriteAlignment = THREE.SpriteAlignment.topLeft;
 
@@ -178,10 +180,12 @@ window.onDocumentMouseDown = ( event ) ->
   projector = new THREE.Projector()
   projector.unprojectVector( vector, camera );
 
+window.onDocumentMouseUp = ( event ) ->
+  event.preventDefault();
+  vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
   raycaster = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
 
   intersects = raycaster.intersectObjects( window.labels );
-
-  console.log window.sprite_id_to_label[intersects[0].object.id]
-  window.output window.sprite_id_to_label[intersects[0].object.id]
+  if intersects.length
+    window.output window.sprite_id_to_label[intersects[0].object.id]
 

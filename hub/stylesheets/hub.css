@@ -3066,3 +3066,10 @@ body {
   padding: 5px 10px;
   margin: 0;
 }
+
+/* line 273, ../sass/hub.scss */
+.testpoint {
+  position: absolute;
+  color: #0f0;
+  z-index: 1000000;
+}

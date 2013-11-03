@@ -5,7 +5,8 @@ url =  'https://goinstant.net/poga/yhd2013-moe-users'
 window.id = \users
 window.addEventListener("message", -> window.input it.data, false);
 
-$(document).on \click, \.gi-user, ->
+$(document).on \click, \span, ->
+  console.log $(it.target).text!
   window.output $(it.target).text!
 
 connection = new goinstant.Connection(url)
@@ -20,7 +21,12 @@ do
 window.reset = -> 
   room.self!.key('displayName').set ""
 window.input = ->
-  room.self!.key('displayName').set it
+  text = it
+  do
+    (err, v, ctx) <- room.self!.key('displayName').get
+    connect.log err if err
+    console.log("v=#v")
+    room.self!.key('displayName').set(text)
 window.output = ->
   return if window.muted
   input it
