@@ -107,8 +107,8 @@ GET = (url, data, onSuccess, dataType) ->
 window.makeTextSprite = ( message, {r, g, b}, parameters ) ->
   parameters = {} if parameters === undefined
 
-  fontface = "Arial";
-  fontsize = 10;
+  fontface = "Lantinghei TC";
+  fontsize = 24;
   borderThickness = 1;
   borderColor = { r:0, g:0, b:0, a:1.0 };
   backgroundColor = { r: Math.round(200 + r * 55), g: Math.round(200 + g * 55), b: Math.round(200 + b * 55), a:1.0 };
@@ -144,7 +144,7 @@ window.makeTextSprite = ( message, {r, g, b}, parameters ) ->
 
   spriteMaterial = new THREE.SpriteMaterial( { map: texture, useScreenCoordinates: false, alignment: spriteAlignment } );
   sprite = new THREE.Sprite( spriteMaterial );
-  sprite.scale.set(4, 2, 0.04)
+  sprite.scale.set(2, 1, 0.04)
   return sprite
 
 window.roundRect = (ctx, x, y, w, h, r) ->

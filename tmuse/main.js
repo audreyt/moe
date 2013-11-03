@@ -139,8 +139,8 @@
       if (deepEq$(parameters, undefined, '===')) {
         parameters = {};
       }
-      fontface = "Arial";
-      fontsize = 10;
+      fontface = "Lantinghei TC";
+      fontsize = 24;
       borderThickness = 1;
       borderColor = {
         r: 0,
@@ -175,7 +175,7 @@
         alignment: spriteAlignment
       });
       sprite = new THREE.Sprite(spriteMaterial);
-      sprite.scale.set(4, 2, 0.04);
+      sprite.scale.set(2, 1, 0.04);
       return sprite;
     };
     return window.roundRect = function(ctx, x, y, w, h, r){
