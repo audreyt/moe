@@ -88,7 +88,7 @@ window.go-similar = function go-similar
     sims += char + Shape[char]
   return sims
 
-if location.search
+if "#{ location.search }" is /[^?]/
   <- setTimeout _, 1ms
   render-chars("#{ decodeURIComponent location.search }")
 else

@@ -143,7 +143,7 @@
                   }
                   return goSimilar;
                 }());
-                if (location.search) {
+                if (/[^?]/.exec(location.search + "")) {
                   return setTimeout(function(){
                     return renderChars(decodeURIComponent(location.search) + "");
                   }, 1);
