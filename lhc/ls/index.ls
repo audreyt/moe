@@ -139,6 +139,7 @@ main = ({data}) ->
     queue.push [taken, rest]
     queue.push [taken + head, rest]
   keys = Object.keys(seen)
+  keys = keys.slice(0, 10)
   $output.empty!
   for char in keys
     $output.append $(\<li/>).css(\width, ~~(window.innerWidth / keys.length) - 5).append $(\<a/> href: \#).text char .click -> window.output $(@).text!
