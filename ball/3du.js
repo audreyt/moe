@@ -134,7 +134,7 @@
           transform(targets.grid, 5000);
       }
       else {
-          transform(targets.sphere, 5000);
+          transform(targets.grid, 5000);
       }
       return window.addEventListener('resize', onWindowResize, false);
     }
