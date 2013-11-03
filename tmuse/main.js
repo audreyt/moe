@@ -77,12 +77,8 @@
           sphere.position.x = coords[0] * multiplier;
           sphere.position.y = coords[1] * multiplier;
           sphere.position.z = coords[2] * multiplier;
-          scene.add(sphere);
-          objs[n.label] = sphere;
-          spritey = makeTextSprite(" " + n.label + " ");
+          spritey = makeTextSprite(" " + n.label + " ", obj_coloring[n.label]);
           spritey.position = sphere.position.clone().multiplyScalar(1.01);
-          spritey.position.z += 0.2;
-          scene.add(sphere);
           scene.add(spritey);
         }
         edges = json.graph_json.edges;
@@ -137,8 +133,9 @@
         return onSuccess(CACHED[url] = it);
       }, dataType || 'json').fail(function(){});
     };
-    window.makeTextSprite = function(message, parameters){
-      var fontface, fontsize, borderThickness, borderColor, backgroundColor, spriteAlignment, canvas, context, metrics, textWidth, texture, spriteMaterial, sprite;
+    window.makeTextSprite = function(message, arg$, parameters){
+      var r, g, b, fontface, fontsize, borderThickness, borderColor, backgroundColor, spriteAlignment, canvas, context, metrics, textWidth, texture, spriteMaterial, sprite;
+      r = arg$.r, g = arg$.g, b = arg$.b;
       if (deepEq$(parameters, undefined, '===')) {
         parameters = {};
       }
@@ -152,11 +149,12 @@
         a: 1.0
       };
       backgroundColor = {
-        r: 255,
-        g: 255,
-        b: 255,
+        r: Math.round(200 + r * 55),
+        g: Math.round(200 + g * 55),
+        b: Math.round(200 + b * 55),
         a: 1.0
       };
+      console.log(JSON.stringify(backgroundColor, void 8, 2));
       spriteAlignment = THREE.SpriteAlignment.topLeft;
       canvas = document.createElement('canvas');
       context = canvas.getContext('2d');
