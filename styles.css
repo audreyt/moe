@@ -1,8 +1,11 @@
 body {
   background: #ddddff;
+  margin: 0;
+  padding: 0;
 }
 
 iframe {
   width: 33%;
-  height: 48%;
+  height: 50%;
+  border: 0;
 }
