@@ -48,7 +48,7 @@ scene.add camera
 
 scene.add new THREE.AmbientLight(0x333333)
 light = new THREE.DirectionalLight(0xffffff)
-light.position.set(0, 0, 2500)
+light.position.set(0, 2000, 500)
 light.target.position.set(0, 0, 0)
 scene.add light
 
@@ -60,12 +60,17 @@ scene.simulate!
 
 controls = new THREE.OrbitControls camera
 
+materialFront = new THREE.MeshLambertMaterial do
+  map: THREE.ImageUtils.loadTexture \./images/wood.jpg
+  color: 0x999999
+  ambient: 0xF0F0F0
+material = new Physijs.createMaterial(materialFront, 8, 0.4)
 block-material = Physijs.createMaterial do
-  new THREE.MeshLambertMaterial(color: \red)
+  new THREE.MeshLambertMaterial map: new THREE.ImageUtils.loadTexture \./images/plywood.jpg, ambient: 0xFF9999
   0.9 # medium friction
   0.5 # medium restitution
-#block-material.map.wrapS = block-material.map.wrapT = THREE.RepeatWrapping
-#block-material.map.repeat.set( 1, 0.5 )
+block-material.map.wrapS = block-material.map.wrapT = THREE.RepeatWrapping
+block-material.map.repeat.set( 1, 0.5 )
 
 extrusionSettings =
   amount: 100

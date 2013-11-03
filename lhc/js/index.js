@@ -20,7 +20,7 @@ String::permutate = ->
   ret
 */
 (function(){
-  var buffer, bufferedMsgsFirst, renderer, scene, camera, light, render, controls, blockMaterial, extrusionSettings, split$ = ''.split, join$ = [].join;
+  var buffer, bufferedMsgsFirst, renderer, scene, camera, light, render, controls, materialFront, material, blockMaterial, extrusionSettings, split$ = ''.split, join$ = [].join;
   buffer = [];
   bufferedMsgsFirst = function(arg$){
     var data;
@@ -51,7 +51,7 @@ String::permutate = ->
   scene.add(camera);
   scene.add(new THREE.AmbientLight(0x333333));
   light = new THREE.DirectionalLight(0xffffff);
-  light.position.set(0, 0, 2500);
+  light.position.set(0, 2000, 500);
   light.target.position.set(0, 0, 0);
   scene.add(light);
   render = function(){
@@ -61,9 +61,19 @@ String::permutate = ->
   requestAnimationFrame(render);
   scene.simulate();
   controls = new THREE.OrbitControls(camera);
+  materialFront = new THREE.MeshLambertMaterial({
+    map: THREE.ImageUtils.loadTexture('./images/wood.jpg'),
+    color: 0x999999,
+    ambient: 0xF0F0F0
+  });
+  material = new Physijs.createMaterial(materialFront, 8, 0.4);
   blockMaterial = Physijs.createMaterial(new THREE.MeshLambertMaterial({
-    color: 'red'
+    map: new THREE.ImageUtils.loadTexture('./images/plywood.jpg', {
+      ambient: 0xFF9999
+    })
   }), 0.9, 0.5);
+  blockMaterial.map.wrapS = blockMaterial.map.wrapT = THREE.RepeatWrapping;
+  blockMaterial.map.repeat.set(1, 0.5);
   extrusionSettings = {
     amount: 100,
     bevelEnabled: false,
