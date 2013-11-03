@@ -3084,3 +3084,6 @@ body {
   color: #0f0;
   z-index: 1000000;
 }
+
+.iframe-header .input { display: none !important }
+.iframe-header label { color: #eee !important }
