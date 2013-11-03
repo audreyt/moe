@@ -85,6 +85,8 @@ Centroids <- $.get \./data/Centroids.json
 # main function for Large Henzi Collider
 ###
 # API
+cTime = 3.0
+cCounter = 0
 origin = "http://127.0.0.1:8888/"
 window.id = \lhc
 window.reset = !->
@@ -102,6 +104,7 @@ window.uniq = uniq = ->
 main = ({data}) ->
   $input.val $input.val! + data
   data = uniq($input.val!)
+  cCounter := 0
   doAddChar(data)
   comps = []
   get-comps = ->
@@ -168,6 +171,8 @@ getShapeOf = ->
 doAddChar = ->
   for char in it
     console.log "creating geometry for #char"
+    randX = Math.random() * 500 - 250
+    randY = Math.random() * 500 - 250
     for i, shape of getShapeOf Outlines[char]
       geometry = new THREE.ExtrudeGeometry(shape, extrusionSettings)
       offset = new THREE.Vector3 do
@@ -179,10 +184,15 @@ doAddChar = ->
       geometry.applyMatrix m
       mesh = new Physijs.ConvexMesh(geometry, block-material, 9)
       mesh.position = offset.clone!
-      #mesh.position.add new THREE.Vector3(0, 0, 0)
+      mesh.position.add new THREE.Vector3(randX - 1075, randY + 1075, 0)
       mesh.castShadow = yes
       mesh.receiveShadow = yes
+      mesh._physijs.linearVelocity.x = 0
+      mesh._physijs.linearVelocity.y = 0
+      mesh._physijs.linearVelocity.z = 200
       scene.add mesh
+scene.addEventListener \update, ->
+  doAddChar uniq $input.val! if cCounter++ % ~~(cTime * 120) is 0
 window.input := -> main {data: it}
 window.removeEventListener \message, buffered-msgs-first
 for data in buffer => main {data}
