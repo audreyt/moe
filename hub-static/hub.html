@@ -219,8 +219,14 @@ $(function(){
         var wHeight = $(".tube.project-users .moving-word").height();
         var startPointX = pUserWordPosition.left - (wWidth+30)/2;
         var startPointY = pUserWordPosition.top - (wHeight+26)/2;
+        var X = rCenterPointX - (wWidth+30)/2;
+        var Y = rCenterPointY - (wWidth+26)/2;
+        var endPointX = startPointX; startPointX = X;
+        var endPointY = startPointY; startPointY = Y;
+        
         $(".tube.project-users .moving-word").css({top: startPointY, left: startPointX});
-        $(".tube.project-users .moving-word").animate({top: rCenterPointY - (wHeight+26)/2, left: rCenterPointX - (wWidth+30)/2}, {
+        $(".tube.project-users .moving-word").animate(
+            {top: endPointY, left: endPointX}, {
             duration: 2500,
             complete: function() {
                 $(".tube.project-users .moving-word").fadeOut('slow', function(){
@@ -235,8 +241,13 @@ $(function(){
         var wHeight = $(".tube.project-tmuse .moving-word").height();
         var startPointX = pTmuseWordPosition.left - (wWidth+30)/2;
         var startPointY = pTmuseWordPosition.top - (wHeight+26)/2;
+        var X = rCenterPointX - (wWidth+30)/2;
+        var Y = rCenterPointY - (wWidth+26)/2;
+        var endPointX = startPointX; startPointX = X;
+        var endPointY = startPointY; startPointY = Y;
         $(".tube.project-tmuse .moving-word").css({top: startPointY, left: startPointX});
-        $(".tube.project-tmuse .moving-word").animate({top: rCenterPointY - (wHeight+26)/2, left: rCenterPointX - (wWidth+30)/2}, {
+        $(".tube.project-tmuse .moving-word").animate(
+            {top: endPointY, left: endPointX}, {
             duration: 2500,
             complete: function() {
                 $(".tube.project-tmuse .moving-word").fadeOut('slow', function(){
@@ -251,8 +262,13 @@ $(function(){
         var wHeight = $(".tube.project-dict .moving-word").height();
         var startPointX = pDictWordPosition.left - (wWidth+30)/2;
         var startPointY = pDictWordPosition.top - (wHeight+26)/2;
+        var X = rCenterPointX - (wWidth+30)/2;
+        var Y = rCenterPointY - (wWidth+26)/2;
+        var endPointX = startPointX; startPointX = X;
+        var endPointY = startPointY; startPointY = Y;
         $(".tube.project-dict .moving-word").css({top: startPointY, left: startPointX});
-        $(".tube.project-dict .moving-word").animate({top: rCenterPointY - (wHeight+26)/2, left: rCenterPointX - (wWidth+30)/2}, {
+        $(".tube.project-dict .moving-word").animate(
+            {top: endPointY, left: endPointX}, {
             duration: 2500,
             complete: function() {
                 $(".tube.project-dict .moving-word").fadeOut('slow', function(){
@@ -267,8 +283,13 @@ $(function(){
         var wHeight = $(".tube.project-ball .moving-word").height();
         var startPointX = pBallWordPosition.left - (wWidth+30)/2;
         var startPointY = pBallWordPosition.top - (wHeight+26)/2;
+        var X = rCenterPointX - (wWidth+30)/2;
+        var Y = rCenterPointY - (wWidth+26)/2;
+        var endPointX = startPointX; startPointX = X;
+        var endPointY = startPointY; startPointY = Y;
         $(".tube.project-ball .moving-word").css({top: startPointY, left: startPointX});
-        $(".tube.project-ball .moving-word").animate({top: rCenterPointY - (wHeight+26)/2, left: rCenterPointX - (wWidth+30)/2}, {
+        $(".tube.project-ball .moving-word").animate(
+            {top: endPointY, left: endPointX}, {
             duration: 2500,
             complete: function() {
                 $(".tube.project-ball .moving-word").fadeOut('slow', function(){
@@ -283,8 +304,13 @@ $(function(){
         var wHeight = $(".tube.project-thc .moving-word").height();
         var startPointX = pThcWordPosition.left - (wWidth+30)/2;
         var startPointY = pThcWordPosition.top - (wHeight+26)/2;
+        var X = rCenterPointX - (wWidth+30)/2;
+        var Y = rCenterPointY - (wWidth+26)/2;
+        var endPointX = startPointX; startPointX = X;
+        var endPointY = startPointY; startPointY = Y;
         $(".tube.project-thc .moving-word").css({top: startPointY, left: startPointX});
-        $(".tube.project-thc .moving-word").animate({top: rCenterPointY - (wHeight+26)/2, left: rCenterPointX - (wWidth+30)/2}, {
+        $(".tube.project-thc .moving-word").animate(
+            {top: endPointY, left: endPointX}, {
             duration: 2500,
             complete: function() {
                 $(".tube.project-thc .moving-word").fadeOut('slow', function(){
@@ -299,8 +325,13 @@ $(function(){
         var wHeight = $(".tube.project-map .moving-word").height();
         var startPointX = pMapWordPosition.left - (wWidth+30)/2;
         var startPointY = pMapWordPosition.top - (wHeight+26)/2;
+        var X = rCenterPointX - (wWidth+30)/2;
+        var Y = rCenterPointY - (wWidth+26)/2;
+        var endPointX = startPointX; startPointX = X;
+        var endPointY = startPointY; startPointY = Y;
         $(".tube.project-map .moving-word").css({top: startPointY, left: startPointX});
-        $(".tube.project-map .moving-word").animate({top: rCenterPointY - (wHeight+26)/2, left: rCenterPointX - (wWidth+30)/2}, {
+        $(".tube.project-map .moving-word").animate(
+            {top: endPointY, left: endPointX}, {
             duration: 2500,
             complete: function() {
                 $(".tube.project-map .moving-word").fadeOut('slow', function(){

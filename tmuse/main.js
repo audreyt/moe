@@ -42,7 +42,7 @@
         }
         scene = new THREE.Scene();
         window.camera = camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        renderer = new THREE.WebGLRenderer();
+        window.renderer = renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         $('#canvas').html(renderer.domElement);
         camera.position.z = 5;
@@ -97,7 +97,7 @@
           color = obj_coloring[nodes[edge.s].label];
           mat.color.setRGB(color.r, color.g, color.b);
           mat.transparent = true;
-          mat.opacity = 0.1;
+          mat.opacity = 0.05;
           sv = nodes[edge.s].coords;
           tv = nodes[edge.t].coords;
           geometry = new THREE.Geometry();
@@ -111,7 +111,7 @@
           requestAnimationFrame(render);
           return renderer.render(scene, camera);
         };
-        renderer.setClearColor(0x333333, 1);
+        renderer.setClearColor(0xcccccc, 1);
         light = new THREE.PointLight(0xffffff);
         light.position.set(-100, 200, 100);
         scene.add(light);
@@ -124,6 +124,11 @@
         }
       });
     };
+    $(window).resize(function(){
+      window.renderer.setSize(window.innerWidth, window.innerHeight);
+      window.camera.aspect = window.innerWidth / window.innerHeight;
+      return window.camera.updateProjectionMatrix();
+    });
     window.output = function(it){
       if (window.muted) {
         return;

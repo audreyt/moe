@@ -1,7 +1,9 @@
 body {
-  background: white;
-  padding: 0;
-  margin: 0;
+  background: #333333;
+}
+
+h1, input, button {
+  display: none;
 }
 
 #output-section {
