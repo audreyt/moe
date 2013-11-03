@@ -203,4 +203,5 @@ window.input := -> main {data: it}
 window.removeEventListener \message, buffered-msgs-first
 for data in buffer => main {data}
 window.addEventListener \message, main
+window.input \萌
 
