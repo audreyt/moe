@@ -52,6 +52,11 @@ light.position.set(0, 2000, 500)
 light.target.position.set(0, 0, 0)
 scene.add light
 
+window.addEventListener \resize, ->
+  renderer.setSize(window.innerWidth, (window.innerHeight - 48))
+  camera.aspect = window.innerWidth / (window.innerHeight - 48)
+  camera.updateProjectionMatrix!
+
 render = !->
   requestAnimationFrame(render)
   renderer.render(scene, camera)
