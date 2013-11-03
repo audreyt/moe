@@ -128,6 +128,6 @@
       }
       return result;
     };
-    return fill('北');
+    return fill('明');
   });
 }).call(this);

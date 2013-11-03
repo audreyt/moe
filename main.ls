@@ -4,7 +4,7 @@ origin = "http://127.0.0.1:8888/"
 @frames = []
 for x in $('iframe').get! => @frames.push x.contentWindow.window
 
-prev = null
+prev = \明
 window.id = \hub
 window.reset = -> input ''
 window.addEventListener("message", -> window.input it.data, false);

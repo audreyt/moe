@@ -33,3 +33,8 @@ window.output = ->
   window.top.postMessage(it, origin)
 
 window.reset!
+window.setInterval ->
+  $(".gi-user").each (i,x) ->
+    if $(x).text!.match(/cf-tick/)
+      $(x).text("")
+, 1

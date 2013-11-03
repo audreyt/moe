@@ -106,4 +106,4 @@ window.GEO2STR = GEO2STR = ->
 
   result
 
-fill \北
+fill \明

@@ -8,7 +8,7 @@
       x = ref$[i$];
       this.frames.push(x.contentWindow.window);
     }
-    prev = null;
+    prev = '明';
     window.id = 'hub';
     window.reset = function(){
       return input('');

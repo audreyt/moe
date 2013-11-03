@@ -50,7 +50,14 @@
           input(it);
           return window.top.postMessage(it, origin);
         };
-        return window.reset();
+        window.reset();
+        return window.setInterval(function(){
+          return $(".gi-user").each(function(i, x){
+            if ($(x).text().match(/cf-tick/)) {
+              return $(x).text("");
+            }
+          });
+        }, 1);
       });
     });
   });
