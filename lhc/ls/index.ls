@@ -90,7 +90,7 @@ Centroids <- $.get \./data/Centroids.json
 # main function for Large Henzi Collider
 ###
 # API
-cTime = 5.0
+cTime = 2.0
 cCounter = 0
 origin = "http://127.0.0.1:8888/"
 window.id = \lhc
@@ -99,7 +99,8 @@ window.reset = !->
   $output.empty!
 window.output = ->
   return if window.muted
-  window.top.postMessage it, origin
+  if window.parent isnt window
+    window.parent.postMessage it, origin
 $input = $ \#input
 $output = $ \#output
 window.uniq = uniq = ->
@@ -107,7 +108,6 @@ window.uniq = uniq = ->
   for w in it / '' => seen[w] = true
   Object.keys(seen).sort! * ''
 main = ({data}) ->
-  $input.val $input.val! + data
   data = uniq($input.val! + data)
   $input.val data
   cCounter := 0
@@ -197,7 +197,7 @@ doAddChar = ->
       mesh._physijs.linearVelocity.z = 200
       scene.add mesh
 scene.addEventListener \update, ->
-  doAddChar uniq $input.val! if cCounter++ % ~~(cTime * 120) is 0
+  doAddChar $input.val! if (cCounter++ % ~~(cTime * 120)) is 0
 window.input := -> main {data: it}
 window.removeEventListener \message, buffered-msgs-first
 for data in buffer => main {data}

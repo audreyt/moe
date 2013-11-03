@@ -8,7 +8,8 @@
     window.addEventListener("message", function(it){
       return window.input(it.data, false);
     });
-    $(document).on('click', '.gi-user', function(it){
+    $(document).on('click', 'span', function(it){
+      console.log($(it.target).text());
       return window.output($(it.target).text());
     });
     connection = new goinstant.Connection(url);
@@ -32,7 +33,15 @@
           return room.self().key('displayName').set("");
         };
         window.input = function(it){
-          return room.self().key('displayName').set(it);
+          var text;
+          text = it;
+          return room.self().key('displayName').get(function(err, v, ctx){
+            if (err) {
+              connect.log(err);
+            }
+            console.log("v=" + v);
+            return room.self().key('displayName').set(text);
+          });
         };
         window.output = function(it){
           if (window.muted) {
