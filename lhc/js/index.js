@@ -172,7 +172,7 @@ String::permutate = ->
                 char = keys[i$];
                 $output.append($('<li/>').css('width', ~~(window.innerWidth / keys.length) - 5).append($('<a/>', {
                   href: '#'
-                }).text(char))).click(fn$);
+                }).text(char).click(fn$)));
               }
               return JSON.stringify(keys, void 8, 2);
               function fn$(){
