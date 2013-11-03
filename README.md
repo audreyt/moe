@@ -10,7 +10,7 @@
 * <https://creativecommons.org/publicdomain/zero/1.0/deed.zh_TW>
 * <http://wiki.creativecommons.org.tw/cc-zero-1-0:pre-final>
 
-# 感謝以下單位提供創用 CC 授權之 Open Data
+# 感謝以下單位提供開放資料
 
 ## 台北市政府
 
@@ -24,6 +24,7 @@
 
 * [常用國字標準字體筆順](http://stroke-order.learningweb.moe.edu.tw/)
 * [國語一字多音審訂表](http://www.edu.tw/pages/detail.aspx?Node=3692&Page=16373&WID=c5ad5187-55ef-4811-8219-e946fe04f725)
+* [標準楷書字形檔](http://www.edu.tw/pages/detail.aspx?Node=3691&Page=17004&WID=c5ad5187-55ef-4811-8219-e946fe04f725)
 
 ## 中央研究院
 
