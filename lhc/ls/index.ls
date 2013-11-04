@@ -63,7 +63,8 @@ render = !->
 requestAnimationFrame(render)
 scene.simulate!
 
-controls = new THREE.OrbitControls camera
+controls = new THREE.TrackballControls camera
+controls.rotateSpeed = 0.5
 
 materialFront = new THREE.MeshLambertMaterial do
   map: THREE.ImageUtils.loadTexture \./images/wood.jpg
