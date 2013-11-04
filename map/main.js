@@ -21,9 +21,6 @@
     latMAX = 25;
     origin = "http://direct.moedict.tw/";
     window.id = 'map';
-    window.addEventListener("message", function(it){
-      return window.input(it.data, false);
-    });
     $('body').on('click', 'a.poi', function(){
       return output($(this).text() + "");
     });
@@ -57,9 +54,6 @@
       return typeof (ref$ = window.parent).post === 'function' ? ref$.post(it, window.id) : void 8;
     };
     DATA = {};
-    $.getJSON('orig-chars.json', function(it){
-      return DATA['j'] = it;
-    });
     window.STR2GEO = STR2GEO = function(it){
       var long, lat, i$, to$, i, char, high, low, rX, rY, rLong, rLat;
       long = DATA['j'].indexOf(it[0]);
