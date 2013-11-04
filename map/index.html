@@ -1,43 +1,43 @@
 <html>
 <head>
-	<meta charset="utf-8" />
-
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css" href="leaflet.css"/>
 <link rel="stylesheet" type="text/css" href="styles.css"/>
-	<link rel="stylesheet" href="dist/leaflet.css" />
+<link rel="stylesheet" href="dist/leaflet.css"/>
 <script src="js/jquery.js"></script>
 <script src="main.js"></script>
 <script src="leaflet.js"></script>
 </head>
-
 <div class="translate" style="display: none">
-string: <input name="str" id="inputStr"><a id="submitStr" href="#">Submit</a><br /><br />
-X: <input name="long" id="inputX">(<span id="spanLong"></span>)<br />
+string: <input name="str" id="inputStr"><a id="submitStr" href="#">Submit</a><br/><br/>
+X: <input name="long" id="inputX">(<span id="spanLong"></span>)<br/>
 Y: <input name="lat" id="inputY">(<span id="spanLat"></span>)<br/><a id="submitGeo" href="#">Submit</a>
 </div>
-
-	<script>
+<script>
 function fill (word) {
 if (word.length > 1) { word = word.substr(0, 1) }
-$('#map').remove();
-var map = $('<div id="map" style="width: 100%; height: 100%"></div>').appendTo('body');
-    var road_layer = new L.TileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
+if (window.prev == word) { return }; window.prev = word;
+var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    var road_layer = new L.TileLayer(osmUrl, {
+            minZoom: 8,
             maxZoom: 18,
-            subdomains: ['1', '2', '3', '4'],
-            attribution: '<a href="http://www.mapquest.com/" target="_blank">MapQuest</a>, <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> CC-BY-SA.'
-        }),
-
-    map = new L.Map('map', {
-        center: new L.LatLng(25.09, 121.535579),
-        zoom: 11,
-        layers: [ road_layer ]
-    });
+            attribution: '<a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> CC-BY-SA.'
+        });
 
                 GET('data/POI-Names.json', (function(names) {
 		function onEachFeature(feature, layer) {
 			layer.bindPopup("<a class='poi' style='cursor: pointer'>" + names[Math.floor(Math.random() * names.length)]+ "</a>");
 		}
+
+
+$('#map').remove();
+var $map = $('<div id="map" style="width: 100%; height: 100%"></div>').appendTo('body');
+var map = new L.Map('map');
+map.addLayer(road_layer);
+map.setView(new L.LatLng(25.09, 121.535579), 11);
+if (!word) { return }
+
                 GET('data/outline/' + encodeURIComponent(word) + '.geojson', (function(outline) {
                 GET('data/poi/' + encodeURIComponent(word) + '.json', (function(poi) {
 
@@ -56,37 +56,22 @@ var orangeIcon = L.icon(spec);
 spec.iconUrl = 'leaf-red.png';
 var redIcon = L.icon(spec); 
 var icons = [greenIcon, orangeIcon, redIcon];
-var p = 0
+var p = 0;
+map.whenReady(function(){
+setTimeout(function(){
+    L.geoJson(outline, {}).addTo(map);
+    map.whenReady(function(){
+        setTimeout(function(){
 		L.geoJson(poi, {
-			style: function (feature) { return feature.properties && feature.properties.style; },
 			onEachFeature: onEachFeature,
 			pointToLayer: function (feature, latlng) {
 				return L.marker(latlng, {icon: icons[p++ % 3]});
-/*
-				return L.circleMarker(latlng, {
-					radius: 5,
-					fillColor: '#'+Math.floor(Math.random()*16777215).toString(16),
-					color: "#000",
-					weight: 1,
-					opacity: 1,
-					fillOpacity: 0.8
-				});
-*/
 			}
 		}).addTo(map);
-		L.geoJson(outline, {
-			style: function (feature) { return feature.properties && feature.properties.style; },
-			pointToLayer: function (feature, latlng) {
-				return L.circleMarker(latlng, {
-					radius: 5,
-					fillColor: '#'+Math.floor(Math.random()*16777215).toString(16),
-					color: "#000",
-					weight: 1,
-					opacity: 1,
-					fillOpacity: 0.8
-				});
-			}
-		}).addTo(map);
+        }, 100);
+    });
+}, 100);
+});
 
                 }));
                 }));
