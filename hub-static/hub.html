@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div class="iframe">
-            <iframe src="../users/index.html"></iframe>
+            <iframe src="./users/index.html"></iframe>
             </div>
         </div>
         <div class="iframe-wrapper w-type project-tmuse">
@@ -55,7 +55,7 @@
                 </div>
             </div>
             <div class="iframe">
-            <iframe src="../tmuse/index.html"></iframe>
+            <iframe src="./tmuse/index.html"></iframe>
             </div>
         </div>
         <div class="iframe-wrapper v-type project-dict">
@@ -70,7 +70,7 @@
                 </div>
             </div>
             <div class="iframe">
-            <iframe src="../dict/index.html"></iframe>
+            <iframe src="./dict/index.html"></iframe>
             </div>
         </div>
         <div class="iframe-wrapper n-type project-ball">
@@ -85,7 +85,7 @@
                 </div>
             </div>
             <div class="iframe">
-            <iframe src="../ball/index.html"></iframe>
+            <iframe src="./ball/index.html"></iframe>
             </div>
         </div>
         <div class="iframe-wrapper w-type project-thc">
@@ -100,7 +100,7 @@
                 </div>
             </div>
             <div class="iframe">
-            <iframe src="../lhc/index.html"></iframe>
+            <iframe src="./lhc/index.html"></iframe>
             </div>
         </div>
         <div class="iframe-wrapper n-type project-map">
@@ -115,7 +115,7 @@
                 </div>
             </div>
             <div class="iframe">
-            <iframe src="../map/index.html"></iframe>
+            <iframe src="./map/index.html"></iframe>
             </div>
         </div>
     </div>
@@ -213,7 +213,7 @@ $(function(){
     var pMapWordPosition = {"top": rCenterPointY+contentWidth*0.3*0.31, "left": rCenterPointX+contentWidth*0.3};
 
     // dirty code...
-    var pUserWord = function(word) {
+    var pUserWord = function(word, rev) {
         $(".tube.project-users").append('<span class="moving-word output">'+word+'</span>');
         var wWidth = $(".tube.project-users .moving-word").width();
         var wHeight = $(".tube.project-users .moving-word").height();
@@ -221,13 +221,13 @@ $(function(){
         var startPointY = pUserWordPosition.top - (wHeight+26)/2;
         var X = rCenterPointX - (wWidth+30)/2;
         var Y = rCenterPointY - (wWidth+26)/2;
-        var endPointX = startPointX; startPointX = X;
-        var endPointY = startPointY; startPointY = Y;
+        var endPointX = X, endPointY = Y;
+        if (!rev) { endPointX = startPointX; startPointX = X; endPointY = startPointY; startPointY = Y; }
         
         $(".tube.project-users .moving-word").css({top: startPointY, left: startPointX});
         $(".tube.project-users .moving-word").animate(
             {top: endPointY, left: endPointX}, {
-            duration: 2500,
+            duration: rev ? 1000 : 1500,
             complete: function() {
                 $(".tube.project-users .moving-word").fadeOut('slow', function(){
                     $(this).remove();
@@ -235,7 +235,7 @@ $(function(){
             }
         });
     };
-    var pTmuseWord = function(word) {
+    var pTmuseWord = function(word, rev) {
         $(".tube.project-tmuse").append('<span class="moving-word output">'+word+'</span>');
         var wWidth = $(".tube.project-tmuse .moving-word").width();
         var wHeight = $(".tube.project-tmuse .moving-word").height();
@@ -243,12 +243,12 @@ $(function(){
         var startPointY = pTmuseWordPosition.top - (wHeight+26)/2;
         var X = rCenterPointX - (wWidth+30)/2;
         var Y = rCenterPointY - (wWidth+26)/2;
-        var endPointX = startPointX; startPointX = X;
-        var endPointY = startPointY; startPointY = Y;
+        var endPointX = X, endPointY = Y;
+        if (!rev) { endPointX = startPointX; startPointX = X; endPointY = startPointY; startPointY = Y; }
         $(".tube.project-tmuse .moving-word").css({top: startPointY, left: startPointX});
         $(".tube.project-tmuse .moving-word").animate(
             {top: endPointY, left: endPointX}, {
-            duration: 2500,
+            duration: rev ? 1000 : 1500,
             complete: function() {
                 $(".tube.project-tmuse .moving-word").fadeOut('slow', function(){
                     $(this).remove();
@@ -256,7 +256,7 @@ $(function(){
             }
         });
     };
-    var pDictWord = function(word) {
+    var pDictWord = function(word, rev) {
         $(".tube.project-dict").append('<span class="moving-word output">'+word+'</span>');
         var wWidth = $(".tube.project-dict .moving-word").width();
         var wHeight = $(".tube.project-dict .moving-word").height();
@@ -264,12 +264,12 @@ $(function(){
         var startPointY = pDictWordPosition.top - (wHeight+26)/2;
         var X = rCenterPointX - (wWidth+30)/2;
         var Y = rCenterPointY - (wWidth+26)/2;
-        var endPointX = startPointX; startPointX = X;
-        var endPointY = startPointY; startPointY = Y;
+        var endPointX = X, endPointY = Y;
+        if (!rev) { endPointX = startPointX; startPointX = X; endPointY = startPointY; startPointY = Y; }
         $(".tube.project-dict .moving-word").css({top: startPointY, left: startPointX});
         $(".tube.project-dict .moving-word").animate(
             {top: endPointY, left: endPointX}, {
-            duration: 2500,
+            duration: rev ? 1000 : 1500,
             complete: function() {
                 $(".tube.project-dict .moving-word").fadeOut('slow', function(){
                     $(this).remove();
@@ -277,7 +277,7 @@ $(function(){
             }
         });
     };
-    var pBallWord = function(word) {
+    var pBallWord = function(word, rev) {
         $(".tube.project-ball").append('<span class="moving-word output">'+word+'</span>');
         var wWidth = $(".tube.project-ball .moving-word").width();
         var wHeight = $(".tube.project-ball .moving-word").height();
@@ -285,12 +285,12 @@ $(function(){
         var startPointY = pBallWordPosition.top - (wHeight+26)/2;
         var X = rCenterPointX - (wWidth+30)/2;
         var Y = rCenterPointY - (wWidth+26)/2;
-        var endPointX = startPointX; startPointX = X;
-        var endPointY = startPointY; startPointY = Y;
+        var endPointX = X, endPointY = Y;
+        if (!rev) { endPointX = startPointX; startPointX = X; endPointY = startPointY; startPointY = Y; }
         $(".tube.project-ball .moving-word").css({top: startPointY, left: startPointX});
         $(".tube.project-ball .moving-word").animate(
             {top: endPointY, left: endPointX}, {
-            duration: 2500,
+            duration: rev ? 1000 : 1500,
             complete: function() {
                 $(".tube.project-ball .moving-word").fadeOut('slow', function(){
                     $(this).remove();
@@ -298,7 +298,7 @@ $(function(){
             }
         });
     };
-    var pThcWord = function(word) {
+    var pThcWord = function(word, rev) {
         $(".tube.project-thc").append('<span class="moving-word output">'+word+'</span>');
         var wWidth = $(".tube.project-thc .moving-word").width();
         var wHeight = $(".tube.project-thc .moving-word").height();
@@ -306,12 +306,12 @@ $(function(){
         var startPointY = pThcWordPosition.top - (wHeight+26)/2;
         var X = rCenterPointX - (wWidth+30)/2;
         var Y = rCenterPointY - (wWidth+26)/2;
-        var endPointX = startPointX; startPointX = X;
-        var endPointY = startPointY; startPointY = Y;
+        var endPointX = X, endPointY = Y;
+        if (!rev) { endPointX = startPointX; startPointX = X; endPointY = startPointY; startPointY = Y; }
         $(".tube.project-thc .moving-word").css({top: startPointY, left: startPointX});
         $(".tube.project-thc .moving-word").animate(
             {top: endPointY, left: endPointX}, {
-            duration: 2500,
+            duration: rev ? 1000 : 1500,
             complete: function() {
                 $(".tube.project-thc .moving-word").fadeOut('slow', function(){
                     $(this).remove();
@@ -319,7 +319,7 @@ $(function(){
             }
         });
     };
-    var pMapWord = function(word) {
+    var pMapWord = function(word, rev) {
         $(".tube.project-map").append('<span class="moving-word output">'+word+'</span>');
         var wWidth = $(".tube.project-map .moving-word").width();
         var wHeight = $(".tube.project-map .moving-word").height();
@@ -327,12 +327,12 @@ $(function(){
         var startPointY = pMapWordPosition.top - (wHeight+26)/2;
         var X = rCenterPointX - (wWidth+30)/2;
         var Y = rCenterPointY - (wWidth+26)/2;
-        var endPointX = startPointX; startPointX = X;
-        var endPointY = startPointY; startPointY = Y;
+        var endPointX = X, endPointY = Y;
+        if (!rev) { endPointX = startPointX; startPointX = X; endPointY = startPointY; startPointY = Y; }
         $(".tube.project-map .moving-word").css({top: startPointY, left: startPointX});
         $(".tube.project-map .moving-word").animate(
             {top: endPointY, left: endPointX}, {
-            duration: 2500,
+            duration: rev ? 1000 : 1500,
             complete: function() {
                 $(".tube.project-map .moving-word").fadeOut('slow', function(){
                     $(this).remove();
@@ -344,12 +344,18 @@ $(function(){
 
     $(".tube.project-users .moving-word").css(pThcWordPosition);
     window.pushText = function(t, origin) {
-        pUserWord(t);
-        pTmuseWord(t);
-        pDictWord(t);
-        pBallWord(t);
-        pThcWord(t);
-        pMapWord(t);
+        if ($(".project-users > .tube-status").hasClass('open'))
+            pUserWord(t, origin == 'users');
+        if ($(".project-tmuse > .tube-status").hasClass('open'))
+            pTmuseWord(t, origin == 'tmuse');
+        if ($(".project-dict > .tube-status").hasClass('open'))
+            pDictWord(t, origin == 'dict');
+        if ($(".project-ball > .tube-status").hasClass('open'))
+            pBallWord(t, origin == 'ball');
+        if ($(".project-thc > .tube-status").hasClass('open'))
+            pThcWord(t, origin == 'lhc');
+        if ($(".project-map > .tube-status").hasClass('open'))
+            pMapWord(t, origin == 'map');
     };
     $(".gogo").on("click", function(e) {
         e.preventDefault();

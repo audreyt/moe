@@ -19,17 +19,22 @@
         if (/^[-a-zA-Z\s]*$/.exec(text)) {
           return;
         }
+        if ($(".project-" + origin + " > .tube-status").hasClass('close')) {
+          return;
+        }
         if (prev + "" === text + "") {
           return;
         }
         prev = text;
         if (typeof window.pushText === 'function') {
-          window.pushText(text);
+          window.pushText(text, origin);
         }
         for (i$ = 0, len$ = (ref$ = frames).length; i$ < len$; ++i$) {
           w = ref$[i$];
           if (w.id !== origin) {
-            results$.push((fn$.call(this, w)));
+            if (!$(".project-" + w.id + " > .tube-status").hasClass('close')) {
+              results$.push((fn$.call(this, w)));
+            }
           }
         }
         return results$;

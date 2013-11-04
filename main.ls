@@ -10,13 +10,16 @@ window.reset = -> input ''
 #window.addEventListener("message", -> window.input it.data, false);
 window.post = function post (text, origin)
   return if text is /^[-a-zA-Z\s]*$/
+
+  return if $(".project-#origin > .tube-status").hasClass \close
   return if "#prev" is "#text"
   prev := text
-  window.push-text? text
-  for w in frames | w.id isnt origin => let w
-    <- window.requestAnimationFrame
-    <- setTimeout _, 1000ms
-    w.input? prev, origin
+  window.push-text? text, origin
+  for w in frames | w.id isnt origin
+    unless $(".project-#{w.id} > .tube-status").hasClass \close => let w
+      <- window.requestAnimationFrame
+      <- setTimeout _, 1000ms
+      w.input? prev, origin
 window.output = ->
   # record?
 
