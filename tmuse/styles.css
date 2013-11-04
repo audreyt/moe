@@ -2,6 +2,7 @@ body {
   background: #111122;
   margin: 0;
   border: 0;
+  padding: 0;
   cursor: move;
 }
 

@@ -21,7 +21,7 @@ String::permutate = ->
 */
 # buffered messages before data loaded
 buffer = []
-buffered-msgs-first = ({data}) -> buffer.push data unless buffer.0 is data
+buffered-msgs-first = ({data}) -> buffer.push data unless data in buffer
 window.input = -> buffered-msgs-first {data: it}
 #window.addEventListener \message buffered-msgs-first
 
@@ -220,8 +220,8 @@ window.doAddChar = ->
 scene.addEventListener \update, ->
   window.doAddChar $input.val! if (cCounter++ % ~~(cTime * 60)) is 0
 window.input := -> main {data: it}
-window.removeEventListener \message, buffered-msgs-first
-for data in buffer => main {data}
-window.addEventListener \message, main
+#window.removeEventListener \message, buffered-msgs-first
+#for data in buffer => main {data}
+#window.addEventListener \message, main
 window.input \萌
 

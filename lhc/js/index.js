@@ -25,7 +25,7 @@ String::permutate = ->
   bufferedMsgsFirst = function(arg$){
     var data;
     data = arg$.data;
-    if (buffer[0] !== data) {
+    if (!in$(data, buffer)) {
       return buffer.push(data);
     }
   };
@@ -115,7 +115,7 @@ String::permutate = ->
   GET('./data/char_comp_simple.json', function(CharComp){
     return GET('./data/comp_char_sorted.json', function(CompChar){
       return GET('./data/orig-chars.json', function(OrigChars){
-        var cTime, cCounter, origin, $input, $output, uniq, main, getShapeOf, i$, ref$, len$, data;
+        var cTime, cCounter, origin, $input, $output, uniq, main, getShapeOf;
         cTime = 2.0;
         cCounter = 0;
         origin = "http://direct.moedict.tw/";
@@ -296,14 +296,6 @@ String::permutate = ->
             data: it
           });
         };
-        window.removeEventListener('message', bufferedMsgsFirst);
-        for (i$ = 0, len$ = (ref$ = buffer).length; i$ < len$; ++i$) {
-          data = ref$[i$];
-          main({
-            data: data
-          });
-        }
-        window.addEventListener('message', main);
         return window.input('萌');
       });
     });
