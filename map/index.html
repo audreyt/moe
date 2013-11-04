@@ -25,10 +25,11 @@ var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
             attribution: '<a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> CC-BY-SA.'
         });
 
-                GET('data/POI-Names.json', (function(names) {
-		function onEachFeature(feature, layer) {
-			layer.bindPopup("<a class='poi' style='cursor: pointer'>" + names[Math.floor(Math.random() * names.length)]+ "</a>");
-		}
+            GET('data/POI-Taipei.json', (function(names) {
+              var popup = L.popup();
+            function onEachFeature(feature, layer) {
+                layer.bindPopup( popup )
+            }
 
 
 $('#map').remove();
@@ -38,17 +39,17 @@ map.addLayer(road_layer);
 map.setView(new L.LatLng(25.09, 121.535579), 11);
 if (!word) { return }
 
-                GET('data/outline/' + encodeURIComponent(word) + '.geojson', (function(outline) {
-                GET('data/poi/' + encodeURIComponent(word) + '.json', (function(poi) {
+            GET('data/outline/' + encodeURIComponent(word) + '.geojson', (function(outline) {
+            GET('data/poi/' + encodeURIComponent(word) + '.json', (function(poi) {
 
 var spec = {
-    iconUrl: 'leaf-green.png',
-    shadowUrl: 'leaf-shadow.png',
-    iconSize:     [19, 50], // size of the icon
-    shadowSize:   [25, 32], // size of the shadow
-    iconAnchor:   [11, 50], // point of the icon which will correspond to marker's location
-    shadowAnchor: [2, 31],  // the same for the shadow
-    popupAnchor:  [-3, -43] // point from which the popup should open relative to the iconAnchor
+iconUrl: 'leaf-green.png',
+shadowUrl: 'leaf-shadow.png',
+iconSize:     [19, 50], // size of the icon
+shadowSize:   [25, 32], // size of the shadow
+iconAnchor:   [11, 50], // point of the icon which will correspond to marker's location
+shadowAnchor: [2, 31],  // the same for the shadow
+popupAnchor:  [-3, -43] // point from which the popup should open relative to the iconAnchor
 };
 var greenIcon = L.icon(spec); 
 spec.iconUrl = 'leaf-orange.png';
@@ -59,23 +60,32 @@ var icons = [greenIcon, orangeIcon, redIcon];
 var p = 0;
 map.whenReady(function(){
 setTimeout(function(){
-    L.geoJson(outline, {}).addTo(map);
-    map.whenReady(function(){
-        setTimeout(function(){
-		L.geoJson(poi, {
-			onEachFeature: onEachFeature,
-			pointToLayer: function (feature, latlng) {
-				return L.marker(latlng, {icon: icons[p++ % 3]});
-			}
-		}).addTo(map);
-        }, 100);
-    });
+L.geoJson(outline, {}).addTo(map);
+map.whenReady(function(){
+    setTimeout(function(){
+            L.geoJson(poi, {
+                    onEachFeature: onEachFeature,
+                    pointToLayer: function (feature, latlng) {
+                            return L.marker(latlng, {icon: icons[p++ % 3],
+                        opacity: 0.75});
+                    }
+            }).addTo(map).on("click", function(e) {
+                var content = names[e.latlng.lng + "," + e.latlng.lat] || '';
+                var ref$ = content.split("\n"), name = ref$[0], addr = ref$[1];
+            if (!addr) { addr = '' }
+            if (name == addr) {name = ''} else {
+                name = "<a class='poi' style='cursor: pointer'>" + name + "</a><br>"
+            }
+                popup.setContent((name + addr) || '零時政府祕密基地')
+            });
+    }, 100);
+});
 }, 100);
 });
 
-                }));
-                }));
-                }));
+            }));
+            }));
+            }));
 
 }
 	</script>
