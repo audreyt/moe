@@ -22,10 +22,9 @@
             <a href="#" class="main-btn">主選單</a>
             <div class="tube project-users"><a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a></div>
             <div class="tube project-tmuse"><a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a></div>
-            <div class="tube project-tmuse"><a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a></div>
             <div class="tube project-dict"><a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a></div>
             <div class="tube project-ball"><a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a></div>
-            <div class="tube project-thc"><a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a></div>
+            <div class="tube project-lhc"><a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a></div>
             <div class="tube project-map"><a href="#" class="tube-status open"><i class="icon-circle-blank"></i></a></div>
         </div>
         <div class="iframe-wrapper v-type project-users">
@@ -88,7 +87,7 @@
             <iframe src="./ball/index.html"></iframe>
             </div>
         </div>
-        <div class="iframe-wrapper w-type project-thc">
+        <div class="iframe-wrapper w-type project-lhc">
             <div class="iframe-header">
                 <div class="controls">
                     <a href="#" class="zoom"><i class="icon-zoom-in"></i></a>
@@ -176,11 +175,11 @@ $(function(){
     $(".iframe-wrapper.v-type .iframe").css({height: vBlockHeight-46});
     $(".iframe-wrapper.w-type .iframe").css({width: wBlockWidth-16});
 
-    // calculate block position. project-users, project-tmuse, project-dict, project-ball, project-thc, project-map
+    // calculate block position. project-users, project-tmuse, project-dict, project-ball, project-lhc, project-map
     $(".iframe-wrapper.project-tmuse").css({top: contentHeight*0.01});
     $(".iframe-wrapper.v-type").css({top:contentHeight*0.1});
     $(".iframe-wrapper.project-ball, .iframe-wrapper.project-map").css({top:contentHeight*0.52});
-    $(".iframe-wrapper.project-thc").css({top: contentHeight*0.99-nBlockHeight});
+    $(".iframe-wrapper.project-lhc").css({top: contentHeight*0.99-nBlockHeight});
     $(".iframe-wrapper.w-type").css({left:(contentWidth-wBlockWidth)/2});
     $(".iframe-wrapper.project-users, .iframe-wrapper.project-ball").css({left:"2%"});
     $(".iframe-wrapper.project-dict, .iframe-wrapper.project-map").css({left:contentWidth*0.98-nBlockWidth});
@@ -192,9 +191,9 @@ $(function(){
     $(".tube.project-ball .tube-status, .tube.project-map .tube-status").css({top: centerPointY+6});
     $(".tube.project-users .tube-status, .tube.project-ball .tube-status").css({left: centerPointX-94});
     $(".tube.project-dict .tube-status, .tube.project-map .tube-status").css({left: centerPointX+58});
-    $(".tube.project-tmuse .tube-status, .tube.project-thc .tube-status").css({left: centerPointX-18});
+    $(".tube.project-tmuse .tube-status, .tube.project-lhc .tube-status").css({left: centerPointX-18});
     $(".tube.project-tmuse .tube-status").css({top: centerPointY-96});
-    $(".tube.project-thc .tube-status").css({top: centerPointY+60});
+    $(".tube.project-lhc .tube-status").css({top: centerPointY+60});
 
     // tube-status toggle
     $(".tube-status").on("click", function() {
@@ -209,7 +208,7 @@ $(function(){
     var pTmuseWordPosition = {"top": rCenterPointY-contentHeight*0.3, "left": rCenterPointX};
     var pDictWordPosition = {"top": rCenterPointY-contentWidth*0.3*0.31, "left": rCenterPointX+contentWidth*0.3};
     var pBallWordPosition = {"top": rCenterPointY+contentWidth*0.3*0.31, "left": rCenterPointX-contentWidth*0.3};
-    var pThcWordPosition = {"top": rCenterPointY+contentHeight*0.3, "left": rCenterPointX};
+    var pLhcWordPosition = {"top": rCenterPointY+contentHeight*0.3, "left": rCenterPointX};
     var pMapWordPosition = {"top": rCenterPointY+contentWidth*0.3*0.31, "left": rCenterPointX+contentWidth*0.3};
 
     // dirty code...
@@ -298,22 +297,22 @@ $(function(){
             }
         });
     };
-    var pThcWord = function(word, rev) {
-        $(".tube.project-thc").append('<span class="moving-word output">'+word+'</span>');
-        var wWidth = $(".tube.project-thc .moving-word").width();
-        var wHeight = $(".tube.project-thc .moving-word").height();
-        var startPointX = pThcWordPosition.left - (wWidth+30)/2;
-        var startPointY = pThcWordPosition.top - (wHeight+26)/2;
+    var pLhcWord = function(word, rev) {
+        $(".tube.project-lhc").append('<span class="moving-word output">'+word+'</span>');
+        var wWidth = $(".tube.project-lhc .moving-word").width();
+        var wHeight = $(".tube.project-lhc .moving-word").height();
+        var startPointX = pLhcWordPosition.left - (wWidth+30)/2;
+        var startPointY = pLhcWordPosition.top - (wHeight+26)/2;
         var X = rCenterPointX - (wWidth+30)/2;
         var Y = rCenterPointY - (wWidth+26)/2;
         var endPointX = X, endPointY = Y;
         if (!rev) { endPointX = startPointX; startPointX = X; endPointY = startPointY; startPointY = Y; }
-        $(".tube.project-thc .moving-word").css({top: startPointY, left: startPointX});
-        $(".tube.project-thc .moving-word").animate(
+        $(".tube.project-lhc .moving-word").css({top: startPointY, left: startPointX});
+        $(".tube.project-lhc .moving-word").animate(
             {top: endPointY, left: endPointX}, {
             duration: rev ? 1000 : 1500,
             complete: function() {
-                $(".tube.project-thc .moving-word").fadeOut('slow', function(){
+                $(".tube.project-lhc .moving-word").fadeOut('slow', function(){
                     $(this).remove();
                 });
             }
@@ -342,7 +341,7 @@ $(function(){
     };
     //$(".testpoint").css(pTmuseWordPosition);
 
-    $(".tube.project-users .moving-word").css(pThcWordPosition);
+    $(".tube.project-users .moving-word").css(pLhcWordPosition);
     window.pushText = function(t, origin) {
         if ($(".project-users > .tube-status").hasClass('open'))
             pUserWord(t, origin == 'users');
@@ -352,8 +351,8 @@ $(function(){
             pDictWord(t, origin == 'dict');
         if ($(".project-ball > .tube-status").hasClass('open'))
             pBallWord(t, origin == 'ball');
-        if ($(".project-thc > .tube-status").hasClass('open'))
-            pThcWord(t, origin == 'lhc');
+        if ($(".project-lhc > .tube-status").hasClass('open'))
+            pLhcWord(t, origin == 'lhc');
         if ($(".project-map > .tube-status").hasClass('open'))
             pMapWord(t, origin == 'map');
     };
@@ -363,7 +362,7 @@ $(function(){
         pTmuseWord("中文");
         pDictWord("中文");
         pBallWord("中文");
-        pThcWord("中文");
+        pLhcWord("中文");
         pMapWord("中文");
     });
 

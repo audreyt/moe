@@ -72,7 +72,7 @@ window.input = ->
     color = obj_coloring[nodes[edge.s].label]
     mat.color.setRGB(color.r,color.g,color.b)
     mat.transparent = true
-    mat.opacity = 0.2
+    mat.opacity = 0.333
     sv = nodes[edge.s].coords
     tv = nodes[edge.t].coords
     geometry = new THREE.Geometry()
