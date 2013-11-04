@@ -9,7 +9,6 @@ origin = "http://direct.moedict.tw/"
 window.id = \tmuse
 window.colors = [[42,75,215],[29,105,20],[129,38,192],[129,197,122],[157,175,255],[41,208,208],[255,146,51],[255,238,51],[233,222,187],[255,205,243]]
 window.reset = -> $in.val ''
-window.addEventListener("message", -> window.input it.data, false)
 window.input = ->
   $in.val it
   json <- GET "a/#it.json"

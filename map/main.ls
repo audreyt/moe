@@ -106,4 +106,4 @@ window.GEO2STR = GEO2STR = ->
 
   result
 
-fill \明
+fill ''

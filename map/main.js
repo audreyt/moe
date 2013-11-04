@@ -123,6 +123,6 @@
       }
       return result;
     };
-    return fill('明');
+    return fill('');
   });
 }).call(this);

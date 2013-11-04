@@ -15,9 +15,6 @@
     window.reset = function(){
       return $in.val('');
     };
-    window.addEventListener("message", function(it){
-      return window.input(it.data, false);
-    });
     window.input = function(it){
       $in.val(it);
       return GET("a/" + it + ".json", function(json){

@@ -9,6 +9,10 @@ body#sketch iframe {
   border: 0;
 }
 
+iframe {
+  background: black;
+}
+
 body .twinkling {
   width: 100%;
   height: 100%;
