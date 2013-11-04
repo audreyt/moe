@@ -125,16 +125,22 @@
       });
     };
     $(window).resize(function(){
-      window.renderer.setSize(window.innerWidth, window.innerHeight);
-      window.camera.aspect = window.innerWidth / window.innerHeight;
-      return window.camera.updateProjectionMatrix();
+      var ref$;
+      if ((ref$ = window.renderer) != null) {
+        ref$.setSize(window.innerWidth, window.innerHeight);
+      }
+      if ((ref$ = window.camera) != null) {
+        ref$.aspect = window.innerWidth / window.innerHeight;
+      }
+      return (ref$ = window.camera) != null ? ref$.updateProjectionMatrix() : void 8;
     });
     window.output = function(it){
+      var ref$;
       if (window.muted) {
         return;
       }
       input(it);
-      return window.top.postMessage(it, origin);
+      return typeof (ref$ = window.parent).post === 'function' ? ref$.post(it, window.id) : void 8;
     };
     CACHED = {};
     GET = function(url, data, onSuccess, dataType){

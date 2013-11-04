@@ -40,7 +40,8 @@ window.input = ->
 window.output = ->
   input it
   return if window.muted
-  window.top.postMessage(it, origin)
+  #window.top.postMessage(it, origin)
+  window.parent.post? it, window.id
 
 DATA = {}
 do

@@ -382,15 +382,12 @@ $(function(){
             originTop = thisBlock.css("top");
             originLeft = thisBlock.css("left");
             thisBlock.css({"z-index": 9999, position: "fixed"}).animate({width: windowWidth*0.98, height: windowHeight*0.98, top: "1%", left: "1%"});
-            thisIframe.animate({width: windowWidth*0.98-16, height: windowHeight*0.98-46}, {
-                complete: function() {
-                    thisBlock.siblings(".iframe-wrapper").find(".iframe").css({visibility: "hidden"});
-                }
-            });
+            thisBlock.siblings(".iframe-wrapper").find(".iframe").hide();
+            thisIframe.animate({width: windowWidth*0.98-16, height: windowHeight*0.98-46});
             $(this).find("i").removeClass("icon-zoom-in").addClass("icon-zoom-out");
         }
         else {
-            $(".iframe-wrapper .iframe").css({visibility: "visible"});
+            thisBlock.siblings(".iframe-wrapper").find(".iframe").show();
             thisBlock.animate({width: originWidth, height: originHeight, top: originTop, left: originLeft});
             thisIframe.animate({width: originWidth-16, height: originHeight-46}, {
                 complete: function() {

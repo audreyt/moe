@@ -99,14 +99,15 @@ window.input = ->
   document.addEventListener( 'dblclick', window.onDocumentMouseUp, false );
 
 $(window).resize ->
-  window.renderer.setSize(window.innerWidth, window.innerHeight)
-  window.camera.aspect = window.innerWidth / window.innerHeight
-  window.camera.updateProjectionMatrix!
+  window.renderer?setSize(window.innerWidth, window.innerHeight)
+  window.camera?aspect = window.innerWidth / window.innerHeight
+  window.camera?updateProjectionMatrix!
 
 window.output = ->
   return if window.muted
   input it
-  window.top.postMessage(it, origin)
+  # window.top.postMessage(it, origin)
+  window.parent.post? it, window.id
 
 CACHED = {}
 GET = (url, data, onSuccess, dataType) ->

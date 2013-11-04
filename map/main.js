@@ -49,11 +49,12 @@
       return fill(it);
     };
     window.output = function(it){
+      var ref$;
       input(it);
       if (window.muted) {
         return;
       }
-      return window.top.postMessage(it, origin);
+      return typeof (ref$ = window.parent).post === 'function' ? ref$.post(it, window.id) : void 8;
     };
     DATA = {};
     $.getJSON('orig-chars.json', function(it){

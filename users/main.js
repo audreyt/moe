@@ -44,11 +44,12 @@
           });
         };
         window.output = function(it){
+          var ref$;
           if (window.muted) {
             return;
           }
           input(it);
-          return window.top.postMessage(it, origin);
+          return typeof (ref$ = window.parent).post === 'function' ? ref$.post(it, window.id) : void 8;
         };
         window.reset();
         return window.setInterval(function(){

@@ -104,8 +104,9 @@ window.reset = !->
   $output.empty!
 window.output = ->
   return if window.muted
-  if window.parent isnt window
-    window.parent.postMessage it, origin
+  #if window.parent isnt window
+  #  window.parent.postMessage it, origin
+  window.parent.post? it, window.id
 $input = $ \#input
 $output = $ \#output
 window.uniq = uniq = ->

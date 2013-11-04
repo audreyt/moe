@@ -34,6 +34,9 @@
         $(element).data(entry);
         element = document.createElement('div');
         element.className = 'element';
+        element.style.backgroundColor = 'rgb(220,201,172)';
+        element.style.border = '5px solid rgb(103,90,73)';
+        element.style.borderRadius = '10px';
         element.style.backgroundImage = 'url("images/bg_element.png")';
         number = document.createElement('div');
         if (strokes) {
@@ -106,7 +109,7 @@
       }
       window.renderer = renderer = new THREE.CSS3DRenderer();
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.domElement.style.position = 'absolute';
+      renderer.domElement.style.position = 'fixed';
       document.getElementById('container').appendChild(renderer.domElement);
       window.controls = controls = new THREE.TrackballControls(camera, renderer.domElement);
       controls.rotateSpeed = 0.5;
@@ -164,18 +167,15 @@
   curH = window.innerHeight;
   window.onWindowResize = (function(){
     function onWindowResize(){
-      console.log('resize=true');
       isResizing = true;
       return setTimeout(checkResize, 100);
     }
     return onWindowResize;
   }());
   function checkResize(){
-    console.log('check=true');
     if (!isResizing) {
       return;
     }
-    console.log('check=resize=true');
     if (w === window.innerWidth && h === window.innerHeight) {
       if (curW !== w || curH !== h) {
         curW = w;
@@ -187,7 +187,6 @@
       }
       return isResizing = false;
     } else {
-      console.log('w!=h');
       w = window.innerWidth;
       h = window.innerHeight;
       return setTimeout(checkResize, 100);

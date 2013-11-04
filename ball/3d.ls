@@ -20,7 +20,9 @@ window.init = function init(table)
     $(element).data entry
     element = document.createElement( 'div' )
     element.className = 'element'
-    # element.style.backgroundColor = 'rgba(0,127,127,' + ( Math.random() * 0.5 + 0.25 ) + ')'
+    element.style.backgroundColor = 'rgb(220,201,172)' # + ( Math.random() * 0.25 + 0.75 ) + ')'
+    element.style.border = '5px solid rgb(103,90,73)' # + ( Math.random() * 0.25 + 0.75 ) + ')'
+    element.style.borderRadius = '10px' # + ( Math.random() * 0.25 + 0.75 ) + ')'
     element.style.backgroundImage = 'url("images/bg_element.png")'
     number = document.createElement( 'div' )
     if strokes
@@ -84,7 +86,7 @@ window.init = function init(table)
 
   window.renderer = renderer = new THREE.CSS3DRenderer()
   renderer.setSize( window.innerWidth, window.innerHeight )
-  renderer.domElement.style.position = 'absolute'
+  renderer.domElement.style.position = 'fixed'
   document.getElementById( 'container' ).appendChild( renderer.domElement )
 
   window.controls = controls = new THREE.TrackballControls( camera, renderer.domElement )
@@ -135,14 +137,11 @@ w = h = null
 cur-w = window.innerWidth
 cur-h = window.innerHeight
 window.onWindowResize = function onWindowResize()
-  console.log \resize=true
   isResizing := true
   setTimeout checkResize, 100ms
 
 function checkResize
-  console.log \check=true
   return unless isResizing
-  console.log \check=resize=true
   if w is window.innerWidth and h is window.innerHeight
     if cur-w isnt w or cur-h isnt h
       cur-w := w; cur-h := h
@@ -152,7 +151,6 @@ function checkResize
       render!
     isResizing := false
   else
-    console.log \w!=h
     w := window.innerWidth
     h := window.innerHeight
     setTimeout checkResize, 100ms

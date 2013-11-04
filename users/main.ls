@@ -30,7 +30,8 @@ window.input = ->
 window.output = ->
   return if window.muted
   input it
-  window.top.postMessage(it, origin)
+  # window.top.postMessage(it, origin)
+  window.parent.post? it, window.id
 
 window.reset!
 window.setInterval ->

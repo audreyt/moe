@@ -34,7 +34,8 @@ window.input = ->
 window.output = ->
   return if window.muted
   input it
-  window.top.postMessage(it, origin)
+  #window.top.postMessage(it, origin)
+  window.parent.post? it, window.id
 
 function draw (ch)
   parts = []
@@ -73,14 +74,25 @@ function go-rhyme
 function go-alike
   show-chars SoundAlike[ (it - /[ˋˊˇ‧]/g) ]
 
+window.uniq = uniq = ->
+  seen = {}
+  out = ''
+  for w in it / ''
+    out += w unless seen[w]
+    seen[w] = true
+  return out
+
 window.go-char = function go-char ({ch, bpmf, radical})
   output ch
   <- setTimeout _, 1ms
-  rads = RadicalSame[ radical ] || ''
-  snds = SoundAlike[ bpmf ] || ''
   sims = go-similar(ch) || ''
-  # console.log rads+snds+sims
-  show-chars(rads+snds+sims)
+  snds = SoundAlike[ (bpmf - /[ˋˊˇ‧]/g) ] || ''
+  rads = RadicalSame[ radical ] || ''
+  sims = sims.slice(0, 50) if sims.length > 50
+  snds = snds.slice(0, 50) if snds.length > 50
+  all = uniq(sims + snds + rads)
+  all = all.slice(0, 100) if all.length > 100
+  show-chars all
 
 window.go-similar = function go-similar
   sims = ""
