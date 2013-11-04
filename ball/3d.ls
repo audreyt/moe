@@ -20,7 +20,8 @@ window.init = function init(table)
     $(element).data entry
     element = document.createElement( 'div' )
     element.className = 'element'
-    element.style.backgroundColor = 'rgba(0,127,127,' + ( Math.random() * 0.5 + 0.25 ) + ')'
+    # element.style.backgroundColor = 'rgba(0,127,127,' + ( Math.random() * 0.5 + 0.25 ) + ')'
+    element.style.backgroundImage = 'url("images/bg_element.png")'
     number = document.createElement( 'div' )
     if strokes
       number.className = 'number'
@@ -91,21 +92,25 @@ window.init = function init(table)
   controls.addEventListener( 'change', render )
 
   button = document.getElementById( 'sphere' )
-  button.addEventListener( 'click', (-> transform( targets.sphere, 2000 )), false )
+  button.addEventListener( 'click', (->
+    $('#menu button').removeClass!
+    $('#sphere').addClass "active"
+    transform( targets.sphere, 2000 )
+  ), false )
   button = document.getElementById( 'helix' )
-  button.addEventListener( 'click', (-> transform( targets.helix, 2000 )), false )
+  button.addEventListener( 'click', (->
+    $('#menu button').removeClass!
+    $('#helix').addClass "active"
+    transform( targets.helix, 2000 )
+  ), false )
   button = document.getElementById( 'grid' )
-  button.addEventListener( 'click', (-> transform( targets.grid, 2000 )), false )
-  transform( targets.sphere, 5000 )
+  button.addEventListener( 'click', (->
+    $('#menu button').removeClass!
+    $('#grid').addClass "active"
+    transform( targets.grid, 2000 )
+  ), false )
+  transform( targets.grid, 5000 )
   window.addEventListener( 'resize', onWindowResize, false )
-
-/*
-$iframe = $('<iframe src="https://www.moedict.tw/#~@" style="height: 100%; width: 30%; right: 0; position: fixed">')
-$('body').append($iframe)
-$('body').on('click', '.element', function() {
-$iframe.attr('src', 'https://www.moedict.tw/#~@' + encodeURIComponent($('.symbol', this).text()))
-})
-*/
 
 window.transform = function transform( targets, duration )
   duration /= 2
@@ -125,11 +130,32 @@ window.transform = function transform( targets, duration )
     .onUpdate( render )
     .start()
 
+isResizing = false
+w = h = null
+cur-w = window.innerWidth
+cur-h = window.innerHeight
 window.onWindowResize = function onWindowResize()
-  camera.aspect = window.innerWidth / window.innerHeight
-  camera.updateProjectionMatrix()
-  renderer.setSize( window.innerWidth, window.innerHeight )
-  render!
+  console.log \resize=true
+  isResizing := true
+  setTimeout checkResize, 100ms
+
+function checkResize
+  console.log \check=true
+  return unless isResizing
+  console.log \check=resize=true
+  if w is window.innerWidth and h is window.innerHeight
+    if cur-w isnt w or cur-h isnt h
+      cur-w := w; cur-h := h
+      camera.aspect = w / h
+      camera.updateProjectionMatrix!
+      renderer.setSize w, h
+      render!
+    isResizing := false
+  else
+    console.log \w!=h
+    w := window.innerWidth
+    h := window.innerHeight
+    setTimeout checkResize, 100ms
 
 window.animate = function animate()
   requestAnimationFrame( animate )
