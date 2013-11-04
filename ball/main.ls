@@ -23,18 +23,18 @@ SoundRhyme <- GET "SoundRhyme.json"
 SoundAlike <- GET "SoundAlike.json"
 
 origin = "http://direct.moedict.tw/"
-window.id = \tmuse
+window.id = \ball
 window.reset = -> $in.val ''
 window.addEventListener("message", -> window.input it.data, false);
-window.input = ->
-  $in.val it
-  show-chars go-similar it
+window.input = (ch) ->
+  return unless ch and Sound[ch.0]
+  $in.val ch
   $out.empty!
+  ch = ch.0 if ch.length > 1
+  window.show-all { ch, bpmf: Sound[ch]?0, radical: Radical[ch] }
 
 window.output = ->
   return if window.muted
-  input it
-  #window.top.postMessage(it, origin)
   window.parent.post? it, window.id
 
 function draw (ch)
@@ -56,14 +56,16 @@ window.render-chars = function render-chars
     # console.log ch
     continue unless Sound[ch]
     radical = Radical[ch]
-    bpmf = Sound[ch].0
+    bpmf = Sound[ch]?0
     table.push { ch, bpmf, radical }
   window.init table
   window.animate!
 
-window.show-chars = function show-chars
-  if it
-    window.location ="?#{ encodeURIComponent it }" unless window.location is "?#{ encodeURIComponent it }" or window.location is "?#it"
+window.show-chars = function show-chars (chars)
+  return unless chars
+  return if window.location is "?#{ encodeURIComponent chars }"
+  return if window.location is "?#chars"
+  window.location.href = window.location.pathname + "?#{ encodeURIComponent chars }"
 
 function go-radical
   show-chars RadicalSame[ it ]
@@ -85,6 +87,9 @@ window.uniq = uniq = ->
 window.go-char = function go-char ({ch, bpmf, radical})
   output ch
   <- setTimeout _, 1ms
+  window.show-all {ch, bpmf, radical}
+
+window.show-all = function show-all ({ch, bpmf, radical})
   sims = go-similar(ch) || ''
   snds = SoundAlike[ (bpmf - /[ˋˊˇ‧]/g) ] || ''
   rads = RadicalSame[ radical ] || ''

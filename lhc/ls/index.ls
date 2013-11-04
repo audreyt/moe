@@ -104,8 +104,6 @@ window.reset = !->
   $output.empty!
 window.output = ->
   return if window.muted
-  #if window.parent isnt window
-  #  window.parent.postMessage it, origin
   window.parent.post? it, window.id
 $input = $ \#input
 $output = $ \#output
@@ -149,7 +147,6 @@ main = ({data}) ->
   $output.empty!
   for char in keys
     $output.append $(\<li/>).css(\width, ~~(window.innerWidth / keys.length) - 5).append $(\<a/> href: \#).text(char).click -> window.output $(@).text!
-  JSON.stringify keys,, 2
 getShapeOf = ->
   ret = []
   for stroke in it
@@ -182,7 +179,7 @@ getShapeOf = ->
   ret
 doAddChar = ->
   for char in it
-    console.log "creating geometry for #char"
+    # console.log "creating geometry for #char"
     randX = Math.random() * 500 - 250
     randY = Math.random() * 500 - 250
     for i, shape of getShapeOf Outlines[char]

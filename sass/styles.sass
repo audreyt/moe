@@ -1,9 +1,27 @@
-body
+@import "compass/css3"
+
+body#sketch
   background: #DDF
   margin: 0
   padding: 0
+  iframe
+    width: 33%
+    height: 50%
+    border: 0
 
-iframe
-  width: 33%
-  height: 50%
-  border: 0
+body
+  .twinkling
+    width: 100%
+    height: 100%
+  .content-wrapper
+    display: none
+
+.iframe-wrapper
+  border-radius: 10px
+
+.iframe
+  background: black
+
+.iframe-wrapper, .iframe
+  @include transition(all 0.5s ease-in-out)
+  

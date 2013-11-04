@@ -9,6 +9,7 @@
 <title>萌典字宙反應爐</title>
 <meta name="viewport" content="width=device-width">
 <link rel="stylesheet" media="screen" href="./stylesheets/hub.css">
+<link rel="stylesheet" media="screen" href="./styles.css">
 <script src="js/jquery.js"></script>
 <script src="main.js"></script>
 </head>
@@ -142,15 +143,6 @@
 <script src="javascripts/jquery-1.10.2.min.js"></script>
 <script>
 $(function(){
-    //lightbox
-    $(".lightbox").hide();
-    $(".main-btn").on("click", function() {
-        $(".lightbox").fadeIn();
-    });
-    $(".lightbox .lightbox-close").on("click", function() {
-        $(".lightbox").fadeOut();
-    });
-
     // get window width & height
     var windowWidth = $(window).width();
     var windowHeight = $(window).height();
@@ -351,7 +343,7 @@ $(function(){
     //$(".testpoint").css(pTmuseWordPosition);
 
     $(".tube.project-users .moving-word").css(pThcWordPosition);
-    window.pushText = function(t) {
+    window.pushText = function(t, origin) {
         pUserWord(t);
         pTmuseWord(t);
         pDictWord(t);
@@ -381,24 +373,35 @@ $(function(){
             originHeight = thisBlock.height();
             originTop = thisBlock.css("top");
             originLeft = thisBlock.css("left");
-            thisBlock.css({"z-index": 9999, position: "fixed"}).animate({width: windowWidth*0.98, height: windowHeight*0.98, top: "1%", left: "1%"});
-            thisBlock.siblings(".iframe-wrapper").find(".iframe").hide();
-            thisIframe.animate({width: windowWidth*0.98-16, height: windowHeight*0.98-46});
+            thisBlock.css({"z-index": 9999, position: "fixed"}).css({width: windowWidth*0.98, height: windowHeight*0.98, top: "1%", left: "1%"});
+            thisIframe.css({width: windowWidth*0.98-16, height: windowHeight*0.98-46});
+            setTimeout(function(){
+                thisBlock.siblings(".iframe-wrapper").find(".iframe").hide();
+            }, 1000);
             $(this).find("i").removeClass("icon-zoom-in").addClass("icon-zoom-out");
         }
         else {
             thisBlock.siblings(".iframe-wrapper").find(".iframe").show();
-            thisBlock.animate({width: originWidth, height: originHeight, top: originTop, left: originLeft});
-            thisIframe.animate({width: originWidth-16, height: originHeight-46}, {
-                complete: function() {
-                    thisBlock.css({"z-index": 5, position: "absolute"});
-                }
-            });
+            thisBlock.css({width: originWidth, height: originHeight, top: originTop, left: originLeft});
+            thisIframe.css({width: originWidth-16, height: originHeight-46});
+            thisBlock.css({"z-index": 5, position: "absolute"});
             
             $(this).find("i").removeClass("icon-zoom-out").addClass("icon-zoom-in");
         }
     });
-    
+
+    //lightbox
+    $(".lightbox").hide();
+    $(".main-btn").on("click", function() {
+        $(".lightbox").fadeIn();
+    });
+    $(".lightbox .lightbox-close").on("click", function() {
+        $(".lightbox").fadeOut();
+    });
+
+    setTimeout(function(){
+        $('.content-wrapper').show();
+    }, 1);
 });
 </script>
 </body>

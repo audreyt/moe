@@ -1,8 +1,8 @@
 <- $
 
 origin = "http://direct.moedict.tw/"
-@frames = []
-for x in $('iframe').get! => @frames.push x.contentWindow.window
+frames = []
+for x in $('iframe').get! => frames.push x.contentWindow.window
 
 prev = \明
 window.id = \hub
@@ -12,10 +12,11 @@ window.post = function post (text, origin)
   return if text isnt /\S/
   return if "#prev" is "#text"
   prev := text
-  for w in @frames | w.id isnt origin => let w
-    console.log "Posting message or not to #{ w.id }"
-    #<- setTimeout _, 50ms
-    #w.postMessage prev, origin
+  window.push-text? text
+  for w in frames | w.id isnt origin => let w
+    <- window.requestAnimationFrame
+    <- setTimeout _, 1000ms
+    w.input? prev, origin
 window.output = ->
   # record?
 

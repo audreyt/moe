@@ -26,24 +26,34 @@
               return GET("SoundAlike.json", function(SoundAlike){
                 var origin, uniq;
                 origin = "http://direct.moedict.tw/";
-                window.id = 'tmuse';
+                window.id = 'ball';
                 window.reset = function(){
                   return $in.val('');
                 };
                 window.addEventListener("message", function(it){
                   return window.input(it.data, false);
                 });
-                window.input = function(it){
-                  $in.val(it);
-                  showChars(goSimilar(it));
-                  return $out.empty();
+                window.input = function(ch){
+                  var ref$;
+                  if (!(ch && Sound[ch[0]])) {
+                    return;
+                  }
+                  $in.val(ch);
+                  $out.empty();
+                  if (ch.length > 1) {
+                    ch = ch[0];
+                  }
+                  return window.showAll({
+                    ch: ch,
+                    bpmf: (ref$ = Sound[ch]) != null ? ref$[0] : void 8,
+                    radical: Radical[ch]
+                  });
                 };
                 window.output = function(it){
                   var ref$;
                   if (window.muted) {
                     return;
                   }
-                  input(it);
                   return typeof (ref$ = window.parent).post === 'function' ? ref$.post(it, window.id) : void 8;
                 };
                 function draw(ch){
@@ -78,7 +88,7 @@
                 }
                 window.renderChars = (function(){
                   function renderChars(it){
-                    var table, i$, len$, ch, radical, bpmf;
+                    var table, i$, len$, ch, radical, bpmf, ref$;
                     window.table = table = [];
                     for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
                       ch = it[i$];
@@ -86,7 +96,7 @@
                         continue;
                       }
                       radical = Radical[ch];
-                      bpmf = Sound[ch][0];
+                      bpmf = (ref$ = Sound[ch]) != null ? ref$[0] : void 8;
                       table.push({
                         ch: ch,
                         bpmf: bpmf,
@@ -99,12 +109,17 @@
                   return renderChars;
                 }());
                 window.showChars = (function(){
-                  function showChars(it){
-                    if (it) {
-                      if (!(window.location === "?" + encodeURIComponent(it) || window.location === "?" + it)) {
-                        return window.location = "?" + encodeURIComponent(it);
-                      }
+                  function showChars(chars){
+                    if (!chars) {
+                      return;
                     }
+                    if (window.location === "?" + encodeURIComponent(chars)) {
+                      return;
+                    }
+                    if (window.location === "?" + chars) {
+                      return;
+                    }
+                    return window.location.href = window.location.pathname + ("?" + encodeURIComponent(chars));
                   }
                   return showChars;
                 }());
@@ -137,24 +152,35 @@
                     ch = arg$.ch, bpmf = arg$.bpmf, radical = arg$.radical;
                     output(ch);
                     return setTimeout(function(){
-                      var sims, snds, rads, all;
-                      sims = goSimilar(ch) || '';
-                      snds = SoundAlike[replace$.call(bpmf, /[ˋˊˇ‧]/g, '')] || '';
-                      rads = RadicalSame[radical] || '';
-                      if (sims.length > 50) {
-                        sims = sims.slice(0, 50);
-                      }
-                      if (snds.length > 50) {
-                        snds = snds.slice(0, 50);
-                      }
-                      all = uniq(sims + snds + rads);
-                      if (all.length > 100) {
-                        all = all.slice(0, 100);
-                      }
-                      return showChars(all);
+                      return window.showAll({
+                        ch: ch,
+                        bpmf: bpmf,
+                        radical: radical
+                      });
                     }, 1);
                   }
                   return goChar;
+                }());
+                window.showAll = (function(){
+                  function showAll(arg$){
+                    var ch, bpmf, radical, sims, snds, rads, all;
+                    ch = arg$.ch, bpmf = arg$.bpmf, radical = arg$.radical;
+                    sims = goSimilar(ch) || '';
+                    snds = SoundAlike[replace$.call(bpmf, /[ˋˊˇ‧]/g, '')] || '';
+                    rads = RadicalSame[radical] || '';
+                    if (sims.length > 50) {
+                      sims = sims.slice(0, 50);
+                    }
+                    if (snds.length > 50) {
+                      snds = snds.slice(0, 50);
+                    }
+                    all = uniq(sims + snds + rads);
+                    if (all.length > 100) {
+                      all = all.slice(0, 100);
+                    }
+                    return showChars(all);
+                  }
+                  return showAll;
                 }());
                 window.goSimilar = (function(){
                   function goSimilar(it){

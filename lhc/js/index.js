@@ -100,12 +100,11 @@ String::permutate = ->
               $output.empty();
             };
             window.output = function(it){
+              var ref$;
               if (window.muted) {
                 return;
               }
-              if (window.parent !== window) {
-                return window.parent.postMessage(it, origin);
-              }
+              return typeof (ref$ = window.parent).post === 'function' ? ref$.post(it, window.id) : void 8;
             };
             $input = $('#input');
             $output = $('#output');
@@ -119,7 +118,7 @@ String::permutate = ->
               return join$.call(Object.keys(seen).sort(), '');
             };
             main = function(arg$){
-              var data, comps, getComps, seen, i$, len$, ch, scanned, queue, callback, count, ref$, taken, rest, c, head, keys, char;
+              var data, comps, getComps, seen, i$, len$, ch, scanned, queue, callback, count, ref$, taken, rest, c, head, keys, char, results$ = [];
               data = arg$.data;
               data = uniq($input.val() + data);
               $input.val(data);
@@ -175,11 +174,11 @@ String::permutate = ->
               $output.empty();
               for (i$ = 0, len$ = keys.length; i$ < len$; ++i$) {
                 char = keys[i$];
-                $output.append($('<li/>').css('width', ~~(window.innerWidth / keys.length) - 5).append($('<a/>', {
+                results$.push($output.append($('<li/>').css('width', ~~(window.innerWidth / keys.length) - 5).append($('<a/>', {
                   href: '#'
-                }).text(char).click(fn$)));
+                }).text(char).click(fn$))));
               }
-              return JSON.stringify(keys, void 8, 2);
+              return results$;
               function fn$(){
                 return window.output($(this).text());
               }
@@ -234,7 +233,6 @@ String::permutate = ->
               for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
                 char = it[i$];
                 lresult$ = [];
-                console.log("creating geometry for " + char);
                 randX = Math.random() * 500 - 250;
                 randY = Math.random() * 500 - 250;
                 for (i in ref$ = getShapeOf(Outlines[char])) {
