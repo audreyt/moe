@@ -7,7 +7,8 @@ body {
   padding: 0;
   position: relative;
   height: 100%;
-  background: #16161D;
+  background: #16161d url(../images/bg_body.jpg) center center;
+  background-size: cover;
 }
 
 #input {
@@ -18,7 +19,7 @@ body {
   position: absolute;
   bottom: 0;
   left: 0;
-  right: 0;
+  right: -5%;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -41,6 +42,7 @@ body {
   text-align: center;
   color: #999;
   background-color: #16161D;
+  opacity: 0.8;
   padding-top: 10px;
   padding-bottom: 10px;
   height: 100%;
@@ -49,4 +51,5 @@ body {
 #output li a:hover {
   color: #FFF;
   background-color: #333;
+  opacity: 1;
 }

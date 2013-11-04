@@ -17,7 +17,6 @@ latMAX = 25
 
 origin = "http://direct.moedict.tw/"
 window.id = \map
-window.addEventListener("message", -> window.input it.data , false)
 
 $(\body).on \click 'a.poi' -> output("#{ $(@).text() }")
 $(\#submitStr).click ->
@@ -44,9 +43,9 @@ window.output = ->
   window.parent.post? it, window.id
 
 DATA = {}
-do
-  <- $.getJSON \orig-chars.json
-  DATA['j'] = it
+#do
+#  <- $.getJSON \orig-chars.json
+#  DATA['j'] = it
 
 window.STR2GEO = STR2GEO = ->
   long = DATA['j'].indexOf(it[0])
