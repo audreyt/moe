@@ -20,7 +20,7 @@ String::permutate = ->
   ret
 */
 (function(){
-  var buffer, bufferedMsgsFirst, renderer, scene, camera, light, render, controls, materialFront, material, blockMaterial, extrusionSettings, split$ = ''.split, join$ = [].join;
+  var buffer, bufferedMsgsFirst, renderer, scene, camera, light, render, controls, materialFront, material, blockMaterial, extrusionSettings, split$ = ''.split;
   buffer = [];
   bufferedMsgsFirst = function(arg$){
     var data;
@@ -110,18 +110,25 @@ String::permutate = ->
             $input = $('#input');
             $output = $('#output');
             window.uniq = uniq = function(it){
-              var seen, i$, ref$, len$, w;
+              var seen, result, i$, ref$, len$, w;
               seen = {};
+              result = '';
               for (i$ = 0, len$ = (ref$ = split$.call(it, '')).length; i$ < len$; ++i$) {
                 w = ref$[i$];
+                if (!seen[w]) {
+                  result += w;
+                }
                 seen[w] = true;
               }
-              return join$.call(Object.keys(seen).sort(), '');
+              return result;
             };
             main = function(arg$){
-              var data, comps, getComps, seen, i$, len$, ch, scanned, queue, callback, count, ref$, taken, rest, c, head, keys, char, results$ = [];
+              var data, comps, getComps, seen, i$, len$, ch, scanned, queue, callback, count, ref$, taken, rest, c, head, keys, k, char;
               data = arg$.data;
               data = uniq($input.val() + data);
+              if (data.length > 10) {
+                data = data.substr(-10);
+              }
               $input.val(data);
               cCounter = 0;
               comps = [];
@@ -135,8 +142,14 @@ String::permutate = ->
                 }
                 return it + out;
               };
-              comps = uniq(getComps(data));
               seen = {};
+              for (i$ = 0, len$ = data.length; i$ < len$; ++i$) {
+                ch = data[i$];
+                if (in$(ch, OrigChars)) {
+                  seen[ch] = true;
+                }
+              }
+              comps = uniq(getComps(data));
               for (i$ = 0, len$ = comps.length; i$ < len$; ++i$) {
                 ch = comps[i$];
                 if (in$(ch, OrigChars)) {
@@ -170,16 +183,22 @@ String::permutate = ->
                 queue.push([taken, rest]);
                 queue.push([taken + head, rest]);
               }
-              keys = Object.keys(seen);
-              keys = keys.slice(0, 10);
+              keys = data;
+              for (k in seen) {
+                if (!~data.indexOf(k)) {
+                  keys += k;
+                }
+              }
+              if (keys.length > 10) {
+                keys = keys.substr(-10);
+              }
               $output.empty();
               for (i$ = 0, len$ = keys.length; i$ < len$; ++i$) {
                 char = keys[i$];
-                results$.push((fn$.call(this, char)));
+                (fn$.call(this, char));
               }
-              return results$;
               function fn$(char){
-                return $output.append($('<li/>').css({
+                $output.append($('<li/>').css({
                   width: 90 / keys.length + "%"
                 }).append($('<a/>', {
                   href: '#'

@@ -110,10 +110,14 @@ $input = $ \#input
 $output = $ \#output
 window.uniq = uniq = ->
   seen = {}
-  for w in it / '' => seen[w] = true
-  Object.keys(seen).sort! * ''
+  result = ''
+  for w in it / ''
+    result += w unless seen[w]
+    seen[w] = true
+  return result
 main = ({data}) ->
   data = uniq($input.val! + data)
+  data.=substr(-10) if data.length > 10
   $input.val data
   cCounter := 0
   comps = []
@@ -123,8 +127,9 @@ main = ({data}) ->
       comps = CharComp[char]
       out += if CharComp[char] then get-comps CharComp[char] else char
     it + out
-  comps = uniq(get-comps data)
   seen = {}
+  for ch in data => seen[ch] = true if ch in OrigChars
+  comps = uniq(get-comps data)
   for ch in comps => seen[ch] = true if ch in OrigChars
   scanned = { '' : true }
   queue = []
@@ -143,13 +148,16 @@ main = ({data}) ->
     rest.=substr(1)
     queue.push [taken, rest]
     queue.push [taken + head, rest]
-  keys = Object.keys(seen)
-  keys = keys.slice(0, 10)
+  keys = data
+  for k of seen | not ~data.indexOf(k)
+    keys += k
+  keys.=substr(-10) if keys.length > 10
   $output.empty!
   for char in keys => let char
     $output.append $(\<li/>).css(width: "#{ 90 / keys.length }%").append $(\<a/> href: \#).text(char).click ->
       window.doAddChar char
       window.output char
+  return
 getShapeOf = ->
   ret = []
   for stroke in (it || [])
