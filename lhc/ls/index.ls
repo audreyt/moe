@@ -93,7 +93,7 @@ Outlines  <- $.get \./data/Outlines.json
 Centroids <- $.get \./data/Centroids.json
 #moe       <- $.get \./data/moe.json
 ###
-# main function for Large Henzi Collider
+# main function for Large Hanzi Collider
 ###
 # API
 cTime = 2.0
@@ -146,8 +146,10 @@ main = ({data}) ->
   keys = Object.keys(seen)
   keys = keys.slice(0, 10)
   $output.empty!
-  for char in keys
-    $output.append $(\<li/>).css(\width, ~~(window.innerWidth / keys.length) - 5).append $(\<a/> href: \#).text(char).click -> window.output $(@).text!
+  for char in keys => let char
+    $output.append $(\<li/>).css(width: "#{ 90 / keys.length }%").append $(\<a/> href: \#).text(char).click ->
+      window.doAddChar char
+      window.output char
 getShapeOf = ->
   ret = []
   for stroke in (it || [])
@@ -178,7 +180,7 @@ getShapeOf = ->
               break
     ret.push shape
   ret
-doAddChar = ->
+window.doAddChar = ->
   for char in it
     # console.log "creating geometry for #char"
     randX = Math.random() * 500 - 250
@@ -202,7 +204,7 @@ doAddChar = ->
       mesh._physijs.linearVelocity.z = 200
       scene.add mesh
 scene.addEventListener \update, ->
-  doAddChar $input.val! if (cCounter++ % ~~(cTime * 120)) is 0
+  window.doAddChar $input.val! if (cCounter++ % ~~(cTime * 120)) is 0
 window.input := -> main {data: it}
 window.removeEventListener \message, buffered-msgs-first
 for data in buffer => main {data}

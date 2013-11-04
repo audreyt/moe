@@ -91,7 +91,7 @@ String::permutate = ->
       return $.get('./data/orig-chars.json', function(OrigChars){
         return $.get('./data/Outlines.json', function(Outlines){
           return $.get('./data/Centroids.json', function(Centroids){
-            var cTime, cCounter, origin, $input, $output, uniq, main, getShapeOf, doAddChar, i$, ref$, len$, data;
+            var cTime, cCounter, origin, $input, $output, uniq, main, getShapeOf, i$, ref$, len$, data;
             cTime = 2.0;
             cCounter = 0;
             origin = "http://direct.moedict.tw/";
@@ -175,13 +175,18 @@ String::permutate = ->
               $output.empty();
               for (i$ = 0, len$ = keys.length; i$ < len$; ++i$) {
                 char = keys[i$];
-                results$.push($output.append($('<li/>').css('width', ~~(window.innerWidth / keys.length) - 5).append($('<a/>', {
-                  href: '#'
-                }).text(char).click(fn$))));
+                results$.push((fn$.call(this, char)));
               }
               return results$;
-              function fn$(){
-                return window.output($(this).text());
+              function fn$(char){
+                return $output.append($('<li/>').css({
+                  width: 90 / keys.length + "%"
+                }).append($('<a/>', {
+                  href: '#'
+                }).text(char).click(function(){
+                  window.doAddChar(char);
+                  return window.output(char);
+                })));
               }
             };
             getShapeOf = function(it){
@@ -229,7 +234,7 @@ String::permutate = ->
                 return parseInt(tokens.shift(), 10);
               }
             };
-            doAddChar = function(it){
+            window.doAddChar = function(it){
               var i$, len$, char, lresult$, randX, randY, i, ref$, shape, geometry, offset, m, mesh, results$ = [];
               for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
                 char = it[i$];
@@ -259,7 +264,7 @@ String::permutate = ->
             };
             scene.addEventListener('update', function(){
               if (cCounter++ % ~~(cTime * 120) === 0) {
-                return doAddChar($input.val());
+                return window.doAddChar($input.val());
               }
             });
             window.input = function(it){
