@@ -7,9 +7,9 @@ $ \#submit .click -> input $in.val! if $in.val!
 
 origin = "http://direct.moedict.tw/"
 window.id = \tmuse
-window.colors = [[0,0,0],[87,87,87],[173,35,35],[42,75,215],[29,105,20],[129,38,192],[160,160,160],[129,197,122],[157,175,255],[41,208,208],[255,146,51],[255,238,51],[233,222,187],[255,205,243]]
+window.colors = [[42,75,215],[29,105,20],[129,38,192],[129,197,122],[157,175,255],[41,208,208],[255,146,51],[255,238,51],[233,222,187],[255,205,243]]
 window.reset = -> $in.val ''
-window.addEventListener("message", -> window.input it.data, false);
+window.addEventListener("message", -> window.input it.data, false)
 window.input = ->
   $in.val it
   json <- GET "a/#it.json"
@@ -31,7 +31,7 @@ window.input = ->
   renderer.setSize(window.innerWidth, window.innerHeight)
   $(\#canvas).html(renderer.domElement)
 
-  camera.position.z = 5;
+  camera.position.z = 4.2
   multiplier = 5
   objs = {}
 #clustering & coloring
@@ -52,28 +52,27 @@ window.input = ->
     sphere_geo = new THREE.SphereGeometry(obj_radius[n.label]*0.1 + 0.05,10,10)
     mat = new THREE.MeshBasicMaterial({color: 0x0000ff})
     mat.color.setRGB(obj_coloring[n.label].r, obj_coloring[n.label].g, obj_coloring[n.label].b)
+    mat.wireframe = true
     sphere = new THREE.Mesh(sphere_geo, mat)
     sphere.position.x = coords[0]*multiplier
     sphere.position.y = coords[1]*multiplier
     sphere.position.z = coords[2]*multiplier
-    #scene.add(sphere)
-    #objs[n.label] = sphere
+    scene.add( sphere )
 
-    spritey = makeTextSprite( " #{n.label} ", obj_coloring[n.label]);
-    spritey.position = sphere.position.clone().multiplyScalar(1.01);
-    # scene.add(sphere)
-    window.labels.push spritey
-    scene.add( spritey );
-    window.sprite_id_to_label[spritey.id] = n.label
+    spritey = makeTextSprite( " #{n.label} ", obj_coloring[n.label])
+    spritey.position = sphere.position.clone().multiplyScalar(1);
+    window.labels.push sphere
+    scene.add( spritey )
+    window.sprite_id_to_label[sphere.id] = n.label
 
 #draw edges
   edges = json.graph_json.edges
   for edge in edges
-    mat = new THREE.LineBasicMaterial({color: 0x000000, linewidth:2})
+    mat = new THREE.LineBasicMaterial({color: 0x000000, linewidth: 1})
     color = obj_coloring[nodes[edge.s].label]
     mat.color.setRGB(color.r,color.g,color.b)
     mat.transparent = true
-    mat.opacity = 0.05
+    mat.opacity = 0.2
     sv = nodes[edge.s].coords
     tv = nodes[edge.t].coords
     geometry = new THREE.Geometry()
@@ -82,21 +81,30 @@ window.input = ->
 
     line = new THREE.Line(geometry, mat)
     scene.add(line)
-  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls = new THREE.TrackballControls(camera, renderer.domElement)
+  controls.rotateSpeed = 0.5
 
   render = ->
-    requestAnimationFrame(render);
-    renderer.render(scene, camera);
+    renderer.render(scene, camera)
+    controls.update!
+    window.pointerDetectRay = projector.pickingRay(window.mouse2D.clone!, camera);
+    requestAnimationFrame(render)
 
-  renderer.setClearColor(0x222222, 1);
-  light = new THREE.PointLight(0xffffff);
-  light.position.set(-100,200,100);
-  scene.add(light);
-  render!;
+  renderer.setClearColor(0x111118, 1)
+  scene.add new THREE.AmbientLight(0x333333)
+  light = new THREE.DirectionalLight(0xffffff)
+  light.position.set(0, 2000, 500)
+  light.target.position.set(0, 0, 0)
 
-  document.addEventListener( 'mousedown', window.onDocumentMouseDown, false );
-  document.addEventListener( 'doubleclick', window.onDocumentMouseUp, false );
-  document.addEventListener( 'dblclick', window.onDocumentMouseUp, false );
+  window.pointerDetectRay = new THREE.Raycaster!
+  window.pointerDetectRay.ray.direction.set(0, -1, 0);
+  window.projector = new THREE.Projector!
+  window.mouse2D = new THREE.Vector3(0, 0, 0)
+
+  render!
+
+  document.addEventListener( 'click', window.onDocumentClick, false )
+  document.addEventListener( 'mousemove', window.onDocumentMouseMove, false )
 
 $(window).resize ->
   window.renderer?setSize(window.innerWidth, window.innerHeight)
@@ -124,75 +132,68 @@ GET = (url, data, onSuccess, dataType) ->
 window.makeTextSprite = ( message, {r, g, b}, parameters ) ->
   parameters = {} if parameters === undefined
 
-  fontface = "Lantinghei TC";
-  fontsize = 24;
-  borderThickness = 1;
-  borderColor = { r:0, g:0, b:0, a:1.0 };
-  backgroundColor = { r: Math.round(200 + r * 55), g: Math.round(200 + g * 55), b: Math.round(200 + b * 55), a:1.0 };
+  fontface = 'Heiti TC'
+  fontsize = 32
+  borderThickness = 1
+  borderColor = { r:0, g:0, b:0, a:1.0 }
+  backgroundColor = { r: Math.round(155 + r * 100), g: Math.round(155 + g * 100), b: Math.round(155 + b * 100), a:0.8 }
   #console.log JSON.stringify backgroundColor,,2
 
-  spriteAlignment = THREE.SpriteAlignment.topLeft;
+  spriteAlignment = THREE.SpriteAlignment.topLeft
 
-  canvas = document.createElement('canvas');
-  context = canvas.getContext('2d');
-  context.font = "Bold " + fontsize + "px " + fontface;
+  canvas = document.createElement('canvas')
+  context = canvas.getContext('2d')
+  context.font = "Bold " + fontsize + "px " + fontface
 
   # get size data (height depends only on font size)
-  metrics = context.measureText( message );
-  textWidth = metrics.width;
+  metrics = context.measureText( message )
+  textWidth = metrics.width
 
   # background color
-  context.fillStyle = "rgba(" + backgroundColor.r + "," + backgroundColor.g + "," + backgroundColor.b + "," + backgroundColor.a + ")";
+  context.fillStyle = "rgba(" + backgroundColor.r + "," + backgroundColor.g + "," + backgroundColor.b + "," + backgroundColor.a + ")"
   # border color
-  context.strokeStyle = "rgba(" + borderColor.r + "," + borderColor.g + "," + borderColor.b + "," + borderColor.a + ")";
+  context.strokeStyle = "rgba(" + borderColor.r + "," + borderColor.g + "," + borderColor.b + "," + borderColor.a + ")"
 
-  context.lineWidth = borderThickness;
-  window.roundRect(context, borderThickness/2, borderThickness/2, textWidth + borderThickness, fontsize * 1.4 + borderThickness, 6);
+  context.lineWidth = borderThickness
+  window.roundRect(context, borderThickness/2, borderThickness/2, textWidth + borderThickness, fontsize * 1.4 + borderThickness, 6)
   # 1.4 is extra height factor for text below baseline: g,j,p,q.
 
   # text color
-  context.fillStyle = "rgba(0, 0, 0, 1.0)";
-
-  context.fillText( message, borderThickness, fontsize + borderThickness);
+  context.fillStyle = "rgba(0, 0, 0, 1.0)"
+  context.fillText( message, borderThickness, fontsize + borderThickness)
 
   # canvas contents will be used for a texture
-  texture = new THREE.Texture(canvas) 
-  texture.needsUpdate = true;
+  texture = new THREE.Texture(canvas)
+  texture.needsUpdate = true
 
-  spriteMaterial = new THREE.SpriteMaterial( { map: texture, useScreenCoordinates: false, alignment: spriteAlignment } );
-  sprite = new THREE.Sprite( spriteMaterial );
-  sprite.scale.set(2, 1, 0.04)
+  spriteMaterial = new THREE.SpriteMaterial( { map: texture, useScreenCoordinates: false, alignment: spriteAlignment } )
+  sprite = new THREE.Sprite( spriteMaterial )
+  sprite.scale.set(2, 1, 1)
   return sprite
 
 window.roundRect = (ctx, x, y, w, h, r) ->
-  ctx.beginPath();
-  ctx.moveTo(x+r, y);
-  ctx.lineTo(x+w - r, y);
-  ctx.quadraticCurveTo(x+w, y, x+w, y+r);
-  ctx.lineTo(x+w, y+h - r);
-  ctx.quadraticCurveTo(x+w, y+h, x+w - r, y+h);
-  ctx.lineTo(x+r, y+h);
-  ctx.quadraticCurveTo(x, y+h, x, y+h - r);
-  ctx.lineTo(x, y+r);
-  ctx.quadraticCurveTo(x, y, x+r, y);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();   
+  ctx.beginPath()
+  ctx.moveTo(x+r, y)
+  ctx.lineTo(x+w - r, y)
+  ctx.quadraticCurveTo(x+w, y, x+w, y+r)
+  ctx.lineTo(x+w, y+h - r)
+  ctx.quadraticCurveTo(x+w, y+h, x+w - r, y+h)
+  ctx.lineTo(x+r, y+h)
+  ctx.quadraticCurveTo(x, y+h, x, y+h - r)
+  ctx.lineTo(x, y+r)
+  ctx.quadraticCurveTo(x, y, x+r, y)
+  ctx.closePath()
+  ctx.fill()
+  ctx.stroke();
 
-window.onDocumentMouseDown = ( event ) ->
+window.onDocumentMouseMove = ( event ) ->
   event.preventDefault();
+  window.mouse2D.x = (event.clientX / window.innerWidth) * 2 - 1;
+  window.mouse2D.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-  vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
-  projector = new THREE.Projector()
-  projector.unprojectVector( vector, camera );
-
-window.onDocumentMouseUp = ( event ) ->
-  event.preventDefault();
-  vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
-  raycaster = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
-
-  intersects = raycaster.intersectObjects( window.labels );
+window.onDocumentClick = ( event ) ->
+  intersects = window.pointerDetectRay.intersectObjects window.labels
   if intersects.length
-    window.output window.sprite_id_to_label[intersects[0].object.id]
+    window.output window.sprite_id_to_label[intersects.0.object.id]
 
 window.input $in.val!

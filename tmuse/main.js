@@ -11,7 +11,7 @@
     });
     origin = "http://direct.moedict.tw/";
     window.id = 'tmuse';
-    window.colors = [[0, 0, 0], [87, 87, 87], [173, 35, 35], [42, 75, 215], [29, 105, 20], [129, 38, 192], [160, 160, 160], [129, 197, 122], [157, 175, 255], [41, 208, 208], [255, 146, 51], [255, 238, 51], [233, 222, 187], [255, 205, 243]];
+    window.colors = [[42, 75, 215], [29, 105, 20], [129, 38, 192], [129, 197, 122], [157, 175, 255], [41, 208, 208], [255, 146, 51], [255, 238, 51], [233, 222, 187], [255, 205, 243]];
     window.reset = function(){
       return $in.val('');
     };
@@ -45,7 +45,7 @@
         window.renderer = renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         $('#canvas').html(renderer.domElement);
-        camera.position.z = 5;
+        camera.position.z = 4.2;
         multiplier = 5;
         objs = {};
         obj_coloring = {};
@@ -77,27 +77,29 @@
             color: 0x0000ff
           });
           mat.color.setRGB(obj_coloring[n.label].r, obj_coloring[n.label].g, obj_coloring[n.label].b);
+          mat.wireframe = true;
           sphere = new THREE.Mesh(sphere_geo, mat);
           sphere.position.x = coords[0] * multiplier;
           sphere.position.y = coords[1] * multiplier;
           sphere.position.z = coords[2] * multiplier;
+          scene.add(sphere);
           spritey = makeTextSprite(" " + n.label + " ", obj_coloring[n.label]);
-          spritey.position = sphere.position.clone().multiplyScalar(1.01);
-          window.labels.push(spritey);
+          spritey.position = sphere.position.clone().multiplyScalar(1);
+          window.labels.push(sphere);
           scene.add(spritey);
-          window.sprite_id_to_label[spritey.id] = n.label;
+          window.sprite_id_to_label[sphere.id] = n.label;
         }
         edges = json.graph_json.edges;
         for (i$ = 0, len$ = edges.length; i$ < len$; ++i$) {
           edge = edges[i$];
           mat = new THREE.LineBasicMaterial({
             color: 0x000000,
-            linewidth: 2
+            linewidth: 1
           });
           color = obj_coloring[nodes[edge.s].label];
           mat.color.setRGB(color.r, color.g, color.b);
           mat.transparent = true;
-          mat.opacity = 0.05;
+          mat.opacity = 0.2;
           sv = nodes[edge.s].coords;
           tv = nodes[edge.t].coords;
           geometry = new THREE.Geometry();
@@ -106,19 +108,26 @@
           line = new THREE.Line(geometry, mat);
           scene.add(line);
         }
-        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls = new THREE.TrackballControls(camera, renderer.domElement);
+        controls.rotateSpeed = 0.5;
         render = function(){
-          requestAnimationFrame(render);
-          return renderer.render(scene, camera);
+          renderer.render(scene, camera);
+          controls.update();
+          window.pointerDetectRay = projector.pickingRay(window.mouse2D.clone(), camera);
+          return requestAnimationFrame(render);
         };
-        renderer.setClearColor(0x222222, 1);
-        light = new THREE.PointLight(0xffffff);
-        light.position.set(-100, 200, 100);
-        scene.add(light);
+        renderer.setClearColor(0x111118, 1);
+        scene.add(new THREE.AmbientLight(0x333333));
+        light = new THREE.DirectionalLight(0xffffff);
+        light.position.set(0, 2000, 500);
+        light.target.position.set(0, 0, 0);
+        window.pointerDetectRay = new THREE.Raycaster();
+        window.pointerDetectRay.ray.direction.set(0, -1, 0);
+        window.projector = new THREE.Projector();
+        window.mouse2D = new THREE.Vector3(0, 0, 0);
         render();
-        document.addEventListener('mousedown', window.onDocumentMouseDown, false);
-        document.addEventListener('doubleclick', window.onDocumentMouseUp, false);
-        return document.addEventListener('dblclick', window.onDocumentMouseUp, false);
+        document.addEventListener('click', window.onDocumentClick, false);
+        return document.addEventListener('mousemove', window.onDocumentMouseMove, false);
         function fn$(){
           return window.output($(this).text());
         }
@@ -161,8 +170,8 @@
       if (deepEq$(parameters, undefined, '===')) {
         parameters = {};
       }
-      fontface = "Lantinghei TC";
-      fontsize = 24;
+      fontface = 'Heiti TC';
+      fontsize = 32;
       borderThickness = 1;
       borderColor = {
         r: 0,
@@ -171,10 +180,10 @@
         a: 1.0
       };
       backgroundColor = {
-        r: Math.round(200 + r * 55),
-        g: Math.round(200 + g * 55),
-        b: Math.round(200 + b * 55),
-        a: 1.0
+        r: Math.round(155 + r * 100),
+        g: Math.round(155 + g * 100),
+        b: Math.round(155 + b * 100),
+        a: 0.8
       };
       spriteAlignment = THREE.SpriteAlignment.topLeft;
       canvas = document.createElement('canvas');
@@ -196,7 +205,7 @@
         alignment: spriteAlignment
       });
       sprite = new THREE.Sprite(spriteMaterial);
-      sprite.scale.set(2, 1, 0.04);
+      sprite.scale.set(2, 1, 1);
       return sprite;
     };
     window.roundRect = function(ctx, x, y, w, h, r){
@@ -214,19 +223,14 @@
       ctx.fill();
       return ctx.stroke();
     };
-    window.onDocumentMouseDown = function(event){
-      var vector, projector;
+    window.onDocumentMouseMove = function(event){
       event.preventDefault();
-      vector = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5);
-      projector = new THREE.Projector();
-      return projector.unprojectVector(vector, camera);
+      window.mouse2D.x = (event.clientX / window.innerWidth) * 2 - 1;
+      return window.mouse2D.y = -(event.clientY / window.innerHeight) * 2 + 1;
     };
-    window.onDocumentMouseUp = function(event){
-      var vector, raycaster, intersects;
-      event.preventDefault();
-      vector = new THREE.Vector3((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1, 0.5);
-      raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-      intersects = raycaster.intersectObjects(window.labels);
+    window.onDocumentClick = function(event){
+      var intersects;
+      intersects = window.pointerDetectRay.intersectObjects(window.labels);
       if (intersects.length) {
         return window.output(window.sprite_id_to_label[intersects[0].object.id]);
       }

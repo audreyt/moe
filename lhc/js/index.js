@@ -184,10 +184,10 @@ String::permutate = ->
               }
             };
             getShapeOf = function(it){
-              var ret, i$, len$, stroke, shape, path, tokens, shiftNum, isOutline, cmd;
+              var ret, i$, ref$, len$, stroke, shape, path, tokens, shiftNum, isOutline, cmd;
               ret = [];
-              for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
-                stroke = it[i$];
+              for (i$ = 0, len$ = (ref$ = it || []).length; i$ < len$; ++i$) {
+                stroke = ref$[i$];
                 shape = new THREE.Shape;
                 path = new THREE.Path;
                 tokens = stroke.split(' ');

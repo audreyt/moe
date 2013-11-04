@@ -9,7 +9,7 @@ window.id = \hub
 window.reset = -> input ''
 #window.addEventListener("message", -> window.input it.data, false);
 window.post = function post (text, origin)
-  return if text isnt /\S/
+  return if text is /^[-a-zA-Z\s]*$/
   return if "#prev" is "#text"
   prev := text
   window.push-text? text

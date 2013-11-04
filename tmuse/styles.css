@@ -1,5 +1,7 @@
 body {
-  background: #333333;
+  background: #111122;
+  margin: 0;
+  border: 0;
 }
 
 h1, input, button {

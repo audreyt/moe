@@ -16,7 +16,7 @@
     window.post = (function(){
       function post(text, origin){
         var i$, ref$, len$, w, results$ = [];
-        if (!/\S/.test(text)) {
+        if (/^[-a-zA-Z\s]*$/.exec(text)) {
           return;
         }
         if (prev + "" === text + "") {

@@ -149,7 +149,7 @@ main = ({data}) ->
     $output.append $(\<li/>).css(\width, ~~(window.innerWidth / keys.length) - 5).append $(\<a/> href: \#).text(char).click -> window.output $(@).text!
 getShapeOf = ->
   ret = []
-  for stroke in it
+  for stroke in (it || [])
     shape = new THREE.Shape
     path = new THREE.Path
     tokens = stroke.split ' '
