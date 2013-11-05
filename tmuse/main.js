@@ -49,7 +49,9 @@
         obj_radius = {};
         clustering = json.clustering_json;
         window.labels = [];
+        window.topic = null;
         window.sprite_id_to_label = {};
+        window.sprite_id_to_sprite = {};
         for (i$ = 0, len$ = clustering.length; i$ < len$; ++i$) {
           i = i$;
           cluster = clustering[i$];
@@ -85,6 +87,7 @@
           window.labels.push(sphere);
           scene.add(spritey);
           window.sprite_id_to_label[sphere.id] = n.label;
+          window.sprite_id_to_sprite[sphere.id] = spritey;
         }
         edges = json.graph_json.edges;
         for (i$ = 0, len$ = edges.length; i$ < len$; ++i$) {
@@ -168,7 +171,7 @@
         parameters = {};
       }
       fontface = 'Heiti TC';
-      fontsize = 32;
+      fontsize = 64;
       borderThickness = 1;
       borderColor = {
         r: 0,
@@ -202,7 +205,7 @@
         alignment: spriteAlignment
       });
       sprite = new THREE.Sprite(spriteMaterial);
-      sprite.scale.set(2, 1, 1);
+      sprite.scale.set(1, 0.5, 1);
       return sprite;
     };
     window.roundRect = function(ctx, x, y, w, h, r){
@@ -221,9 +224,34 @@
       return ctx.stroke();
     };
     window.onDocumentMouseMove = function(event){
+      var intersects, spritey;
       event.preventDefault();
       window.mouse2D.x = (event.clientX / window.innerWidth) * 2 - 1;
-      return window.mouse2D.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      window.mouse2D.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      intersects = window.pointerDetectRay.intersectObjects(window.labels);
+      if (topic && intersects.length && intersects[0].object.id === topic.id) {
+        return;
+      }
+      if (topic) {
+        topic.material.wireframeLinewidth = 1;
+        spritey = window.sprite_id_to_sprite[topic.id];
+        spritey.scale.x = 1;
+        spritey.scale.y = 0.5;
+        spritey.rotation = 0;
+      }
+      if (intersects.length) {
+        document.body.style.cursor = 'pointer';
+        window.topic = intersects[0].object;
+        topic.material.wireframeLinewidth = 2;
+        spritey = window.sprite_id_to_sprite[topic.id];
+        spritey.scale.x = 2;
+        spritey.scale.y = 1;
+        spritey.rotation = 0.1;
+        return window.x = spritey;
+      } else {
+        window.topic = null;
+        return document.body.style.cursor = 'move';
+      }
     };
     window.onDocumentClick = function(event){
       var intersects;
