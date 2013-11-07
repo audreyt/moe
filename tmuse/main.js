@@ -139,10 +139,11 @@
           }
         }
         material = new THREE.ParticleBasicMaterial({
-          size: 2,
           sizeAttenuation: true,
-          depthWrite: false
+          depthWrite: false,
+          size: 2
         });
+        material.color.setRGB(0.6, 0.6, 0.4);
         particles = new THREE.ParticleSystem(geometry, material);
         particles.renderDepth = 0;
         scene.add(particles);

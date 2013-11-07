@@ -113,7 +113,8 @@ window.input = ->
       vertex.z = 1000 * Math.sin(2 * Math.random()-1)
       distance = vertex.x * vertex.x + vertex.y * vertex.y + vertex.z * vertex.z
       geometry.vertices.push( vertex );
-  material = new THREE.ParticleBasicMaterial size: 1, sizeAttenuation: true, depthWrite: false
+  material = new THREE.ParticleBasicMaterial { +sizeAttenuation, -depthWrite, size: 2 }
+  material.color.setRGB(0.6, 0.6, 0.4)
   particles = new THREE.ParticleSystem( geometry, material )
   particles.renderDepth = 0
   scene.add particles
