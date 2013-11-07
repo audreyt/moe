@@ -30,7 +30,7 @@ window.init = function init(table)
       number.className = 'number'
     else
       number.className = 'number radical'
-    number.textContent = strokes || radical
+    number.textContent = strokes || radical || ch
     element.appendChild( number )
     symbol = document.createElement( 'div' )
     symbol.className = 'symbol'
@@ -66,15 +66,15 @@ window.init = function init(table)
   distance = radius / 2
   distance = 300 if distance < 300
   for obj, i in objects
-    phi = i * 0.175 + Math.PI
+    phi = (objects.length - i) * 0.175 + Math.PI
     object = new THREE.Object3D()
     object.position.x = distance * 2.5 * Math.sin( phi )
-    object.position.y = - ( i * 8 ) + ( distance )
+    object.position.y = - ( (objects.length - i) * 8 ) + ( distance )
     object.position.z = distance * 2 * Math.cos( phi )
     vector.x = object.position.x * 2.5
     vector.y = object.position.y
     vector.z = object.position.z * 2
-    object.lookAt( vector )
+    object.lookAt( camera.position )
     targets.helix.push( object )
 
   distance = radius / 2

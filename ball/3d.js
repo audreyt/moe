@@ -61,7 +61,7 @@
         } else {
           number.className = 'number radical';
         }
-        number.textContent = strokes || radical;
+        number.textContent = strokes || radical || ch;
         element.appendChild(number);
         symbol = document.createElement('div');
         symbol.className = 'symbol';
@@ -104,15 +104,15 @@
       for (i$ = 0, len$ = (ref$ = objects).length; i$ < len$; ++i$) {
         i = i$;
         obj = ref$[i$];
-        phi = i * 0.175 + Math.PI;
+        phi = (objects.length - i) * 0.175 + Math.PI;
         object = new THREE.Object3D();
         object.position.x = distance * 2.5 * Math.sin(phi);
-        object.position.y = -(i * 8) + distance;
+        object.position.y = -((objects.length - i) * 8) + distance;
         object.position.z = distance * 2 * Math.cos(phi);
         vector.x = object.position.x * 2.5;
         vector.y = object.position.y;
         vector.z = object.position.z * 2;
-        object.lookAt(vector);
+        object.lookAt(camera.position);
         targets.helix.push(object);
       }
       distance = radius / 2;
