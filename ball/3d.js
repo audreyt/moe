@@ -11,26 +11,43 @@
   };
   window.init = (function(){
     function init(table){
-      var l, radius, camera, scene, i$, len$, entry, ch, radical, strokes, bpmf, element, number, symbol, details, object, vector, ref$, i, obj, phi, theta, distance, renderer, controls, button;
+      var l, radius, camera, scene, i$, len$, entry, ch, radical, strokes, bpmfs, element, number, symbol, j$, len1$, idx, bpmf, details, object, vector, ref$, i, obj, phi, theta, distance, renderer, controls, button;
       $('#container').remove();
       $('<div/>', {
         id: 'container'
       }).prependTo($('body'));
-      $('#container').on('click', '.element', function(){
+      $('#container').on('click', '.symbol', function(){
         return goChar({
-          ch: $('.symbol', this).text(),
-          radical: $('.radical', this).text() || $('.symbol', this).text(),
-          bpmf: $('.details', this).text()
+          ch: $(this).text()
+        });
+      });
+      $('#container').on('click', '.radical', function(){
+        return goChar({
+          radical: $(this).text()
+        });
+      });
+      $('#container').on('click', '.details', function(){
+        return goChar({
+          bpmf: $(this).text()
         });
       });
       l = table.length;
       radius = Math.sqrt(l) * 56;
       window.camera = camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, radius * 6.25);
       camera.position.z = radius * 2;
+      if (l <= 25) {
+        camera.position.z = radius * 0.8;
+      }
+      if (l <= 10) {
+        camera.position.z = radius * 0.4;
+      }
+      if (l <= 5) {
+        camera.position.z = radius * 0.2;
+      }
       window.scene = scene = new THREE.Scene();
       for (i$ = 0, len$ = table.length; i$ < len$; ++i$) {
         entry = table[i$];
-        ch = entry.ch, radical = entry.radical, strokes = entry.strokes, bpmf = entry.bpmf;
+        ch = entry.ch, radical = entry.radical, strokes = entry.strokes, bpmfs = entry.bpmfs;
         $(element).data(entry);
         element = document.createElement('div');
         element.className = 'element';
@@ -50,10 +67,14 @@
         symbol.className = 'symbol';
         symbol.textContent = ch;
         element.appendChild(symbol);
-        details = document.createElement('div');
-        details.className = 'details';
-        details.innerHTML = bpmf;
-        element.appendChild(details);
+        for (j$ = 0, len1$ = bpmfs.length; j$ < len1$; ++j$) {
+          idx = j$;
+          bpmf = bpmfs[j$];
+          details = document.createElement('div');
+          details.className = "details idx-" + idx + " total-" + bpmfs.length;
+          details.innerHTML = bpmf;
+          element.appendChild(details);
+        }
         object = new THREE.CSS3DObject(element);
         object.position.x = Math.random() * (radius * 5) - radius * 2.5;
         object.position.y = Math.random() * (radius * 5) - radius * 2.5;
@@ -85,10 +106,10 @@
         obj = ref$[i$];
         phi = i * 0.175 + Math.PI;
         object = new THREE.Object3D();
-        object.position.x = distance * 2 * Math.sin(phi);
+        object.position.x = distance * 2.5 * Math.sin(phi);
         object.position.y = -(i * 8) + distance;
         object.position.z = distance * 2 * Math.cos(phi);
-        vector.x = object.position.x * 2;
+        vector.x = object.position.x * 2.5;
         vector.y = object.position.y;
         vector.z = object.position.z * 2;
         object.lookAt(vector);
@@ -103,7 +124,7 @@
         obj = ref$[i$];
         object = new THREE.Object3D();
         object.position.x = (i % 5) * distance - distance * 2;
-        object.position.y = (0 - (Math.floor(i / 5) % 5) * distance) + distance * 2;
+        object.position.y = (0 - (Math.floor(i / 5) % 5) * distance * 1.2) + distance * 2;
         object.position.z = Math.floor(i / 25) * (distance * 2) - 4 * distance;
         targets.grid.push(object);
       }
@@ -118,21 +139,32 @@
       button.addEventListener('click', function(){
         $('#menu button').removeClass();
         $('#sphere').addClass("active");
+        camera.position.z = radius * 2;
         return transform(targets.sphere, 2000);
       }, false);
       button = document.getElementById('helix');
       button.addEventListener('click', function(){
         $('#menu button').removeClass();
         $('#helix').addClass("active");
+        camera.position.z = radius * 2;
         return transform(targets.helix, 2000);
       }, false);
       button = document.getElementById('grid');
       button.addEventListener('click', function(){
         $('#menu button').removeClass();
         $('#grid').addClass("active");
+        if (l <= 25) {
+          camera.position.z = radius * 0.8;
+        }
+        if (l <= 10) {
+          camera.position.z = radius * 0.4;
+        }
+        if (l <= 5) {
+          camera.position.z = radius * 0.2;
+        }
         return transform(targets.grid, 2000);
       }, false);
-      transform(targets.grid, 5000);
+      transform(targets.grid, 2500);
       return window.addEventListener('resize', onWindowResize, false);
     }
     return init;

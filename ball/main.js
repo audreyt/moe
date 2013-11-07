@@ -88,7 +88,7 @@
                 }
                 window.renderChars = (function(){
                   function renderChars(it){
-                    var table, i$, len$, ch, radical, bpmf, ref$;
+                    var table, i$, len$, ch, radical, bpmfs;
                     window.table = table = [];
                     for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
                       ch = it[i$];
@@ -96,10 +96,10 @@
                         continue;
                       }
                       radical = Radical[ch];
-                      bpmf = (ref$ = Sound[ch]) != null ? ref$[0] : void 8;
+                      bpmfs = Sound[ch];
                       table.push({
                         ch: ch,
-                        bpmf: bpmf,
+                        bpmfs: bpmfs,
                         radical: radical
                       });
                     }
@@ -150,7 +150,9 @@
                   function goChar(arg$){
                     var ch, bpmf, radical;
                     ch = arg$.ch, bpmf = arg$.bpmf, radical = arg$.radical;
-                    output(ch);
+                    if (ch) {
+                      output(ch);
+                    }
                     return setTimeout(function(){
                       return window.showAll({
                         ch: ch,
@@ -163,18 +165,25 @@
                 }());
                 window.showAll = (function(){
                   function showAll(arg$){
-                    var ch, bpmf, radical, sims, snds, rads, all;
-                    ch = arg$.ch, bpmf = arg$.bpmf, radical = arg$.radical;
-                    sims = goSimilar(ch) || '';
-                    snds = SoundAlike[replace$.call(bpmf, /[ˋˊˇ‧]/g, '')] || '';
-                    rads = RadicalSame[radical] || '';
+                    var ch, ref$, bpmf, radical, sims, snds, rads, all;
+                    ch = (ref$ = arg$.ch) != null ? ref$ : '', bpmf = arg$.bpmf, radical = arg$.radical;
+                    sims = snds = rads = '';
+                    if (ch) {
+                      sims = goSimilar(ch) || '';
+                    }
+                    if (bpmf) {
+                      snds = SoundAlike[replace$.call(bpmf, /[ˋˊˇ‧]/g, '')] || '';
+                    }
+                    if (radical) {
+                      rads = RadicalSame[radical] || '';
+                    }
                     if (sims.length > 50) {
                       sims = sims.slice(0, 50);
                     }
                     if (snds.length > 50) {
                       snds = snds.slice(0, 50);
                     }
-                    all = uniq(sims + snds + rads);
+                    all = uniq(ch + sims + snds + rads);
                     if (all.length > 100) {
                       all = all.slice(0, 100);
                     }
@@ -202,11 +211,9 @@
                     return renderChars(decodeURIComponent(location.search) + "");
                   }, 1);
                 } else {
-                  return GET("Table.json", function(table){
-                    window.table = table;
-                    window.init(table);
-                    return window.animate();
-                  });
+                  return setTimeout(function(){
+                    return renderChars("萌夢孟懵懵朦檬氓濛猛盟盟矇矇蒙蜢錳");
+                  }, 1);
                 }
               });
             });

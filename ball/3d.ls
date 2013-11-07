@@ -5,18 +5,19 @@ targets = { table: [], sphere: [], helix: [], grid: [] }
 window.init = function init(table)
   $('#container').remove!
   $(\<div/> id: \container).prependTo($ \body)
-  $('#container').on \click \.element -> go-char {
-    ch: $('.symbol', @).text!
-    radical: $('.radical', @).text! || $('.symbol', @).text!
-    bpmf: $('.details', @).text!
-  }
+  $('#container').on \click \.symbol -> go-char { ch: $(@).text! }
+  $('#container').on \click \.radical -> go-char { radical: $(@).text! }
+  $('#container').on \click \.details -> go-char { bpmf: $(@).text! }
   l = table.length
   radius = Math.sqrt(l) * 56
   window.camera = camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, (radius * 6.25) )
-  camera.position.z = (radius * 2)
+  camera.position.z = radius * 2
+  camera.position.z = radius * 0.8 if l <= 25
+  camera.position.z = radius * 0.4 if l <= 10
+  camera.position.z = radius * 0.2 if l <= 5
   window.scene = scene = new THREE.Scene()
   for entry in table
-    {ch, radical, strokes, bpmf} = entry
+    {ch, radical, strokes, bpmfs} = entry
     $(element).data entry
     element = document.createElement( 'div' )
     element.className = 'element'
@@ -35,10 +36,11 @@ window.init = function init(table)
     symbol.className = 'symbol'
     symbol.textContent = ch
     element.appendChild( symbol )
-    details = document.createElement( 'div' )
-    details.className = 'details'
-    details.innerHTML = bpmf # TODO: Array
-    element.appendChild( details )
+    for bpmf, idx in bpmfs
+      details = document.createElement( 'div' )
+      details.className = "details idx-#{idx} total-#{bpmfs.length}"
+      details.innerHTML = bpmf
+      element.appendChild( details )
     object = new THREE.CSS3DObject( element )
     object.position.x = Math.random() * (radius * 5) - (radius * 2.5)
     object.position.y = Math.random() * (radius * 5) - (radius * 2.5)
@@ -66,10 +68,10 @@ window.init = function init(table)
   for obj, i in objects
     phi = i * 0.175 + Math.PI
     object = new THREE.Object3D()
-    object.position.x = distance * 2 * Math.sin( phi )
+    object.position.x = distance * 2.5 * Math.sin( phi )
     object.position.y = - ( i * 8 ) + ( distance )
     object.position.z = distance * 2 * Math.cos( phi )
-    vector.x = object.position.x * 2
+    vector.x = object.position.x * 2.5
     vector.y = object.position.y
     vector.z = object.position.z * 2
     object.lookAt( vector )
@@ -80,7 +82,7 @@ window.init = function init(table)
   for obj, i in objects
     object = new THREE.Object3D()
     object.position.x = ( ( i % 5 ) * distance ) - (distance * 2)
-    object.position.y = ( 0 - ( Math.floor( i / 5 ) % 5 ) * distance ) + (distance * 2)
+    object.position.y = ( 0 - ( Math.floor( i / 5 ) % 5 ) * distance * 1.2) + (distance * 2)
     object.position.z = ( Math.floor( i / 25 ) ) * (distance*2) - (4 * distance)
     targets.grid.push( object )
 
@@ -97,21 +99,26 @@ window.init = function init(table)
   button.addEventListener( 'click', (->
     $('#menu button').removeClass!
     $('#sphere').addClass "active"
+    camera.position.z = radius * 2
     transform( targets.sphere, 2000 )
   ), false )
   button = document.getElementById( 'helix' )
   button.addEventListener( 'click', (->
     $('#menu button').removeClass!
     $('#helix').addClass "active"
+    camera.position.z = radius * 2
     transform( targets.helix, 2000 )
   ), false )
   button = document.getElementById( 'grid' )
   button.addEventListener( 'click', (->
     $('#menu button').removeClass!
     $('#grid').addClass "active"
+    camera.position.z = radius * 0.8 if l <= 25
+    camera.position.z = radius * 0.4 if l <= 10
+    camera.position.z = radius * 0.2 if l <= 5
     transform( targets.grid, 2000 )
   ), false )
-  transform( targets.grid, 5000 )
+  transform( targets.grid, 2500 )
   window.addEventListener( 'resize', onWindowResize, false )
 
 window.transform = function transform( targets, duration )

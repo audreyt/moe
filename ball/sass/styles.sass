@@ -41,17 +41,26 @@ a
   text-align: center
   cursor: default
   &:hover
+    box-shadow: 0px 0px 12px rgba(193,179,158,1)
+  div:hover
+    cursor: pointer
     box-shadow: 0px 0px 12px rgba(93,79,58,1)
-    border: 2px solid rgba(107,0,0,0.9) !important
+    border: 1px solid rgba(107,0,0,0.9) !important
   .number
     position: absolute
-    top: 20px
-    right: 20px
-    font-size: 12px
-    color: rgba(93,97,58,0.75)
+    top: 0px
+    right: 0px
+    left: 0px
+    height: 28px
+    padding-top: 8px
+    padding-right: 8px
+    font-size: 24px
+    text-align: right
+    color: rgba(93,97,58,1)
+    font-family: 'BiauKai'
   .symbol
     position: absolute
-    top: 40px
+    top: 36px
     left: 0px
     right: 0px
     font-size: 60px
@@ -64,12 +73,55 @@ a
     filter: drop-shadow(0px 0px 20px rgba(213,189,151,0.95))
   .details
     position: absolute
-    bottom: 15px
+    bottom: 0px
+    padding-bottom: 8px
+    padding-left: 8px
+    padding-top: 8px
+    height: 36px
     left: 0px
     right: 0px
-    font-size: 12px
-    color: rgba(107,0,0,0.9)
+    font-family: 'BiauKai'
+    font-size: 22px
+    color: rgba(107,0,0,1)
     font-weight: bold
+    &.total-2
+      padding: 0px 4px 0 0
+      height: 18px
+      font-size: 18px
+      &.idx-0
+        bottom: 32px
+      &.idx-1
+        padding-bottom: 8px
+    &.total-4, &.total-3
+      padding: 0px
+      height: 20px
+      width: 56px
+      white-space: nowrap
+      overflow: visible
+      font-size: 12px
+      &.idx-0, &.idx-1
+        bottom: 32px
+      &.idx-2, &.idx-3
+        padding-bottom: 8px
+      &.idx-1, &.idx-3
+        left: 60px
+    &.total-6, &.total-5
+      text-align: left
+      padding: 0px 2px
+      height: 12px
+      width: 56px
+      white-space: nowrap
+      overflow: visible
+      font-size: 10px
+      &.idx-0, &.idx-1
+        bottom: 40px
+      &.idx-2, &.idx-3
+        bottom: 24px
+      &.idx-4, &.idx-5
+        padding-bottom: 8px
+      &.idx-1, &.idx-3, &.idx-5
+        left: 60px
+
 
 button
   margin: 0 5px

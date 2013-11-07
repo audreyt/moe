@@ -56,8 +56,8 @@ window.render-chars = function render-chars
     # console.log ch
     continue unless Sound[ch]
     radical = Radical[ch]
-    bpmf = Sound[ch]?0
-    table.push { ch, bpmf, radical }
+    bpmfs = Sound[ch]
+    table.push { ch, bpmfs, radical }
   window.init table
   window.animate!
 
@@ -85,17 +85,18 @@ window.uniq = uniq = ->
   return out
 
 window.go-char = function go-char ({ch, bpmf, radical})
-  output ch
+  output ch if ch
   <- setTimeout _, 1ms
   window.show-all {ch, bpmf, radical}
 
-window.show-all = function show-all ({ch, bpmf, radical})
-  sims = go-similar(ch) || ''
-  snds = SoundAlike[ (bpmf - /[ˋˊˇ‧]/g) ] || ''
-  rads = RadicalSame[ radical ] || ''
+window.show-all = function show-all ({ch='', bpmf, radical})
+  sims = snds = rads = ''
+  sims = go-similar(ch) || '' if ch
+  snds = SoundAlike[ (bpmf - /[ˋˊˇ‧]/g) ] || '' if bpmf
+  rads = RadicalSame[ radical ] || '' if radical
   sims = sims.slice(0, 50) if sims.length > 50
   snds = snds.slice(0, 50) if snds.length > 50
-  all = uniq(sims + snds + rads)
+  all = uniq(ch + sims + snds + rads)
   all = all.slice(0, 100) if all.length > 100
   show-chars all
 
@@ -110,7 +111,9 @@ if "#{ location.search }" is /[^?]/
   <- setTimeout _, 1ms
   render-chars("#{ decodeURIComponent location.search }")
 else
-  table <- GET "Table.json"
-  window.table = table
-  window.init table
-  window.animate!
+  <- setTimeout _, 1ms
+  render-chars("萌夢孟懵懵朦檬氓濛猛盟盟矇矇蒙蜢錳")
+  #table <- GET "Table.json"
+  #window.table = table
+  #window.init table
+  #window.animate!
