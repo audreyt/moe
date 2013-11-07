@@ -103,6 +103,20 @@ window.input = ->
   window.projector = new THREE.Projector!
   window.mouse2D = new THREE.Vector3(0, 0, 0)
 
+  geometry = new THREE.Geometry
+  for i from 0 to 1000
+    vertex = new THREE.Vector3
+    distance = 0;
+    while distance < 500*500
+      vertex.x = 1000 * Math.sin(2 * Math.random()-1)
+      vertex.y = 1000 * Math.sin(2 * Math.random()-1)
+      vertex.z = 1000 * Math.sin(2 * Math.random()-1)
+      distance = vertex.x * vertex.x + vertex.y * vertex.y + vertex.z * vertex.z
+      geometry.vertices.push( vertex );
+  material = new THREE.ParticleBasicMaterial size: 1, sizeAttenuation: true, depthWrite: false
+  particles = new THREE.ParticleSystem( geometry, material )
+  particles.renderDepth = 0
+  scene.add particles
   render!
 
   document.addEventListener( 'click', window.onDocumentClick, false )

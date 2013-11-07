@@ -18,7 +18,7 @@
     window.input = function(it){
       $in.val(it);
       return GET("a/" + it + ".json", function(json){
-        var nodes, i$, ref$, len$, labels, $li, j$, len1$, ref1$, label, score, scene, camera, renderer, multiplier, objs, obj_coloring, obj_radius, clustering, i, cluster, c, l, n, coords, sphere_geo, mat, sphere, spritey, edges, edge, color, sv, tv, geometry, line, controls, render, light;
+        var nodes, i$, ref$, len$, labels, $li, j$, len1$, ref1$, label, score, scene, camera, renderer, multiplier, objs, obj_coloring, obj_radius, clustering, i, cluster, c, l, n, coords, sphere_geo, mat, sphere, spritey, edges, edge, color, sv, tv, geometry, line, controls, render, light, vertex, distance, material, particles;
         nodes = json.graph_json.nodes;
         $out.empty();
         if (false) {
@@ -125,6 +125,27 @@
         window.pointerDetectRay.ray.direction.set(0, -1, 0);
         window.projector = new THREE.Projector();
         window.mouse2D = new THREE.Vector3(0, 0, 0);
+        geometry = new THREE.Geometry;
+        for (i$ = 0; i$ <= 1000; ++i$) {
+          i = i$;
+          vertex = new THREE.Vector3;
+          distance = 0;
+          while (distance < 500 * 500) {
+            vertex.x = 1000 * Math.sin(2 * Math.random() - 1);
+            vertex.y = 1000 * Math.sin(2 * Math.random() - 1);
+            vertex.z = 1000 * Math.sin(2 * Math.random() - 1);
+            distance = vertex.x * vertex.x + vertex.y * vertex.y + vertex.z * vertex.z;
+            geometry.vertices.push(vertex);
+          }
+        }
+        material = new THREE.ParticleBasicMaterial({
+          size: 2,
+          sizeAttenuation: true,
+          depthWrite: false
+        });
+        particles = new THREE.ParticleSystem(geometry, material);
+        particles.renderDepth = 0;
+        scene.add(particles);
         render();
         document.addEventListener('click', window.onDocumentClick, false);
         return document.addEventListener('mousemove', window.onDocumentMouseMove, false);
