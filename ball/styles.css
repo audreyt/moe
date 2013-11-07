@@ -4,7 +4,7 @@ html {
 
 body {
   height: 100%;
-  background: black url(../images/bg_body.jpg) center center;
+  background: #110000 url(./images/bg_body.jpg) center center;
   background-size: cover;
   margin: 0;
   font-family: Arial;
