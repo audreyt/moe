@@ -18,11 +18,13 @@ Y: <input name="lat" id="inputY">(<span id="spanLat"></span>)<br/><a id="submitG
 function fill (word) {
 if (word.length > 1) { word = word.substr(0, 1) }
 if (window.prev == word) { return }; window.prev = word;
-var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    var osmUrl='http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png'
+
     var road_layer = new L.TileLayer(osmUrl, {
             minZoom: 8,
             maxZoom: 18,
-            attribution: '<a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> CC-BY-SA.'
+            attribution: '<a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> CC-BY-SA, Tiles &copy; <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>',
+            subdomains: '1234'
         });
 
             GET('data/POI-Taipei.json', (function(names) {

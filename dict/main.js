@@ -29,7 +29,7 @@
   DEBUGGING = false;
   STANDALONE = 'c';
   LANG = STANDALONE || getPref('lang') || (/twblg/.exec(document.URL) ? 't' : 'a');
-  MOEID = '明';
+  MOEID = '萌';
   $(function(){
     $('body').addClass("lang-" + LANG);
     return $('.lang-active').text($(".lang-option." + LANG + ":first").text());

@@ -15,7 +15,7 @@ room = connection.room("game")
 userList = new goinstant.widgets.UserList {room: room, collapsed: false, position: 'left', userOptions: false}
 
 window.reset = ->
-  room.self!.key('displayName').set "明"
+  room.self!.key('displayName').set '萌'
 window.input = ->
   text = it
   do

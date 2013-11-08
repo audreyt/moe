@@ -21,7 +21,7 @@
           userOptions: false
         });
         window.reset = function(){
-          return room.self().key('displayName').set("明");
+          return room.self().key('displayName').set('萌');
         };
         window.input = function(it){
           var text;

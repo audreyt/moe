@@ -4,7 +4,7 @@ origin = "http://direct.moedict.tw/"
 frames = []
 for x in $('iframe').get! => frames.push x.contentWindow.window
 
-prev = \明
+prev = \萌
 window.id = \hub
 window.reset = -> input ''
 #window.addEventListener("message", -> window.input it.data, false);

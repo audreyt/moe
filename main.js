@@ -8,7 +8,7 @@
       x = ref$[i$];
       frames.push(x.contentWindow.window);
     }
-    prev = '明';
+    prev = '萌';
     window.id = 'hub';
     window.reset = function(){
       return input('');

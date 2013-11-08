@@ -123,6 +123,6 @@
       }
       return result;
     };
-    return fill('');
+    return fill('萌');
   });
 }).call(this);
