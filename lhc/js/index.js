@@ -20,7 +20,7 @@ String::permutate = ->
   ret
 */
 (function(){
-  var buffer, bufferedMsgsFirst, renderer, scene, geometry, i$, i, vertex, distance, material, particles, camera, light, render, controls, blockMaterial, extrusionSettings, CACHED, GET, split$ = ''.split, replace$ = ''.replace;
+  var buffer, bufferedMsgsFirst, renderer, scene, geometry, i$, i, vertex, distance, material, particles, camera, light, render, controls, blockMaterial, extrusionSettings, CACHED, MISSED, GET, split$ = ''.split, replace$ = ''.replace;
   buffer = [];
   bufferedMsgsFirst = function(arg$){
     var data;
@@ -108,6 +108,7 @@ String::permutate = ->
       "centroids": [["1338.92718489426", "378.097426152744"], ["686.479837421163", "444.310979677645"], ["647.703866880858", "1170.66246053884"], ["1355.89288956154", "1257.3425895333"]]
     }
   };
+  MISSED = {};
   GET = function(url, data, onSuccess, dataType){
     var ref$;
     if (data instanceof Function) {
@@ -116,9 +117,14 @@ String::permutate = ->
     if (CACHED[url]) {
       return onSuccess(CACHED[url]);
     }
+    if (MISSED[url]) {
+      return;
+    }
     return $.get(url, data, function(it){
       return onSuccess(CACHED[url] = it);
-    }, dataType || 'json').fail(function(){});
+    }, dataType || 'json').fail(function(){
+      return MISSED[url] = true;
+    });
   };
   GET('./data/char_comp_simple.json', function(CharComp){
     return GET('./data/comp_char_sorted.json', function(CompChar){
@@ -195,13 +201,11 @@ String::permutate = ->
           callback = null;
           queue = [['', comps]];
           count = 0;
-          console.log(comps);
           while (queue.length) {
             if (count++ > 1000) {
               break;
             }
             ref$ = queue.shift(), taken = ref$[0], rest = ref$[1];
-            console.log("'" + taken + "' - '" + rest + "'");
             if (!scanned[taken]) {
               scanned[taken] = true;
               c = CompChar[taken];
