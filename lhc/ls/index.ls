@@ -38,7 +38,7 @@ $(\body).prepend renderer.domElement
 
 scene= new Physijs.Scene(fixedTimeStep: 1 / 24)
 geometry = new THREE.Geometry
-for i from 0 to 1000
+for i from 0 to 500
   vertex = new THREE.Vector3
   distance = 0;
   while distance < 500*500

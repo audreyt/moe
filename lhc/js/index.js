@@ -43,7 +43,7 @@ String::permutate = ->
     fixedTimeStep: 1 / 24
   });
   geometry = new THREE.Geometry;
-  for (i$ = 0; i$ <= 1000; ++i$) {
+  for (i$ = 0; i$ <= 500; ++i$) {
     i = i$;
     vertex = new THREE.Vector3;
     distance = 0;
