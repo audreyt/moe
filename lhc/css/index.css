@@ -7,8 +7,11 @@ body {
   padding: 0;
   position: relative;
   height: 100%;
+  /*
   background: #16161d url(../images/bg_body.jpg) center center;
   background-size: cover;
+  */
+  background: #16161d
 }
 
 #input {
