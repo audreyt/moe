@@ -16,10 +16,6 @@ a {
   color: black;
 }
 
-.element {
-  cursor: pointer !important;
-}
-
 #info {
   position: absolute;
   width: 100%;
