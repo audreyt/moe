@@ -148,7 +148,7 @@ $(function(){
 
     // set content-wrapper height
     var contentWidth, contentHeight;
-    if (windowHeight/windowWidth <= 9/16) {
+    if (windowHeight/windowWidth <= 9/16*1.2) {
         contentWidth = windowHeight / 9 * 16;
         contentHeight = windowHeight;
     }
@@ -164,22 +164,23 @@ $(function(){
     // calculate block size
     var nBlockWidth, nBlockHeight, wBlockWidth, vBlockHeight;
     nBlockWidth = contentWidth * 0.28;
-    nBlockHeight = contentHeight * 0.32;
+    nBlockHeight = contentHeight * 0.467;
+    wBlockHeight = contentHeight * 0.32;
     wBlockWidth = contentWidth* 0.34;
-    vBlockHeight = contentHeight * 0.4;
+    vBlockHeight = contentHeight * 0.467;
 
     $(".iframe-wrapper.n-type").css({width: nBlockWidth, height: nBlockHeight});
-    $(".iframe-wrapper.w-type").css({width: wBlockWidth, height: nBlockHeight});
+    $(".iframe-wrapper.w-type").css({width: wBlockWidth, height: wBlockHeight});
     $(".iframe-wrapper.v-type").css({width: nBlockWidth, height: vBlockHeight});
     $(".iframe-wrapper .iframe").css({width: nBlockWidth-16, height: nBlockHeight-46});
     $(".iframe-wrapper.v-type .iframe").css({height: vBlockHeight-46});
-    $(".iframe-wrapper.w-type .iframe").css({width: wBlockWidth-16});
+    $(".iframe-wrapper.w-type .iframe").css({height: wBlockHeight-46, width: wBlockWidth-16});
 
     // calculate block position. project-users, project-tmuse, project-dict, project-ball, project-lhc, project-map
     $(".iframe-wrapper.project-tmuse").css({top: contentHeight*0.01});
-    $(".iframe-wrapper.v-type").css({top:contentHeight*0.1});
-    $(".iframe-wrapper.project-ball, .iframe-wrapper.project-map").css({top:contentHeight*0.52});
-    $(".iframe-wrapper.project-lhc").css({top: contentHeight*0.99-nBlockHeight});
+    $(".iframe-wrapper.v-type").css({top:contentHeight*0.02});
+    $(".iframe-wrapper.project-ball, .iframe-wrapper.project-map").css({top:contentHeight*0.51});
+    $(".iframe-wrapper.project-lhc").css({top: contentHeight*0.99-wBlockHeight});
     $(".iframe-wrapper.w-type").css({left:(contentWidth-wBlockWidth)/2});
     $(".iframe-wrapper.project-users, .iframe-wrapper.project-ball").css({left:"2%"});
     $(".iframe-wrapper.project-dict, .iframe-wrapper.project-map").css({left:contentWidth*0.98-nBlockWidth});
