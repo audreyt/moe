@@ -7,6 +7,8 @@ body {
   padding: 0;
   position: relative;
   height: 100%;
+  width: 100%;
+  overflow: hidden;
   /*
   background: #16161d url(../images/bg_body.jpg) center center;
   background-size: cover;
