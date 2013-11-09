@@ -20,7 +20,7 @@ String::permutate = ->
   ret
 */
 (function(){
-  var buffer, bufferedMsgsFirst, renderer, scene, geometry, i$, i, vertex, distance, material, particles, camera, light, render, controls, blockMaterial, extrusionSettings, CACHED, MISSED, GET, split$ = ''.split, replace$ = ''.replace;
+  var buffer, bufferedMsgsFirst, renderer, scene, geometry, i$, i, vertex, distance, material, particles, camera, light, render, controls, res$, ref$, len$, ref1$, r, g, b, extrusionSettings, CACHED, MISSED, GET, split$ = ''.split, replace$ = ''.replace;
   buffer = [];
   bufferedMsgsFirst = function(arg$){
     var data;
@@ -73,7 +73,11 @@ String::permutate = ->
   camera.lookAt(new THREE.Vector3(0, 0, 0));
   scene.add(camera);
   scene.add(new THREE.AmbientLight(0x333333));
-  light = new THREE.DirectionalLight(0xffffff);
+  light = new THREE.DirectionalLight(0x999999);
+  light.position.set(0, 2000, 500);
+  light.target.position.set(0, 0, 0);
+  scene.add(light);
+  light = new THREE.SpotLight(0x999999);
   light.position.set(0, 2000, 500);
   light.target.position.set(0, 0, 0);
   scene.add(light);
@@ -90,16 +94,24 @@ String::permutate = ->
   scene.simulate();
   controls = new THREE.TrackballControls(camera);
   controls.rotateSpeed = 0.5;
-  blockMaterial = Physijs.createMaterial(new THREE.MeshLambertMaterial({
-    map: new THREE.ImageUtils.loadTexture('./images/plywood.jpg', {
-      ambient: 0xFF9999
-    })
-  }), 0.9, 0.5);
+  window.colors = [[42, 75, 215], [29, 105, 20], [129, 38, 192], [129, 197, 122], [157, 175, 255], [41, 208, 208], [255, 146, 51], [255, 238, 51], [233, 222, 187], [255, 205, 243]];
+  res$ = [];
+  for (i$ = 0, len$ = (ref$ = window.colors).length; i$ < len$; ++i$) {
+    ref1$ = ref$[i$], r = ref1$[0], g = ref1$[1], b = ref1$[2];
+    r = Math.round(r / 4 + 128);
+    g = Math.round(g / 4 + 128);
+    b = Math.round(b / 4 + 64);
+    res$.push(Physijs.createMaterial(new THREE.MeshPhongMaterial({
+      color: r * 65536 + g * 256 + b,
+      specular: r * 65536 + g * 256 + b,
+      shininess: 10,
+      shading: THREE.FlatShading
+    }), 0.9, 0.5));
+  }
+  window.materials = res$;
   extrusionSettings = {
     amount: 100,
-    bevelEnabled: false,
-    material: blockMaterial,
-    extrudeMaterial: blockMaterial
+    bevelEnabled: true
   };
   CACHED = {
     "./a/萌.json": {
@@ -291,16 +303,38 @@ String::permutate = ->
             return parseInt(tokens.shift(), 10);
           }
         };
+        window.idx = 0;
         window.doAddChar = function(it){
-          var i$, len$, char, results$ = [];
+          var queue, i$, len$, char, addObject;
+          queue = [];
           for (i$ = 0, len$ = it.length; i$ < len$; ++i$) {
             char = it[i$];
-            results$.push(GET("./a/" + char + ".json", fn$));
+            GET("./a/" + char + ".json", fn$);
           }
-          return results$;
+          return (addObject = function(){
+            var mesh;
+            if (!queue.length) {
+              return;
+            }
+            mesh = queue.shift();
+            mesh.addEventListener('ready', function(){
+              return window.requestAnimationFrame(addObject);
+            });
+            mesh.addEventListener('collision', function(it){
+              var i$, ref$, len$, axis, results$ = [];
+              for (i$ = 0, len$ = (ref$ = ['x', 'y', 'z']).length; i$ < len$; ++i$) {
+                axis = ref$[i$];
+                it._physijs.linearVelocity[axis] *= 2;
+                results$.push(mesh._physijs.linearVelocity[axis] *= 2);
+              }
+              return results$;
+            });
+            return scene.add(mesh);
+          })();
           function fn$(arg$){
             var char, outlines, centroids, randX, randY, i, ref$, shape, geometry, offset, m, mesh, results$ = [];
             char = arg$.ch, outlines = arg$.outlines, centroids = arg$.centroids;
+            window.idx++;
             randX = Math.random() * 500 - 250;
             randY = Math.random() * 500 - 250;
             for (i in ref$ = getShapeOf(outlines)) {
@@ -310,7 +344,7 @@ String::permutate = ->
               m = new THREE.Matrix4;
               m.makeTranslation(-offset.x, -offset.y, -offset.z);
               geometry.applyMatrix(m);
-              mesh = new Physijs.ConvexMesh(geometry, blockMaterial, 9);
+              mesh = new Physijs.ConvexMesh(geometry, materials[window.idx % materials.length], 9);
               mesh.position = offset.clone();
               mesh.position.add(new THREE.Vector3(randX - 1075, randY + 1075, 0));
               mesh.castShadow = true;
@@ -318,13 +352,13 @@ String::permutate = ->
               mesh._physijs.linearVelocity.x = Math.random() * 1000 - 500;
               mesh._physijs.linearVelocity.y = Math.random() * 1000 - 500;
               mesh._physijs.linearVelocity.z = Math.random() * 1000 - 500;
-              results$.push(scene.add(mesh));
+              results$.push(queue.push(mesh));
             }
             return results$;
           }
         };
         scene.addEventListener('update', function(){
-          if (cCounter++ % ~~(cTime * 60) === 0) {
+          if (cCounter++ % ~~(cTime * 80) === 0) {
             return window.doAddChar($input.val());
           }
         });

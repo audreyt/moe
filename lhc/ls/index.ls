@@ -62,7 +62,11 @@ camera.lookAt new THREE.Vector3(0, 0, 0)
 scene.add camera
 
 scene.add new THREE.AmbientLight(0x333333)
-light = new THREE.DirectionalLight(0xffffff)
+light = new THREE.DirectionalLight(0x999999)
+light.position.set(0, 2000, 500)
+light.target.position.set(0, 0, 0)
+scene.add light
+light = new THREE.SpotLight(0x999999)
 light.position.set(0, 2000, 500)
 light.target.position.set(0, 0, 0)
 scene.add light
@@ -81,16 +85,22 @@ scene.simulate!
 controls = new THREE.TrackballControls camera
 controls.rotateSpeed = 0.5
 
-block-material = Physijs.createMaterial do
-  new THREE.MeshLambertMaterial map: new THREE.ImageUtils.loadTexture \./images/plywood.jpg, ambient: 0xFF9999
-  0.9 # medium friction
-  0.5 # medium restitution
+window.colors = [[42,75,215],[29,105,20],[129,38,192],[129,197,122],[157,175,255],[41,208,208],[255,146,51],[255,238,51],[233,222,187],[255,205,243]]
+window.materials = for [r,g,b] in window.colors
+  r = Math.round r / 4 + 128
+  g = Math.round g / 4 + 128
+  b = Math.round b / 4 + 64
+  Physijs.createMaterial do
+    new THREE.MeshPhongMaterial color: (r*65536 + g*256 + b), specular: (r*65536 + g*256 + b), shininess: 10, shading: THREE.FlatShading
+    #map: new THREE.ImageUtils.loadTexture \./images/plywood.jpg
+    0.9 # medium friction
+    0.5 # medium restitution
 
 extrusionSettings =
   amount: 100
-  bevelEnabled: false
-  material: block-material
-  extrudeMaterial: block-material
+  bevelEnabled: true
+  #material: block-material
+  #extrudeMaterial: block-material
 
 CACHED = { "./a/萌.json": { "ch": "萌", "outlines": [
     "M 1233 -469 L 1211 -549 1192 -614 1180 -656 1173 -680 1184 -685.5 1195 -691 1207 -676 1236 -639 1255 -614 1271.5 -581 1288 -548 1302 -517.5 1316 -487 1333 -450 1403 -444 1476 -436 1570 -433 1617 -430 1641 -429 1657.5 -423 1674 -417 1676 -408 1677 -400 1659.5 -385.5 1642 -371 1605 -355 1568 -339 1551 -338 1535 -338 1498 -348 1461 -358 1432.5 -363 1404 -368 1367 -372 1383 -320 1400 -280 1409 -256 1413.5 -248.5 1418 -241 1430 -227.5 1442 -214 1444 -207 1446 -195 1432 -179.5 1418 -164 1389 -151 1360 -138 1337 -127 1314 -116 1297 -116 1273 -117 1269 -125 1265 -133 1272 -154 1279 -175 1280 -198 1280 -221 1277 -243.5 1274 -266 1267 -302.5 1260 -339 1250 -397 1175 -410 1110 -421 1095 -422 1067 -424 1043 -426 1039.5 -434.5 1036 -443 1062.5 -459 1089 -475 1106.5 -482 1124 -489 1141 -489 1152 -490 1175 -483.5 1198 -477 Z",
@@ -208,9 +218,12 @@ getShapeOf = ->
               break
     ret.push shape
   ret
+window.idx = 0
 window.doAddChar = ->
+  queue = []
   for char in it
     {ch: char, outlines, centroids} <- GET "./a/#char.json" 
+    window.idx++
     # console.log "creating geometry for #char"
     randX = Math.random() * 500 - 250
     randY = Math.random() * 500 - 250
@@ -223,7 +236,7 @@ window.doAddChar = ->
       m = new THREE.Matrix4
       m.makeTranslation(-offset.x, -offset.y, -offset.z)
       geometry.applyMatrix m
-      mesh = new Physijs.ConvexMesh(geometry, block-material, 9)
+      mesh = new Physijs.ConvexMesh(geometry, materials[window.idx % materials.length], 9)
       mesh.position = offset.clone!
       mesh.position.add new THREE.Vector3(randX - 1075, randY + 1075, 0)
       mesh.castShadow = yes
@@ -231,9 +244,18 @@ window.doAddChar = ->
       mesh._physijs.linearVelocity.x = Math.random() * 1000 - 500
       mesh._physijs.linearVelocity.y = Math.random() * 1000 - 500
       mesh._physijs.linearVelocity.z = Math.random() * 1000 - 500
-      scene.add mesh
+      queue.push mesh
+  do addObject = ->
+    return unless queue.length
+    mesh = queue.shift!
+    mesh.addEventListener \ready ->
+      window.requestAnimationFrame addObject
+    mesh.addEventListener \collision -> for axis in <[ x y z ]>
+      it._physijs.linearVelocity[axis] *= 2
+      mesh._physijs.linearVelocity[axis] *= 2
+    scene.add mesh
 scene.addEventListener \update, ->
-  window.doAddChar $input.val! if (cCounter++ % ~~(cTime * 60)) is 0
+  window.doAddChar $input.val! if (cCounter++ % ~~(cTime * 80)) is 0
 window.input := -> main {data: it}
 #window.removeEventListener \message, buffered-msgs-first
 #for data in buffer => main {data}
