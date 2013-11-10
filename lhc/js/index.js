@@ -42,6 +42,7 @@ String::permutate = ->
   scene = new Physijs.Scene({
     fixedTimeStep: 1 / 24
   });
+  scene.fog = new THREE.FogExp2(0x222222, 0.00005);
   geometry = new THREE.Geometry;
   for (i$ = 0; i$ <= 500; ++i$) {
     i = i$;
@@ -60,7 +61,7 @@ String::permutate = ->
     depthWrite: false,
     size: 2
   });
-  material.color.setRGB(0.6, 0.6, 0.8);
+  material.color.setRGB(0.7, 0.7, 0.8);
   particles = new THREE.ParticleSystem(geometry, material);
   particles.renderDepth = 0;
   scene.add(particles);
@@ -79,6 +80,10 @@ String::permutate = ->
   scene.add(light);
   light = new THREE.SpotLight(0x999999);
   light.position.set(0, 2000, 500);
+  light.target.position.set(0, 0, 0);
+  scene.add(light);
+  light = new THREE.SpotLight(0x999999);
+  light.position.set(0, -2000, -500);
   light.target.position.set(0, 0, 0);
   scene.add(light);
   window.addEventListener('resize', function(){
@@ -325,7 +330,9 @@ String::permutate = ->
               for (i$ = 0, len$ = (ref$ = ['x', 'y', 'z']).length; i$ < len$; ++i$) {
                 axis = ref$[i$];
                 it._physijs.linearVelocity[axis] *= 2;
-                results$.push(mesh._physijs.linearVelocity[axis] *= 2);
+                it._physijs.angularVelocity[axis] *= 2;
+                mesh._physijs.linearVelocity[axis] *= 2;
+                results$.push(mesh._physijs.angularVelocity[axis] *= 2);
               }
               return results$;
             });

@@ -37,6 +37,7 @@ renderer.setSize(window.innerWidth, (window.innerHeight - 48))
 $(\body).prepend renderer.domElement
 
 scene= new Physijs.Scene(fixedTimeStep: 1 / 24)
+scene.fog = new THREE.FogExp2( 0x222222, 0.00005 );
 geometry = new THREE.Geometry
 for i from 0 to 500
   vertex = new THREE.Vector3
@@ -48,7 +49,7 @@ for i from 0 to 500
     distance = vertex.x * vertex.x + vertex.y * vertex.y + vertex.z * vertex.z
     geometry.vertices.push( vertex );
 material = new THREE.ParticleBasicMaterial { +sizeAttenuation, -depthWrite, size: 2 }
-material.color.setRGB(0.6, 0.6, 0.8)
+material.color.setRGB(0.7, 0.7, 0.8)
 particles = new THREE.ParticleSystem( geometry, material )
 particles.renderDepth = 0
 scene.add particles
@@ -68,6 +69,10 @@ light.target.position.set(0, 0, 0)
 scene.add light
 light = new THREE.SpotLight(0x999999)
 light.position.set(0, 2000, 500)
+light.target.position.set(0, 0, 0)
+scene.add light
+light = new THREE.SpotLight(0x999999)
+light.position.set(0, -2000, -500)
 light.target.position.set(0, 0, 0)
 scene.add light
 
@@ -252,7 +257,9 @@ window.doAddChar = ->
       window.requestAnimationFrame addObject
     mesh.addEventListener \collision -> for axis in <[ x y z ]>
       it._physijs.linearVelocity[axis] *= 2
+      it._physijs.angularVelocity[axis] *= 2
       mesh._physijs.linearVelocity[axis] *= 2
+      mesh._physijs.angularVelocity[axis] *= 2
     scene.add mesh
 scene.addEventListener \update, ->
   window.doAddChar $input.val! if (cCounter++ % ~~(cTime * 80)) is 0

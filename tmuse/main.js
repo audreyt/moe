@@ -18,7 +18,7 @@
     window.input = function(it){
       $in.val(it);
       return GET("a/" + it + ".json", function(json){
-        var nodes, i$, ref$, len$, labels, $li, j$, len1$, ref1$, label, score, scene, camera, renderer, multiplier, objs, obj_coloring, obj_radius, clustering, i, cluster, c, l, n, coords, sphere_geo, mat, sphere, spritey, edges, edge, color, sv, tv, geometry, line, controls, render, light, vertex, distance, material, particles;
+        var nodes, i$, ref$, len$, labels, $li, j$, len1$, ref1$, label, score, scene, camera, renderer, multiplier, objs, obj_coloring, obj_radius, clustering, i, cluster, c, l, n, coords, sphere_geo, mat, sphere, spritey, edges, edge, color, sv, tv, geometry, line, controls, render, vertex, distance, material, particles;
         nodes = json.graph_json.nodes;
         $out.empty();
         if (false) {
@@ -117,10 +117,6 @@
           return requestAnimationFrame(render);
         };
         renderer.setClearColor(0x111118, 1);
-        scene.add(new THREE.AmbientLight(0x333333));
-        light = new THREE.DirectionalLight(0xffffff);
-        light.position.set(0, 2000, 500);
-        light.target.position.set(0, 0, 0);
         window.pointerDetectRay = new THREE.Raycaster();
         window.pointerDetectRay.ray.direction.set(0, -1, 0);
         window.projector = new THREE.Projector();

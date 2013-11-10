@@ -25,6 +25,7 @@ window.input = ->
     $li.appendTo $out
 
   scene = new THREE.Scene()
+
   window.camera = camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000)
   window.renderer = renderer = new THREE.WebGLRenderer()
   renderer.setSize(window.innerWidth, window.innerHeight)
@@ -93,10 +94,6 @@ window.input = ->
     requestAnimationFrame(render)
 
   renderer.setClearColor(0x111118, 1)
-  scene.add new THREE.AmbientLight(0x333333)
-  light = new THREE.DirectionalLight(0xffffff)
-  light.position.set(0, 2000, 500)
-  light.target.position.set(0, 0, 0)
 
   window.pointerDetectRay = new THREE.Raycaster!
   window.pointerDetectRay.ray.direction.set(0, -1, 0);
