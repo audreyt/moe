@@ -5,7 +5,6 @@ $out = $ \#output
 
 $ \#submit .click -> input $in.val! if $in.val!
 
-origin = "http://direct.moedict.tw/"
 window.id = \tmuse
 window.colors = [[42,75,215],[29,105,20],[129,38,192],[129,197,122],[157,175,255],[41,208,208],[255,146,51],[255,238,51],[233,222,187],[255,205,243]]
 window.reset = -> $in.val ''
@@ -117,9 +116,6 @@ window.input = ->
   scene.add particles
   render!
 
-  document.addEventListener( 'click', window.onDocumentClick, false )
-  document.addEventListener( 'mousemove', window.onDocumentMouseMove, false )
-
 $(window).resize ->
   window.renderer?setSize(window.innerWidth, window.innerHeight)
   window.camera?aspect = window.innerWidth / window.innerHeight
@@ -201,7 +197,8 @@ window.roundRect = (ctx, x, y, w, h, r) ->
   ctx.stroke();
 
 window.onDocumentMouseMove = ( event ) ->
-  event.preventDefault();
+  event.preventDefault!
+  return unless window.mouse2D
   window.mouse2D.x = (event.clientX / window.innerWidth) * 2 - 1;
   window.mouse2D.y = -(event.clientY / window.innerHeight) * 2 + 1;
   intersects = window.pointerDetectRay.intersectObjects window.labels
@@ -231,5 +228,8 @@ window.onDocumentClick = ( event ) ->
   intersects = window.pointerDetectRay.intersectObjects window.labels
   if intersects.length
     window.output window.sprite_id_to_label[intersects.0.object.id]
+
+document.addEventListener( 'click', window.onDocumentClick, false )
+document.addEventListener( 'mousemove', window.onDocumentMouseMove, false )
 
 window.input $in.val!
