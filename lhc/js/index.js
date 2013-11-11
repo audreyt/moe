@@ -365,7 +365,7 @@ String::permutate = ->
           }
         };
         scene.addEventListener('update', function(){
-          if (cCounter++ % ~~(cTime * 80) === 0) {
+          if (cCounter++ % ~~(cTime * 120) === 0) {
             return window.doAddChar($input.val());
           }
         });
