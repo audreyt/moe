@@ -28,21 +28,21 @@ body {
   margin: 0;
   padding: 0;
   list-style: none;
-  height: 68px;
-  border-top: 5px dotted #DDD;
+  height: 60px;
+  border-top: 2px dotted #DDD;
 }
 
 #output li {
   position: relative;
   float: left;
-  border-right: 5px dotted #DDD;
+  border-right: 2px dotted #DDD;
   height: 100%;
   padding: 0;
 }
 
 #output li a {
   display: block;
-  font-size: 32px;
+  font-size: 26px;
   text-decoration: none;
   text-align: center;
   color: #999;
