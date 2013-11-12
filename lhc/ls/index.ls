@@ -251,7 +251,7 @@ window.doAddChar = ->
       mesh._physijs.linearVelocity.z = Math.random() * 1000 - 500
       queue.push mesh
   do addObject = ->
-    return unless queue.length
+    return setTimeout(addObject, 100ms) unless queue.length
     mesh = queue.shift!
     mesh.addEventListener \ready ->
       window.requestAnimationFrame addObject

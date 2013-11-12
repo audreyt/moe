@@ -319,7 +319,7 @@ String::permutate = ->
           return (addObject = function(){
             var mesh;
             if (!queue.length) {
-              return;
+              return setTimeout(addObject, 100);
             }
             mesh = queue.shift();
             mesh.addEventListener('ready', function(){
