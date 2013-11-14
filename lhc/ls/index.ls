@@ -37,7 +37,7 @@ renderer.setSize(window.innerWidth, (window.innerHeight - 48))
 $(\body).prepend renderer.domElement
 
 scene= new Physijs.Scene(fixedTimeStep: 1 / 24)
-scene.fog = new THREE.FogExp2( 0x222222, 0.00005 );
+#scene.fog = new THREE.FogExp2( 0x222222, 0.00005 );
 geometry = new THREE.Geometry
 for i from 0 to 500
   vertex = new THREE.Vector3
@@ -273,7 +273,7 @@ window.doAddChar = ->
     #  it.setAngularVelocity it.getAngularVelocity.multiplyScalar(2)
     scene.add mesh
 scene.addEventListener \update, ->
-  window.doAddChar $input.val! if (cCounter++ % ~~(cTime * 40)) is 0
+  window.doAddChar $input.val! if (cCounter++ % ~~(cTime * 60)) is 0
 window.input := -> main {data: it}
 #window.removeEventListener \message, buffered-msgs-first
 #for data in buffer => main {data}

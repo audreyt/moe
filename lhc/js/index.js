@@ -42,7 +42,6 @@ String::permutate = ->
   scene = new Physijs.Scene({
     fixedTimeStep: 1 / 24
   });
-  scene.fog = new THREE.FogExp2(0x222222, 0.00005);
   geometry = new THREE.Geometry;
   for (i$ = 0; i$ <= 500; ++i$) {
     i = i$;
@@ -363,7 +362,7 @@ String::permutate = ->
           }
         };
         scene.addEventListener('update', function(){
-          if (cCounter++ % ~~(cTime * 40) === 0) {
+          if (cCounter++ % ~~(cTime * 60) === 0) {
             return window.doAddChar($input.val());
           }
         });
