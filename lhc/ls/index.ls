@@ -42,14 +42,14 @@ geometry = new THREE.Geometry
 for i from 0 to 500
   vertex = new THREE.Vector3
   distance = 0;
-  while distance < 500*500
-    vertex.x = 5000 * Math.sin(2 * Math.random()-1)
-    vertex.y = 5000 * Math.sin(2 * Math.random()-1)
-    vertex.z = 5000 * Math.sin(2 * Math.random()-1)
+  while distance < 500*500*50
+    vertex.x = 25000 * Math.sin(2 * Math.random()-1)
+    vertex.y = 25000 * Math.sin(2 * Math.random()-1)
+    vertex.z = 25000 * Math.sin(2 * Math.random()-1)
     distance = vertex.x * vertex.x + vertex.y * vertex.y + vertex.z * vertex.z
+    vertex.z -= 10000
     geometry.vertices.push( vertex );
 material = new THREE.ParticleBasicMaterial { +sizeAttenuation, -depthWrite, size: 2 }
-material.color.setRGB(0.7, 0.7, 0.8)
 particles = new THREE.ParticleSystem( geometry, material )
 particles.renderDepth = 0
 scene.add particles
@@ -59,7 +59,7 @@ scene.addEventListener \update, ->
 
 camera = new THREE.PerspectiveCamera(45, window.innerWidth / (window.innerHeight - 48), 1, 50000)
 camera.position.set(-2000, 2000, 4000)
-camera.lookAt new THREE.Vector3 0 0 -20000
+camera.lookAt new THREE.Vector3 0 0 -10000
 
 scene.add camera
 
@@ -77,9 +77,10 @@ light.position.set(0, -2000, -500)
 light.target.position.set(0, 0, 0)
 scene.add light
 
-cube = new THREE.CubeGeometry 3000 3000 3000
+cube = new THREE.CubeGeometry 10000 10000 5000
 screen = new Physijs.BoxMesh cube,, 0
-screen.position.set 0 0 -20000
+screen.position.set 0 0 -15000
+#screen.wireframe = yes
 screen.visible = no
 scene.add screen
 
@@ -239,7 +240,7 @@ window.doAddChar = ->
     {ch: char, outlines, centroids} <- GET "./a/#char.json" 
     window.idx++
     # console.log "creating geometry for #char"
-    randX = Math.random() * 500 - 250
+    randX = Math.random() * 5000 - 2500
     randY = Math.random() * 500 - 250
     for i, shape of getShapeOf outlines
       geometry = new THREE.ExtrudeGeometry(shape, extrusionSettings)
@@ -253,27 +254,25 @@ window.doAddChar = ->
       mesh = new Physijs.ConvexMesh(geometry, materials[window.idx % materials.length], 9)
       mesh.position = offset.clone!
       mesh.position.add new THREE.Vector3(randX - 1075, randY + 1075, 0)
+      mesh.lookAt new THREE.Vector3 0 0 10000
       mesh.castShadow = yes
       mesh.receiveShadow = yes
-      mesh.addEventListener \ready, ->
-        @setLinearVelocity new THREE.Vector3 0 0 -20000
-      #mesh._physijs.linearVelocity.x = Math.random() * 1000 - 500
-      #mesh._physijs.linearVelocity.y = Math.random() * 1000 - 500
-      #mesh._physijs.linearVelocity.z = Math.random() * 1000 - 500
       queue.push mesh
+    queue.push null
   do addObject = ->
     return setTimeout(addObject, 100ms) unless queue.length
     mesh = queue.shift!
+    return setTimeout(addObject, 1000ms) unless mesh?
     mesh.addEventListener \ready ->
-      window.requestAnimationFrame addObject
-      #mesh.setLinearVelocity new THREE.Vector3(0,0,-2000)
       mesh.setAngularVelocity new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5)
+      mesh.setLinearVelocity new THREE.Vector3 0 0 -10000
+      addObject!
     #mesh.addEventListener \collision -> for axis in <[ x y z ]>
     #  it.setLinearVelocity it.getLinearVelocity.multiplyScalar(2)
     #  it.setAngularVelocity it.getAngularVelocity.multiplyScalar(2)
     scene.add mesh
 scene.addEventListener \update, ->
-  window.doAddChar $input.val! if (cCounter++ % ~~(cTime * 60)) is 0
+  window.doAddChar $input.val! if (cCounter++ % ~~(10 + (cTime * $input.val!length * 50))) is 0
 window.input := -> main {data: it}
 #window.removeEventListener \message, buffered-msgs-first
 #for data in buffer => main {data}

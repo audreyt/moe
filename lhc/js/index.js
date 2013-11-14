@@ -47,11 +47,12 @@ String::permutate = ->
     i = i$;
     vertex = new THREE.Vector3;
     distance = 0;
-    while (distance < 500 * 500) {
-      vertex.x = 5000 * Math.sin(2 * Math.random() - 1);
-      vertex.y = 5000 * Math.sin(2 * Math.random() - 1);
-      vertex.z = 5000 * Math.sin(2 * Math.random() - 1);
+    while (distance < 500 * 500 * 50) {
+      vertex.x = 25000 * Math.sin(2 * Math.random() - 1);
+      vertex.y = 25000 * Math.sin(2 * Math.random() - 1);
+      vertex.z = 25000 * Math.sin(2 * Math.random() - 1);
       distance = vertex.x * vertex.x + vertex.y * vertex.y + vertex.z * vertex.z;
+      vertex.z -= 10000;
       geometry.vertices.push(vertex);
     }
   }
@@ -60,7 +61,6 @@ String::permutate = ->
     depthWrite: false,
     size: 2
   });
-  material.color.setRGB(0.7, 0.7, 0.8);
   particles = new THREE.ParticleSystem(geometry, material);
   particles.renderDepth = 0;
   scene.add(particles);
@@ -70,7 +70,7 @@ String::permutate = ->
   });
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / (window.innerHeight - 48), 1, 50000);
   camera.position.set(-2000, 2000, 4000);
-  camera.lookAt(new THREE.Vector3(0, 0, -20000));
+  camera.lookAt(new THREE.Vector3(0, 0, -10000));
   scene.add(camera);
   scene.add(new THREE.AmbientLight(0x333333));
   light = new THREE.DirectionalLight(0x999999);
@@ -85,9 +85,9 @@ String::permutate = ->
   light.position.set(0, -2000, -500);
   light.target.position.set(0, 0, 0);
   scene.add(light);
-  cube = new THREE.CubeGeometry(3000, 3000, 3000);
+  cube = new THREE.CubeGeometry(10000, 10000, 5000);
   screen = new Physijs.BoxMesh(cube, void 8, 0);
-  screen.position.set(0, 0, -20000);
+  screen.position.set(0, 0, -15000);
   screen.visible = false;
   scene.add(screen);
   window.addEventListener('resize', function(){
@@ -328,17 +328,21 @@ String::permutate = ->
               return setTimeout(addObject, 100);
             }
             mesh = queue.shift();
+            if (mesh == null) {
+              return setTimeout(addObject, 1000);
+            }
             mesh.addEventListener('ready', function(){
-              window.requestAnimationFrame(addObject);
-              return mesh.setAngularVelocity(new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5));
+              mesh.setAngularVelocity(new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5));
+              mesh.setLinearVelocity(new THREE.Vector3(0, 0, -10000));
+              return addObject();
             });
             return scene.add(mesh);
           })();
           function fn$(arg$){
-            var char, outlines, centroids, randX, randY, i, ref$, shape, geometry, offset, m, mesh, results$ = [];
+            var char, outlines, centroids, randX, randY, i, ref$, shape, geometry, offset, m, mesh;
             char = arg$.ch, outlines = arg$.outlines, centroids = arg$.centroids;
             window.idx++;
-            randX = Math.random() * 500 - 250;
+            randX = Math.random() * 5000 - 2500;
             randY = Math.random() * 500 - 250;
             for (i in ref$ = getShapeOf(outlines)) {
               shape = ref$[i];
@@ -350,19 +354,16 @@ String::permutate = ->
               mesh = new Physijs.ConvexMesh(geometry, materials[window.idx % materials.length], 9);
               mesh.position = offset.clone();
               mesh.position.add(new THREE.Vector3(randX - 1075, randY + 1075, 0));
+              mesh.lookAt(new THREE.Vector3(0, 0, 10000));
               mesh.castShadow = true;
               mesh.receiveShadow = true;
-              mesh.addEventListener('ready', fn$);
-              results$.push(queue.push(mesh));
+              queue.push(mesh);
             }
-            return results$;
-            function fn$(){
-              return this.setLinearVelocity(new THREE.Vector3(0, 0, -20000));
-            }
+            return queue.push(null);
           }
         };
         scene.addEventListener('update', function(){
-          if (cCounter++ % ~~(cTime * 60) === 0) {
+          if (cCounter++ % ~~(10 + cTime * $input.val().length * 50) === 0) {
             return window.doAddChar($input.val());
           }
         });
