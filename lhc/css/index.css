@@ -12,8 +12,8 @@ body {
   /*
   background: #16161d url(../images/bg_body.jpg) center center;
   background-size: cover;
-  */
   background: #16161d
+  */
 }
 
 #input {
@@ -21,6 +21,7 @@ body {
 }
 
 #output {
+  display: none;
   position: absolute;
   bottom: 0;
   left: 0;
