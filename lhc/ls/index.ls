@@ -60,6 +60,7 @@ scene.addEventListener \update, ->
 camera = new THREE.PerspectiveCamera(45, window.innerWidth / (window.innerHeight - 48), 1, 50000)
 camera.position.set(0, 2000, 4000)
 camera.lookAt new THREE.Vector3(0, 0, 0)
+
 scene.add camera
 
 scene.add new THREE.AmbientLight(0x333333)
@@ -75,6 +76,12 @@ light = new THREE.SpotLight(0x999999)
 light.position.set(0, -2000, -500)
 light.target.position.set(0, 0, 0)
 scene.add light
+
+cube = new THREE.CubeGeometry 3000 3000 3000
+screen = new Physijs.BoxMesh cube,, 0
+screen.position.set 0 0 -20000
+screen.visible = no
+scene.add screen
 
 window.addEventListener \resize, ->
   renderer.setSize(window.innerWidth, (window.innerHeight - 48))
@@ -246,9 +253,11 @@ window.doAddChar = ->
       mesh.position.add new THREE.Vector3(randX - 1075, randY + 1075, 0)
       mesh.castShadow = yes
       mesh.receiveShadow = yes
-      mesh._physijs.linearVelocity.x = Math.random() * 1000 - 500
-      mesh._physijs.linearVelocity.y = Math.random() * 1000 - 500
-      mesh._physijs.linearVelocity.z = Math.random() * 1000 - 500
+      mesh.addEventListener \ready, ->
+        @setLinearVelocity new THREE.Vector3 0 0 -20000
+      #mesh._physijs.linearVelocity.x = Math.random() * 1000 - 500
+      #mesh._physijs.linearVelocity.y = Math.random() * 1000 - 500
+      #mesh._physijs.linearVelocity.z = Math.random() * 1000 - 500
       queue.push mesh
   do addObject = ->
     return setTimeout(addObject, 100ms) unless queue.length

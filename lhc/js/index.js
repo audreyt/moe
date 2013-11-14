@@ -20,7 +20,7 @@ String::permutate = ->
   ret
 */
 (function(){
-  var buffer, bufferedMsgsFirst, renderer, scene, geometry, i$, i, vertex, distance, material, particles, camera, light, render, controls, res$, ref$, len$, ref1$, r, g, b, extrusionSettings, CACHED, MISSED, GET, split$ = ''.split, replace$ = ''.replace;
+  var buffer, bufferedMsgsFirst, renderer, scene, geometry, i$, i, vertex, distance, material, particles, camera, light, cube, screen, render, controls, res$, ref$, len$, ref1$, r, g, b, extrusionSettings, CACHED, MISSED, GET, split$ = ''.split, replace$ = ''.replace;
   buffer = [];
   bufferedMsgsFirst = function(arg$){
     var data;
@@ -86,6 +86,11 @@ String::permutate = ->
   light.position.set(0, -2000, -500);
   light.target.position.set(0, 0, 0);
   scene.add(light);
+  cube = new THREE.CubeGeometry(3000, 3000, 3000);
+  screen = new Physijs.BoxMesh(cube, void 8, 0);
+  screen.position.set(0, 0, -20000);
+  screen.visible = false;
+  scene.add(screen);
   window.addEventListener('resize', function(){
     renderer.setSize(window.innerWidth, window.innerHeight - 48);
     camera.aspect = window.innerWidth / (window.innerHeight - 48);
@@ -356,12 +361,13 @@ String::permutate = ->
               mesh.position.add(new THREE.Vector3(randX - 1075, randY + 1075, 0));
               mesh.castShadow = true;
               mesh.receiveShadow = true;
-              mesh._physijs.linearVelocity.x = Math.random() * 1000 - 500;
-              mesh._physijs.linearVelocity.y = Math.random() * 1000 - 500;
-              mesh._physijs.linearVelocity.z = Math.random() * 1000 - 500;
+              mesh.addEventListener('ready', fn$);
               results$.push(queue.push(mesh));
             }
             return results$;
+            function fn$(){
+              return this.setLinearVelocity(new THREE.Vector3(0, 0, -20000));
+            }
           }
         };
         scene.addEventListener('update', function(){
