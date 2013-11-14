@@ -264,11 +264,11 @@ window.doAddChar = ->
     mesh = queue.shift!
     mesh.addEventListener \ready ->
       window.requestAnimationFrame addObject
-    mesh.addEventListener \collision -> for axis in <[ x y z ]>
-      it._physijs.linearVelocity[axis] *= 2
-      it._physijs.angularVelocity[axis] *= 2
-      mesh._physijs.linearVelocity[axis] *= 2
-      mesh._physijs.angularVelocity[axis] *= 2
+      #mesh.setLinearVelocity new THREE.Vector3(0,0,-2000)
+      mesh.setAngularVelocity new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5)
+    #mesh.addEventListener \collision -> for axis in <[ x y z ]>
+    #  it.setLinearVelocity it.getLinearVelocity.multiplyScalar(2)
+    #  it.setAngularVelocity it.getAngularVelocity.multiplyScalar(2)
     scene.add mesh
 scene.addEventListener \update, ->
   window.doAddChar $input.val! if (cCounter++ % ~~(cTime * 120)) is 0

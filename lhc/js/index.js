@@ -328,18 +328,8 @@ String::permutate = ->
             }
             mesh = queue.shift();
             mesh.addEventListener('ready', function(){
-              return window.requestAnimationFrame(addObject);
-            });
-            mesh.addEventListener('collision', function(it){
-              var i$, ref$, len$, axis, results$ = [];
-              for (i$ = 0, len$ = (ref$ = ['x', 'y', 'z']).length; i$ < len$; ++i$) {
-                axis = ref$[i$];
-                it._physijs.linearVelocity[axis] *= 2;
-                it._physijs.angularVelocity[axis] *= 2;
-                mesh._physijs.linearVelocity[axis] *= 2;
-                results$.push(mesh._physijs.angularVelocity[axis] *= 2);
-              }
-              return results$;
+              window.requestAnimationFrame(addObject);
+              return mesh.setAngularVelocity(new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5));
             });
             return scene.add(mesh);
           })();
