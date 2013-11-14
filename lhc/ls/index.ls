@@ -276,8 +276,8 @@ window.doAddChar = ->
     #  it.setAngularVelocity it.getAngularVelocity.multiplyScalar(2)
     scene.add mesh
     addObject!
-scene.addEventListener \update, ->
-  window.doAddChar $input.val! if (cCounter++ % ~~(cTime * 120)) is 0
+#scene.addEventListener \update, ->
+#  window.doAddChar $input.val! if (cCounter++ % ~~(cTime * 120)) is 0
 window.input := -> main {data: it}
 #window.removeEventListener \message, buffered-msgs-first
 #for data in buffer => main {data}

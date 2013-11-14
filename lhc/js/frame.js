@@ -11,11 +11,38 @@
   }
   win.postMessage($('#in').val(), "http://direct.moedict.tw/");
 
+  var start = 1384404682588;
+  var attacks = [];
   var fire = new Firebase("https://iv0d.firebaseio.com");
   fire.child("videos/6GSGNgPJZ5M/danmaku").startAt((new Date().getTime())-30000*1000).on("child_added", function (e) {
     v = e.val();
     if(v.type === "attack") {
-      console.log(v.action);
+      attacks.push(v);
     }
   });
+  var update = function () {
+    var a = [];
+    while(attacks.length) {
+      v = attacks.shift();
+      if(v.timestamp > start) {
+        a.push(v);
+      } else {
+        console.log(v.timestamp, start);
+        switch (v.action) {
+          case "shoe":
+            win.doAddChar("藍白拖");
+            break;
+          case "egg":
+            win.doAddChar("雞蛋");
+            break;
+          case "melon":
+            win.doAddChar("瓜");
+            break;
+        }
+      }
+    }
+    attacks = a;
+    start += 100;
+  };
+  setInterval(update, 100);
 }).call(this);

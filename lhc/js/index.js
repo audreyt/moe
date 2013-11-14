@@ -360,11 +360,6 @@ String::permutate = ->
             }
           }
         };
-        scene.addEventListener('update', function(){
-          if (cCounter++ % ~~(cTime * 120) === 0) {
-            return window.doAddChar($input.val());
-          }
-        });
         window.input = function(it){
           return main({
             data: it
