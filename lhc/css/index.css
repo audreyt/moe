@@ -64,10 +64,10 @@ body {
 canvas {
     width: 100% !important;
     height: 100% !important;
-    cursor: move;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
+    user-select: none;
 }

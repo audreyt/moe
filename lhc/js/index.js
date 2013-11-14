@@ -20,7 +20,7 @@ String::permutate = ->
   ret
 */
 (function(){
-  var buffer, bufferedMsgsFirst, renderer, scene, geometry, i$, i, vertex, distance, material, particles, camera, light, cube, screen, render, controls, res$, ref$, len$, ref1$, r, g, b, extrusionSettings, CACHED, MISSED, GET, split$ = ''.split, replace$ = ''.replace;
+  var buffer, bufferedMsgsFirst, renderer, scene, geometry, i$, i, vertex, distance, material, particles, camera, light, cube, screen, render, res$, ref$, len$, ref1$, r, g, b, extrusionSettings, CACHED, MISSED, GET, split$ = ''.split, replace$ = ''.replace;
   buffer = [];
   bufferedMsgsFirst = function(arg$){
     var data;
@@ -66,8 +66,7 @@ String::permutate = ->
   particles.renderDepth = 0;
   scene.add(particles);
   scene.addEventListener('update', function(){
-    scene.simulate(void 8, 2);
-    return controls.update();
+    return scene.simulate(void 8, 2);
   });
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / (window.innerHeight - 48), 1, 50000);
   camera.position.set(-2000, 2000, 4000);
@@ -102,10 +101,7 @@ String::permutate = ->
   };
   requestAnimationFrame(render);
   scene.simulate();
-  controls = new THREE.TrackballControls(camera);
-  controls.rotateSpeed = 0.5;
-  controls.target = screen.position;
-  console.log(controls);
+  camera.lookAt(screen.position);
   window.colors = [[42, 75, 215], [29, 105, 20], [129, 38, 192], [129, 197, 122], [157, 175, 255], [41, 208, 208], [255, 146, 51], [255, 238, 51], [233, 222, 187], [255, 205, 243]];
   res$ = [];
   for (i$ = 0, len$ = (ref$ = window.colors).length; i$ < len$; ++i$) {
