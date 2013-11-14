@@ -10,4 +10,12 @@
     win = win.getParentNode();
   }
   win.postMessage($('#in').val(), "http://direct.moedict.tw/");
+
+  var fire = new Firebase("https://iv0d.firebaseio.com");
+  fire.child("videos/6GSGNgPJZ5M/danmaku").startAt((new Date().getTime())-30000*1000).on("child_added", function (e) {
+    v = e.val();
+    if(v.type === "attack") {
+      console.log(v.action);
+    }
+  });
 }).call(this);
