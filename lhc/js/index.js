@@ -42,7 +42,6 @@ String::permutate = ->
   scene = new Physijs.Scene({
     fixedTimeStep: 1 / 24
   });
-  scene.fog = new THREE.FogExp2(0x222222, 0.00005);
   geometry = new THREE.Geometry;
   for (i$ = 0; i$ <= 500; ++i$) {
     i = i$;
@@ -102,13 +101,13 @@ String::permutate = ->
   requestAnimationFrame(render);
   scene.simulate();
   camera.lookAt(screen.position);
-  window.colors = [[42, 75, 215], [29, 105, 20], [129, 38, 192], [129, 197, 122], [157, 175, 255], [41, 208, 208], [255, 146, 51], [255, 238, 51], [233, 222, 187], [255, 205, 243]];
+  window.colors = [[42, 42, 215], [220, 220, 220], [200, 0, 0]];
   res$ = [];
   for (i$ = 0, len$ = (ref$ = window.colors).length; i$ < len$; ++i$) {
     ref1$ = ref$[i$], r = ref1$[0], g = ref1$[1], b = ref1$[2];
-    r = Math.round(r / 4 + 128);
-    g = Math.round(g / 4 + 128);
-    b = Math.round(b / 4 + 64);
+    r = Math.round(r / 2 + 128);
+    g = Math.round(g / 2 + 128);
+    b = Math.round(b / 2 + 128);
     res$.push(Physijs.createMaterial(new THREE.MeshPhongMaterial({
       color: r * 65536 + g * 256 + b,
       specular: r * 65536 + g * 256 + b,
@@ -311,7 +310,7 @@ String::permutate = ->
             return parseInt(tokens.shift(), 10);
           }
         };
-        window.idx = 0;
+        window.idx = -1;
         window.doAddChar = function(it){
           var queue, i$, len$, char, addObject;
           queue = [];
@@ -325,14 +324,17 @@ String::permutate = ->
               return setTimeout(addObject, 100);
             }
             mesh = queue.shift();
+            if (!mesh) {
+              return setTimeout(addObject, 500);
+            }
             mesh.addEventListener('ready', function(){
-              window.requestAnimationFrame(addObject);
               return mesh.setAngularVelocity(new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5));
             });
-            return scene.add(mesh);
+            scene.add(mesh);
+            return addObject();
           })();
           function fn$(arg$){
-            var char, outlines, centroids, randX, randY, i, ref$, shape, geometry, offset, m, mesh, results$ = [];
+            var char, outlines, centroids, randX, randY, i, ref$, shape, geometry, offset, m, mesh;
             char = arg$.ch, outlines = arg$.outlines, centroids = arg$.centroids;
             window.idx++;
             randX = Math.random() * 500 - 250;
@@ -350,9 +352,9 @@ String::permutate = ->
               mesh.castShadow = true;
               mesh.receiveShadow = true;
               mesh.addEventListener('ready', fn$);
-              results$.push(queue.push(mesh));
+              queue.push(mesh);
             }
-            return results$;
+            return queue.push(null);
             function fn$(){
               return this.setLinearVelocity(new THREE.Vector3(0, 0, -20000));
             }
@@ -371,7 +373,7 @@ String::permutate = ->
         if (/[^?]/.exec(location.search + "")) {
           return window.input(decodeURIComponent(location.search));
         } else {
-          return window.input('萌');
+          return window.input('藍白拖');
         }
       });
     });

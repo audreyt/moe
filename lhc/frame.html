@@ -8,10 +8,16 @@
   -webkit-user-select: none;
   -moz-user-select: none;
 }
+body {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
 iframe {
   position: absolute;
   width: 100%;
   height: 100%;
+  border: 0;
 }
     </style>
   </head>
@@ -19,7 +25,7 @@ iframe {
     <!--input id="in" value="萌部件"--></input>
     <!--p id="out"></p-->
     <iframe id="ivod" src="http://ivod.ly.g0v.tw/cinema/08-04-TRA-10/K02PSgMEbPw"></iframe>
-    <iframe id="lhc" src="./index.html"></iframe>
+    <iframe id="lhc" src="./index.html" style="pointer-events: none"></iframe>
     <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
     <script src="http://cdn.firebase.com/v0/firebase.js"></script>
     <script src="./js/frame.js"></script>

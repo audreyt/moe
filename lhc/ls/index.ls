@@ -37,7 +37,7 @@ renderer.setSize(window.innerWidth, (window.innerHeight - 48))
 $(\body).prepend renderer.domElement
 
 scene= new Physijs.Scene(fixedTimeStep: 1 / 24)
-scene.fog = new THREE.FogExp2( 0x222222, 0.00005 );
+#scene.fog = new THREE.FogExp2( 0x222222, 0.00005 );
 geometry = new THREE.Geometry
 for i from 0 to 500
   vertex = new THREE.Vector3
@@ -100,11 +100,11 @@ scene.simulate!
 #console.log controls
 camera.lookAt screen.position
 
-window.colors = [[42,75,215],[29,105,20],[129,38,192],[129,197,122],[157,175,255],[41,208,208],[255,146,51],[255,238,51],[233,222,187],[255,205,243]]
+window.colors = [[42,42,215],[220,220,220],[200,0,0]]
 window.materials = for [r,g,b] in window.colors
-  r = Math.round r / 4 + 128
-  g = Math.round g / 4 + 128
-  b = Math.round b / 4 + 64
+  r = Math.round r / 2 + 128
+  g = Math.round g / 2 + 128
+  b = Math.round b / 2 + 128
   Physijs.createMaterial do
     new THREE.MeshPhongMaterial color: (r*65536 + g*256 + b), specular: (r*65536 + g*256 + b), shininess: 10, shading: THREE.FlatShading
     #map: new THREE.ImageUtils.loadTexture \./images/plywood.jpg
@@ -233,7 +233,7 @@ getShapeOf = ->
               break
     ret.push shape
   ret
-window.idx = 0
+window.idx = -1
 window.doAddChar = ->
   queue = []
   for char in it
@@ -262,17 +262,20 @@ window.doAddChar = ->
       #mesh._physijs.linearVelocity.y = Math.random() * 1000 - 500
       #mesh._physijs.linearVelocity.z = Math.random() * 1000 - 500
       queue.push mesh
+    queue.push null
   do addObject = ->
     return setTimeout(addObject, 100ms) unless queue.length
     mesh = queue.shift!
+    unless mesh
+      return setTimeout addObject, 500ms
     mesh.addEventListener \ready ->
-      window.requestAnimationFrame addObject
       #mesh.setLinearVelocity new THREE.Vector3(0,0,-2000)
       mesh.setAngularVelocity new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5)
     #mesh.addEventListener \collision -> for axis in <[ x y z ]>
     #  it.setLinearVelocity it.getLinearVelocity.multiplyScalar(2)
     #  it.setAngularVelocity it.getAngularVelocity.multiplyScalar(2)
     scene.add mesh
+    addObject!
 scene.addEventListener \update, ->
   window.doAddChar $input.val! if (cCounter++ % ~~(cTime * 120)) is 0
 window.input := -> main {data: it}
@@ -283,4 +286,4 @@ window.input := -> main {data: it}
 if "#{ location.search }" is /[^?]/
   window.input decodeURIComponent location.search
 else
-  window.input \萌
+  window.input \藍白拖
