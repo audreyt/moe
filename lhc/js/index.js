@@ -70,8 +70,8 @@ String::permutate = ->
     return controls.update();
   });
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / (window.innerHeight - 48), 1, 50000);
-  camera.position.set(0, 2000, 4000);
-  camera.lookAt(new THREE.Vector3(0, 0, 0));
+  camera.position.set(-2000, 2000, 4000);
+  camera.lookAt(new THREE.Vector3(0, 0, -20000));
   scene.add(camera);
   scene.add(new THREE.AmbientLight(0x333333));
   light = new THREE.DirectionalLight(0x999999);
@@ -104,6 +104,8 @@ String::permutate = ->
   scene.simulate();
   controls = new THREE.TrackballControls(camera);
   controls.rotateSpeed = 0.5;
+  controls.target = screen.position;
+  console.log(controls);
   window.colors = [[42, 75, 215], [29, 105, 20], [129, 38, 192], [129, 197, 122], [157, 175, 255], [41, 208, 208], [255, 146, 51], [255, 238, 51], [233, 222, 187], [255, 205, 243]];
   res$ = [];
   for (i$ = 0, len$ = (ref$ = window.colors).length; i$ < len$; ++i$) {
@@ -152,7 +154,7 @@ String::permutate = ->
     return GET('./data/comp_char_sorted.json', function(CompChar){
       return GET('./data/orig-chars.json', function(OrigChars){
         var cTime, cCounter, origin, $input, $output, uniq, main, getShapeOf;
-        cTime = 2.0;
+        cTime = 0.5;
         cCounter = 0;
         origin = "http://direct.moedict.tw/";
         window.id = 'lhc';
