@@ -232,4 +232,7 @@ window.onDocumentClick = ( event ) ->
 document.addEventListener( 'click', window.onDocumentClick, false )
 document.addEventListener( 'mousemove', window.onDocumentMouseMove, false )
 
-window.input $in.val!
+if "#{ location.search }" is /[^?]/
+  window.input "#{ decodeURIComponent(location.search) - /\?/ }"
+else
+  window.input $in.val!
