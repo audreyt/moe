@@ -7,7 +7,7 @@ Reverse <- $.getJSON \Reverse.json
 Body = React.createClass do
   getInitialState: -> { value: '認得幾個字？', alt: {} }
   render: -> value = @state.value; div {},
-    input { @~onChange, value: value, id: \main }
+    input { @~onChange, value: value, id: \main, +autoFocus }
     button { id: \speak @~onClick } \▶
     textarea { value: @getRuby value }
     ul {},

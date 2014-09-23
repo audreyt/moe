@@ -18,7 +18,8 @@
           return div({}, input({
             onChange: bind$(this, 'onChange'),
             value: value,
-            id: 'main'
+            id: 'main',
+            autoFocus: true
           }), button({
             id: 'speak',
             onClick: bind$(this, 'onClick')
