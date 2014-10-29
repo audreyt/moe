@@ -4,7 +4,8 @@
 Sound <- $.getJSON \Sound.json
 Reverse <- $.getJSON \Reverse.json
 
-Body = React.createClass do
+createClass = React.createFactory << React.createClass
+Body = createClass do
   getInitialState: -> { value: '認得幾個字？', alt: {} }
   render: -> value = @state.value; div {},
     input { @~onChange, value: value, id: \main, +autoFocus }
@@ -35,4 +36,4 @@ Body = React.createClass do
     #{ ["#{ if sounds[idx] then "\n<ruby>#ch<rt>#that</rt></ruby>\n" else "#ch" }" for ch, idx in it ] * "" }
     """.replace(/\n+/g, "\n").replace(/^\n+/ '').replace(/\n+$/, '')
 
-$ -> React.renderComponent Body!, document.body
+$ -> React.render Body!, document.body
