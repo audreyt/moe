@@ -10,6 +10,14 @@
 * <https://creativecommons.org/publicdomain/zero/1.0/deed.zh_TW>
 * <http://wiki.creativecommons.org.tw/cc-zero-1-0:pre-final>
 
+## 開發
+
+```
+bundle install
+npm install
+make
+```
+
 # 感謝以下單位提供開放資料
 
 ## 台北市政府

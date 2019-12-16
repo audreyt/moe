@@ -1,0 +1,32 @@
+{
+  "name": "moe",
+  "version": "1.0.0",
+  "description": "萌典字宙反應爐 — Hanzi Fusion Reactor",
+  "main": "main.js",
+  "scripts": {
+    "start": "make"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/audreyt/moe.git"
+  },
+  "author": {
+    "name": "Audrey Tang",
+    "email": "audreyt@audreyt.org",
+    "twitter": "audreyt"
+  },
+  "contributors": [
+    "caasi Huang <caasi.igd@gmail.com>",
+    "Poga Po <poga.po@gmail.com>",
+    "miau715"
+  ],
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/audreyt/moe/issues"
+  },
+  "homepage": "https://github.com/audreyt/moe#readme",
+  "dependencies": {
+    "livescript": "^1.6.0",
+    "pug-cli": "^1.0.0-alpha6"
+  }
+}
