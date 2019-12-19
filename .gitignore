@@ -12,6 +12,7 @@ logs
 results
 
 .sass-cache
+three.js-r*
 
 npm-debug.log
 node_modules

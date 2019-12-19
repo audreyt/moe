@@ -30,7 +30,7 @@ window.input = -> buffered-msgs-first {data: it}
 Physijs.scripts.worker = \../js/physijs_worker.js
 Physijs.scripts.ammo = \../js/ammo.js
 
-renderer = new THREE.WebGLRenderer
+renderer = new THREE.WebGLRenderer {alpha: on}
 renderer.setSize(window.innerWidth, (window.innerHeight - 48))
 #renderer.shadowMapEnabled = yes
 #renderer.shadowMapSoft = yes
