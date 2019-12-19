@@ -1,2 +1,2 @@
 all ::
-	node ./static-here.js 8888 | lsc -cw *.ls | compass watch
+	node ./static-here.js 8888 | npx lsc -cw *.ls | bundle exec compass watch

@@ -1,8 +1,8 @@
 all ::
-	lsc -c *ls
+	npx lsc -c *ls
 
 run ::
-	lsc -cw *ls | static-here
+	npx lsc -cw *ls | static-here
 
 wc ::
 	@echo -n Lines:

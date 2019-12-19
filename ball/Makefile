@@ -1,5 +1,5 @@
 run ::
-	node ./static-here.js 8888 | jade -w index.jade | lsc -cw *.ls | compass watch
+	node ./static-here.js 8888 | npx pug -w index.jade | npx lsc -cw *.ls | bundle exec compass watch
 
 fetch ::
 	wget -c https://www.moedict.tw/lab/tmuse-cc-by-nc-sa-proxteam/veryfirstdump.json
