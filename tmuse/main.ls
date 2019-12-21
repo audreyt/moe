@@ -61,7 +61,8 @@ window.input = ->
     scene.add( sphere )
 
     spritey = makeTextSprite( " #{n.label} ", obj_coloring[n.label])
-    spritey.position = sphere.position.clone().multiplyScalar(1);
+    pos = sphere.position.clone().multiplyScalar(1)
+    spritey.position.set(pos.x, pos.y, pos.z)
     window.labels.push sphere
     scene.add( spritey )
     window.sprite_id_to_label[sphere.id] = n.label

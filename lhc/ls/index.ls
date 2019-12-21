@@ -252,7 +252,7 @@ window.doAddChar = ->
       m.makeTranslation(-offset.x, -offset.y, -offset.z)
       geometry.applyMatrix m
       mesh = new Physijs.ConvexMesh(geometry, materials[window.idx % materials.length], 9)
-      mesh.position = offset.clone!
+      mesh.position.set(offset.x, offset.y, offset.z)
       mesh.position.add new THREE.Vector3(randX - 1075, randY + 1075, 0)
       mesh.lookAt new THREE.Vector3 0 0 10000
       mesh.castShadow = yes
