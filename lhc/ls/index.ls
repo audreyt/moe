@@ -49,8 +49,8 @@ for i from 0 to 500
     distance = vertex.x * vertex.x + vertex.y * vertex.y + vertex.z * vertex.z
     vertex.z -= 10000
     geometry.vertices.push( vertex );
-material = new THREE.ParticleBasicMaterial { +sizeAttenuation, -depthWrite, size: 2 }
-particles = new THREE.ParticleSystem( geometry, material )
+material = new THREE.PointCloudMaterial { +sizeAttenuation, -depthWrite, size: 2 }
+particles = new THREE.PointCloud( geometry, material )
 particles.renderDepth = 0
 scene.add particles
 scene.addEventListener \update, ->
@@ -77,7 +77,7 @@ light.position.set(0, -2000, -500)
 light.target.position.set(0, 0, 0)
 scene.add light
 
-cube = new THREE.CubeGeometry 10000 10000 5000
+cube = new THREE.BoxGeometry 10000 10000 5000
 screen = new Physijs.BoxMesh cube,, 0
 screen.position.set 0 0 -15000
 #screen.wireframe = yes
@@ -98,7 +98,6 @@ scene.simulate!
 controls = new THREE.TrackballControls camera
 controls.rotateSpeed = 0.5
 controls.target = screen.position
-console.log controls
 
 window.colors = [[42,75,215],[29,105,20],[129,38,192],[129,197,122],[157,175,255],[41,208,208],[255,146,51],[255,238,51],[233,222,187],[255,205,243]]
 window.materials = for [r,g,b] in window.colors

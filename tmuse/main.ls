@@ -90,14 +90,15 @@ window.input = ->
   render = ->
     renderer.render(scene, camera)
     controls.update!
-    window.pointerDetectRay = projector.pickingRay(window.mouse2D.clone!, camera);
+    #window.pointerDetectRay = raycaster.setFromCamera(window.mouse2D.clone!, camera);
+    pointerDetectRay.setFromCamera(window.mouse2D.clone!, camera);
     requestAnimationFrame(render)
 
   renderer.setClearColor(0x111118, 1)
 
   window.pointerDetectRay = new THREE.Raycaster!
   window.pointerDetectRay.ray.direction.set(0, -1, 0);
-  window.projector = new THREE.Projector!
+  window.raycaster = new THREE.Raycaster!
   window.mouse2D = new THREE.Vector3(0, 0, 0)
 
   geometry = new THREE.Geometry
@@ -110,9 +111,9 @@ window.input = ->
       vertex.z = 1000 * Math.sin(2 * Math.random()-1)
       distance = vertex.x * vertex.x + vertex.y * vertex.y + vertex.z * vertex.z
       geometry.vertices.push( vertex );
-  material = new THREE.ParticleBasicMaterial { +sizeAttenuation, -depthWrite, size: 2 }
+  material = new THREE.PointCloudMaterial { +sizeAttenuation, -depthWrite, size: 2 }
   material.color.setRGB(0.6, 0.6, 0.4)
-  particles = new THREE.ParticleSystem( geometry, material )
+  particles = new THREE.PointCloud( geometry, material )
   particles.renderDepth = 0
   scene.add particles
   render!
@@ -151,8 +152,8 @@ window.makeTextSprite = ( message, {r, g, b}, parameters ) ->
   #console.log JSON.stringify backgroundColor,,2
 
   canvas = document.createElement('canvas')
-  canvas.width = 600
-  canvas.height = 600
+  canvas.width = 512
+  canvas.height = 512
   context = canvas.getContext('2d')
   context.font = "Bold " + fontsize + "px " + fontface
 
