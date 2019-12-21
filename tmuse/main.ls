@@ -149,15 +149,17 @@ window.makeTextSprite = ( message, {r, g, b}, parameters ) ->
   backgroundColor = { r: Math.round(155 + r * 100), g: Math.round(155 + g * 100), b: Math.round(155 + b * 100), a:0.8 }
   #console.log JSON.stringify backgroundColor,,2
 
-  spriteAlignment = THREE.SpriteAlignment.topLeft
-
   canvas = document.createElement('canvas')
+  canvas.width = 600
+  canvas.height = 600
   context = canvas.getContext('2d')
   context.font = "Bold " + fontsize + "px " + fontface
 
   # get size data (height depends only on font size)
   metrics = context.measureText( message )
   textWidth = metrics.width
+  offsetX = canvas.width / 2
+  offsetY = canvas.height / 2
 
   # background color
   context.fillStyle = "rgba(" + backgroundColor.r + "," + backgroundColor.g + "," + backgroundColor.b + "," + backgroundColor.a + ")"
@@ -165,20 +167,20 @@ window.makeTextSprite = ( message, {r, g, b}, parameters ) ->
   context.strokeStyle = "rgba(" + borderColor.r + "," + borderColor.g + "," + borderColor.b + "," + borderColor.a + ")"
 
   context.lineWidth = borderThickness
-  window.roundRect(context, borderThickness/2, borderThickness/2, textWidth + borderThickness, fontsize * 1.4 + borderThickness, 6)
+  window.roundRect(context, borderThickness/2 + offsetX, borderThickness/2 + offsetY, textWidth + borderThickness, fontsize * 1.4 + borderThickness, 6)
   # 1.4 is extra height factor for text below baseline: g,j,p,q.
 
   # text color
   context.fillStyle = "rgba(0, 0, 0, 1.0)"
-  context.fillText( message, borderThickness, fontsize + borderThickness)
+  context.fillText( message, borderThickness + offsetX, fontsize + borderThickness + offsetY)
 
   # canvas contents will be used for a texture
   texture = new THREE.Texture(canvas)
   texture.needsUpdate = true
 
-  spriteMaterial = new THREE.SpriteMaterial( { map: texture, useScreenCoordinates: false, alignment: spriteAlignment } )
+  spriteMaterial = new THREE.SpriteMaterial( { map: texture, useScreenCoordinates: false } )
   sprite = new THREE.Sprite( spriteMaterial )
-  sprite.scale.set(1, 0.5, 1)
+  sprite.scale.set(2, 2, 2)
   return sprite
 
 window.roundRect = (ctx, x, y, w, h, r) ->
@@ -207,18 +209,18 @@ window.onDocumentMouseMove = ( event ) ->
   if topic
     topic.material.wireframeLinewidth = 1
     spritey = window.sprite_id_to_sprite[topic.id]
-    spritey.scale.x = 1
-    spritey.scale.y = 0.5
-    spritey.rotation = 0
+    spritey.scale.x = 2
+    spritey.scale.y = 2
+    spritey.rotation = new THREE.Euler(0, 0, 0)
 
   if intersects.length
     document.body.style.cursor = \pointer
     window.topic = intersects.0.object
     topic.material.wireframeLinewidth = 2
     spritey = window.sprite_id_to_sprite[topic.id]
-    spritey.scale.x = 2
-    spritey.scale.y = 1
-    spritey.rotation = 0.1
+    spritey.scale.x = 4
+    spritey.scale.y = 4
+    spritey.rotation = new THREE.Euler(0.1, 0.1, 0.1)
     window.x = spritey
   else
     window.topic = null
