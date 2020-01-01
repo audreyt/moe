@@ -32,8 +32,8 @@ Physijs.scripts.ammo = \../js/ammo.js
 
 renderer = new THREE.WebGLRenderer {alpha: on}
 renderer.setSize(window.innerWidth, (window.innerHeight - 48))
-#renderer.shadowMapEnabled = yes
-#renderer.shadowMapSoft = yes
+#renderer.shadowMap.enabled = yes
+#renderer.shadowMap.soft = yes
 $(\body).prepend renderer.domElement
 
 scene= new Physijs.Scene(fixedTimeStep: 1 / 24)
@@ -49,9 +49,9 @@ for i from 0 to 500
     distance = vertex.x * vertex.x + vertex.y * vertex.y + vertex.z * vertex.z
     vertex.z -= 10000
     geometry.vertices.push( vertex );
-material = new THREE.PointCloudMaterial { +sizeAttenuation, -depthWrite, size: 2 }
-particles = new THREE.PointCloud( geometry, material )
-particles.renderDepth = 0
+material = new THREE.PointsMaterial { +sizeAttenuation, -depthWrite, size: 2 }
+particles = new THREE.Points( geometry, material )
+particles.renderOrder = 0
 scene.add particles
 scene.addEventListener \update, ->
   scene.simulate(void, 2)

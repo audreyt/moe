@@ -111,10 +111,10 @@ window.input = ->
       vertex.z = 1000 * Math.sin(2 * Math.random()-1)
       distance = vertex.x * vertex.x + vertex.y * vertex.y + vertex.z * vertex.z
       geometry.vertices.push( vertex );
-  material = new THREE.PointCloudMaterial { +sizeAttenuation, -depthWrite, size: 2 }
+  material = new THREE.PointsMaterial { +sizeAttenuation, -depthWrite, size: 2 }
   material.color.setRGB(0.6, 0.6, 0.4)
-  particles = new THREE.PointCloud( geometry, material )
-  particles.renderDepth = 0
+  particles = new THREE.Points( geometry, material )
+  particles.renderOrder = 0
   scene.add particles
   render!
 
@@ -180,7 +180,7 @@ window.makeTextSprite = ( message, {r, g, b}, parameters ) ->
   texture = new THREE.Texture(canvas)
   texture.needsUpdate = true
 
-  spriteMaterial = new THREE.SpriteMaterial( { map: texture, useScreenCoordinates: false } )
+  spriteMaterial = new THREE.SpriteMaterial( { map: texture } )
   sprite = new THREE.Sprite( spriteMaterial )
   sprite.scale.set(2, 2, 2)
   return sprite
