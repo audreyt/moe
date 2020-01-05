@@ -117,12 +117,12 @@ String::permutate = ->
       color: r * 65536 + g * 256 + b,
       specular: r * 65536 + g * 256 + b,
       shininess: 10,
-      flatShading: true
+      shading: THREE.FlatShading
     }), 0.9, 0.5));
   }
   window.materials = res$;
   extrusionSettings = {
-    depth: 100,
+    amount: 100,
     bevelEnabled: true
   };
   CACHED = {
@@ -348,7 +348,7 @@ String::permutate = ->
             for (i in ref$ = getShapeOf(outlines)) {
               shape = ref$[i];
               geometry = new THREE.ExtrudeGeometry(shape, extrusionSettings);
-              offset = new THREE.Vector3(+centroids[i][0], -centroids[i][1], extrusionSettings.depth / 2);
+              offset = new THREE.Vector3(+centroids[i][0], -centroids[i][1], extrusionSettings.amount / 2);
               m = new THREE.Matrix4;
               m.makeTranslation(-offset.x, -offset.y, -offset.z);
               geometry.applyMatrix(m);
