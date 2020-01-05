@@ -2,7 +2,7 @@ all ::
 	npx lsc -c *ls
 
 run ::
-	npx lsc -cw *ls | static-here
+	npx lsc -cw *ls | node ./static-here.js 8888
 
 wc ::
 	@echo -n Lines:
