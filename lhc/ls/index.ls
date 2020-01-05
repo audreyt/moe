@@ -105,7 +105,7 @@ window.materials = for [r,g,b] in window.colors
   g = Math.round g / 4 + 128
   b = Math.round b / 4 + 64
   Physijs.createMaterial do
-    new THREE.MeshPhongMaterial color: (r*65536 + g*256 + b), specular: (r*65536 + g*256 + b), shininess: 10, shading: THREE.FlatShading
+    new THREE.MeshPhongMaterial color: (r*65536 + g*256 + b), specular: (r*65536 + g*256 + b), shininess: 10, flatShading: on
     #map: new THREE.ImageUtils.loadTexture \./images/plywood.jpg
     0.9 # medium friction
     0.5 # medium restitution
