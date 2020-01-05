@@ -111,7 +111,7 @@ window.materials = for [r,g,b] in window.colors
     0.5 # medium restitution
 
 extrusionSettings =
-  amount: 100
+  depth: 100
   bevelEnabled: true
   #material: block-material
   #extrudeMaterial: block-material
@@ -246,7 +246,7 @@ window.doAddChar = ->
       offset = new THREE.Vector3 do
         +centroids[i].0
         -centroids[i].1
-        extrusionSettings.amount / 2
+        extrusionSettings.depth / 2
       m = new THREE.Matrix4
       m.makeTranslation(-offset.x, -offset.y, -offset.z)
       geometry.applyMatrix m
