@@ -67,6 +67,11 @@ function httpRespond(res, code, txt, headers) {
 
 var httpCb = function (req, res) {
   var uri = url.parse(req.url).pathname;
+    if (path.normalize(decodeURIComponent(uri)) !== decodeURIComponent(uri)) {
+        res.statusCode = 403;
+        res.end();
+        return;
+    }
   var filename;
   try {
       filename = decodeURIComponent(path.join(process.cwd(), uri));
